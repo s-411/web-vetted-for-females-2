@@ -338,6 +338,7 @@
             padding-left: 0;
             padding-right: 0;
             gap: 0;
+            width: auto;
         }
         .sidebar-collapsed .sidebar-bottom {
             padding-left: 0.5rem;
@@ -352,6 +353,19 @@
         }
         .sidebar-collapsed .sidebar-collapsed-show {
             display: flex !important;
+        }
+        /* Hide criteria dropdown when collapsed */
+        .sidebar-collapsed #criteria-dropdown {
+            display: none;
+        }
+        /* Show collapsed-only items */
+        .sidebar-collapsed-only {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-collapsed-only {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
         }
         .theme-btn-active {
             background: rgba(255, 255, 255, 0.2);
@@ -557,21 +571,14 @@
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">inventory_2</span>
-                    <span class="font-medium sidebar-label">Archives</span>
-                </a>
-
-                <!-- Divider -->
-                <div class="my-4 border-t border-white/10"></div>
 
                 <!-- Criteria Dropdown -->
                 <button onclick="toggleCriteriaDropdown()" class="sidebar-nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" title="Criteria">
                     <span class="material-symbols-outlined shrink-0">checklist</span>
                     <span class="font-medium sidebar-label flex-1 text-left">Criteria</span>
-                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(-90deg);">expand_more</span>
+                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(0deg);">expand_more</span>
                 </button>
-                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0px;">
+                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 400px;">
                     <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="green-flags.html" title="Green Flags">
                         <span class="material-symbols-outlined text-success shrink-0 text-xl">thumb_up</span>
                         <span class="font-medium sidebar-label text-sm">Green Flags</span>
@@ -593,6 +600,15 @@
 
             <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Archived Link (Active) -->
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200 mb-4" href="archives.html" title="Archived">
+                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">inventory_2</span>
+                    <span class="font-medium sidebar-label">Archived</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="mb-4 border-t border-white/10 sidebar-hideable"></div>
+
                 <!-- Theme & Collapse Row -->
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
@@ -608,10 +624,21 @@
                     </button>
                 </div>
 
-                <!-- Collapsed state: just collapse icon -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                </button>
+                <!-- Collapsed state items -->
+                <div class="sidebar-collapsed-only flex-col items-center gap-2 mb-4">
+                    <!-- Collapsed: Theme Toggle -->
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Toggle theme">
+                        <span id="collapsed-theme-icon" class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                    </button>
+                    <!-- Collapsed: User Profile -->
+                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
+                        U
+                    </a>
+                    <!-- Collapsed: Expand Button -->
+                    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Expand sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
 
                 <!-- User Profile -->
                 <a href="settings.html" class="sidebar-profile flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors duration-200 sidebar-hideable">
@@ -679,12 +706,22 @@
             function updateSidebarThemeButtons(theme) {
                 const lightBtn = document.getElementById('theme-light');
                 const darkBtn = document.getElementById('theme-dark');
+                const collapsedIcon = document.getElementById('collapsed-theme-icon');
                 if (lightBtn && darkBtn) {
                     lightBtn.classList.remove('theme-btn-active');
                     darkBtn.classList.remove('theme-btn-active');
                     if (theme === 'light') lightBtn.classList.add('theme-btn-active');
                     if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
                 }
+                // Update collapsed theme icon
+                if (collapsedIcon) {
+                    collapsedIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
             }
 
             // Initialize theme on page load
@@ -742,7 +779,7 @@
     <!-- Archives JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
-        import { getGradeColor, getGradeDescription } from './src/js/grading.js';
+        import { calculateGrade, getGradeColor, getGradeDescription } from './src/js/grading.js';
         import { getInitials, getAvatarColor, formatRelativeTime, escapeHtml } from './src/js/utils.js';
 
         // Make functions available globally
@@ -759,12 +796,16 @@
         };
 
         function renderArchivedProfileCard(profile) {
-            const colors = getGradeColor(profile.grade);
+            // Recalculate grade based on current enabled criteria
+            const gradeResult = calculateGrade(profile);
+            const grade = gradeResult.grade;
+            const colors = getGradeColor(grade);
             const initials = getInitials(profile.name);
             const avatarColor = getAvatarColor(profile.id);
-            const greenCount = profile.greenFlags.length;
-            const redCount = profile.redFlags.length;
-            const dbCount = profile.dealbreakers.length;
+            // Use counts from grade calculation (already filtered)
+            const greenCount = gradeResult.details.greenCount;
+            const redCount = gradeResult.details.redCount;
+            const dbCount = gradeResult.details.dealbreakerCount;
 
             return `
                 <article class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 group">
@@ -773,11 +814,11 @@
                             ${escapeHtml(initials)}
                         </div>
                         <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold opacity-60">
-                            ${profile.grade}
+                            ${grade}
                         </span>
                     </div>
                     <h3 class="font-serif text-xl font-bold text-text-primary mb-1">${escapeHtml(profile.name)}</h3>
-                    <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(profile.grade)}</p>
+                    <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(grade)}</p>
                     <div class="flex items-center gap-4 text-sm mb-4">
                         <span class="flex items-center gap-1 text-success">
                             <span class="material-symbols-outlined text-base">thumb_up</span>

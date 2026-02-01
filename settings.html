@@ -192,11 +192,16 @@
         }
         .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
         .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; width: auto; }
         .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
         .sidebar-collapsed .sidebar-profile { justify-content: center; }
         .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
         .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        /* Hide criteria dropdown when collapsed */
+        .sidebar-collapsed #criteria-dropdown { display: none; }
+        /* Show collapsed-only items */
+        .sidebar-collapsed-only { display: none; }
+        .sidebar-collapsed .sidebar-collapsed-only { display: flex !important; flex-direction: column; align-items: center; }
         .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
         .theme-btn-active span { color: var(--color-accent) !important; }
 
@@ -205,41 +210,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Criteria Tabs */
-        .criteria-tab.active-green {
-            background: var(--color-success-bg);
-            border-bottom-color: var(--color-success);
-            color: var(--color-success);
-        }
-        .criteria-tab.active-red {
-            background: var(--color-error-bg);
-            border-bottom-color: var(--color-error);
-            color: var(--color-error);
-        }
-        .criteria-tab.active-dealbreakers {
-            background: rgba(127, 19, 236, 0.1);
-            border-bottom-color: var(--color-primary);
-            color: var(--color-primary);
-        }
-        .criteria-tab.active-investment {
-            background: var(--color-info-bg);
-            border-bottom-color: var(--color-info);
-            color: var(--color-info);
-        }
-        .criteria-tab:hover:not([class*="active-"]) {
-            background: var(--color-bg-tertiary);
-        }
-
-        /* Criteria Item */
-        .criteria-item {
-            transition: background 150ms ease;
-        }
-        .criteria-item:hover {
-            background: var(--color-bg-tertiary);
-        }
-        .criteria-item.enabled {
-            background: var(--color-success-bg);
-        }
     </style>
 
     <script>
@@ -351,21 +321,14 @@
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
-                    <span class="font-medium sidebar-label">Archives</span>
-                </a>
-
-                <!-- Divider -->
-                <div class="my-4 border-t border-white/10"></div>
 
                 <!-- Criteria Dropdown -->
                 <button onclick="toggleCriteriaDropdown()" class="sidebar-nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" title="Criteria">
                     <span class="material-symbols-outlined shrink-0">checklist</span>
                     <span class="font-medium sidebar-label flex-1 text-left">Criteria</span>
-                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(-90deg);">expand_more</span>
+                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(0deg);">expand_more</span>
                 </button>
-                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0px;">
+                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 400px;">
                     <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="green-flags.html" title="Green Flags">
                         <span class="material-symbols-outlined text-success shrink-0 text-xl">thumb_up</span>
                         <span class="font-medium sidebar-label text-sm">Green Flags</span>
@@ -387,6 +350,15 @@
 
             <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Archived Link -->
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200 mb-4" href="archives.html" title="Archived">
+                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
+                    <span class="font-medium sidebar-label">Archived</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="mb-4 border-t border-white/10 sidebar-hideable"></div>
+
                 <!-- Theme & Collapse Row -->
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
@@ -402,10 +374,21 @@
                     </button>
                 </div>
 
-                <!-- Collapsed state: just collapse icon -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                </button>
+                <!-- Collapsed state items -->
+                <div class="sidebar-collapsed-only flex-col items-center gap-2 mb-4">
+                    <!-- Collapsed: Theme Toggle -->
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Toggle theme">
+                        <span id="collapsed-theme-icon" class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                    </button>
+                    <!-- Collapsed: User Profile -->
+                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
+                        U
+                    </a>
+                    <!-- Collapsed: Expand Button -->
+                    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Expand sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
 
                 <!-- User Profile -->
                 <a href="settings.html" class="sidebar-profile flex items-center gap-3 p-3 rounded-xl bg-white/10 transition-colors duration-200 sidebar-hideable">
@@ -474,6 +457,7 @@
             function updateSidebarThemeButtons(theme) {
                 const lightBtn = document.getElementById('theme-light');
                 const darkBtn = document.getElementById('theme-dark');
+                const collapsedIcon = document.getElementById('collapsed-theme-icon');
                 if (lightBtn && darkBtn) {
                     lightBtn.classList.remove('theme-btn-active');
                     darkBtn.classList.remove('theme-btn-active');
@@ -483,6 +467,15 @@
                         darkBtn.classList.add('theme-btn-active');
                     }
                 }
+                // Update collapsed theme icon
+                if (collapsedIcon) {
+                    collapsedIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
             }
 
             function updateThemeButtons(theme) {
@@ -521,56 +514,6 @@
                         <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Settings</h1>
                         <p class="text-text-secondary">Manage your data and app preferences.</p>
                     </div>
-
-                    <!-- Evaluation Criteria Section -->
-                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h2 class="font-serif text-xl font-bold text-text-primary">Evaluation Criteria</h2>
-                                <p class="text-sm text-text-secondary mt-1">Customize which flags, dealbreakers, and milestones to track</p>
-                            </div>
-                            <button onclick="resetAllCriteria()" class="px-3 py-1.5 text-xs font-medium text-text-secondary hover:text-text-primary bg-bg-tertiary hover:bg-border-hover rounded-lg transition-colors">
-                                Reset to Defaults
-                            </button>
-                        </div>
-
-                        <!-- Category Tabs -->
-                        <div class="flex border-b border-border-default mb-6">
-                            <button onclick="switchCriteriaTab('green')" id="criteria-tab-green" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
-                                <span class="material-symbols-outlined text-success text-lg">thumb_up</span>
-                                <span class="hidden sm:inline">Green Flags</span>
-                            </button>
-                            <button onclick="switchCriteriaTab('red')" id="criteria-tab-red" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
-                                <span class="material-symbols-outlined text-error text-lg">flag</span>
-                                <span class="hidden sm:inline">Red Flags</span>
-                            </button>
-                            <button onclick="switchCriteriaTab('dealbreakers')" id="criteria-tab-dealbreakers" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
-                                <span class="material-symbols-outlined text-primary text-lg">block</span>
-                                <span class="hidden sm:inline">Dealbreakers</span>
-                            </button>
-                            <button onclick="switchCriteriaTab('investment')" id="criteria-tab-investment" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
-                                <span class="material-symbols-outlined text-info text-lg">trending_up</span>
-                                <span class="hidden sm:inline">Investment</span>
-                            </button>
-                        </div>
-
-                        <!-- Criteria Content -->
-                        <div id="criteria-content">
-                            <!-- Rendered by JS -->
-                        </div>
-
-                        <!-- Add Custom Item -->
-                        <div class="mt-6 pt-6 border-t border-border-default">
-                            <h3 class="font-semibold text-text-primary mb-3">Add Custom Item</h3>
-                            <div class="flex gap-3">
-                                <input type="text" id="custom-item-input" placeholder="Enter your custom criteria..." class="flex-1 px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
-                                <button onclick="addCustomItem()" class="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-lg">add</span>
-                                    Add
-                                </button>
-                            </div>
-                        </div>
-                    </section>
 
                     <!-- Appearance Section -->
                     <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
@@ -665,36 +608,6 @@
                         </div>
                     </section>
 
-                    <!-- Privacy Section -->
-                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
-                        <h2 class="font-serif text-xl font-bold text-text-primary mb-2">Privacy</h2>
-                        <p class="text-sm text-text-secondary mb-6">Your privacy is our priority.</p>
-
-                        <div class="space-y-4">
-                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
-                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
-                                <div>
-                                    <p class="font-medium text-success">100% Local Storage</p>
-                                    <p class="text-sm text-text-secondary">All your data is stored only on your device. Nothing is sent to any server.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
-                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
-                                <div>
-                                    <p class="font-medium text-success">No Tracking</p>
-                                    <p class="text-sm text-text-secondary">No analytics, no cookies, no tracking of any kind.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
-                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
-                                <div>
-                                    <p class="font-medium text-success">No Account Required</p>
-                                    <p class="text-sm text-text-secondary">Use the app without creating an account or sharing any personal information.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
                     <!-- Danger Zone -->
                     <section class="bg-error-bg rounded-2xl border border-error/20 p-6 mb-6">
                         <h2 class="font-serif text-xl font-bold text-error mb-2">Danger Zone</h2>
@@ -743,228 +656,8 @@
     <!-- Settings JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
-        import { CriteriaStore } from './src/js/criteria-store.js';
-        import { greenFlags, getDefaultGreenFlags, getOptionalGreenFlags } from './src/data/green-flags.js';
-        import { redFlags, getDefaultRedFlags, getOptionalRedFlags } from './src/data/red-flags.js';
-        import { dealbreakers, getDefaultDealbreakers, getOptionalDealbreakers } from './src/data/dealbreakers.js';
-        import { investmentStages, getDefaultInvestmentStages, getOptionalInvestmentStages } from './src/data/investment-stages.js';
 
         let pendingAction = null;
-        let currentCriteriaTab = 'green';
-
-        // Category config
-        const categoryConfig = {
-            green: {
-                allItems: greenFlags,
-                defaultItems: getDefaultGreenFlags(),
-                optionalItems: getOptionalGreenFlags(),
-                color: 'success',
-                icon: 'thumb_up',
-                label: 'Green Flag',
-                storeKey: 'greenFlags',
-            },
-            red: {
-                allItems: redFlags,
-                defaultItems: getDefaultRedFlags(),
-                optionalItems: getOptionalRedFlags(),
-                color: 'error',
-                icon: 'flag',
-                label: 'Red Flag',
-                storeKey: 'redFlags',
-            },
-            dealbreakers: {
-                allItems: dealbreakers,
-                defaultItems: getDefaultDealbreakers(),
-                optionalItems: getOptionalDealbreakers(),
-                color: 'primary',
-                icon: 'block',
-                label: 'Dealbreaker',
-                storeKey: 'dealbreakers',
-            },
-            investment: {
-                allItems: investmentStages,
-                defaultItems: getDefaultInvestmentStages(),
-                optionalItems: getOptionalInvestmentStages(),
-                color: 'info',
-                icon: 'trending_up',
-                label: 'Investment Stage',
-                storeKey: 'investment',
-            },
-        };
-
-        // Switch criteria tab
-        window.switchCriteriaTab = function(tab) {
-            currentCriteriaTab = tab;
-
-            // Update tab styles
-            ['green', 'red', 'dealbreakers', 'investment'].forEach(t => {
-                const btn = document.getElementById(`criteria-tab-${t}`);
-                btn.classList.remove('active-green', 'active-red', 'active-dealbreakers', 'active-investment');
-                if (t === tab) {
-                    btn.classList.add(`active-${t}`);
-                }
-            });
-
-            renderCriteriaContent();
-        };
-
-        // Render criteria content
-        function renderCriteriaContent() {
-            const config = categoryConfig[currentCriteriaTab];
-            const container = document.getElementById('criteria-content');
-            const customItems = CriteriaStore.getCustomItems(config.storeKey);
-            const defaultIds = config.defaultItems.map(i => i.id);
-
-            // Get all items (default + optional + custom)
-            const allBuiltIn = [...config.defaultItems, ...config.optionalItems];
-
-            let html = '';
-
-            // Enabled Section
-            html += `<div class="mb-6">
-                <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">Active (${countEnabled(config, defaultIds, customItems)})</h3>
-                <div class="space-y-1">`;
-
-            // Default items that are enabled
-            config.defaultItems.forEach(item => {
-                const isEnabled = CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds);
-                if (isEnabled) {
-                    html += renderCriteriaItem(item, config, true, false);
-                }
-            });
-
-            // Optional items that are enabled
-            config.optionalItems.forEach(item => {
-                const isEnabled = CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds);
-                if (isEnabled) {
-                    html += renderCriteriaItem(item, config, true, false);
-                }
-            });
-
-            // Custom items (always enabled)
-            customItems.forEach(item => {
-                html += renderCriteriaItem(item, config, true, true);
-            });
-
-            html += `</div></div>`;
-
-            // Available Section (optional items not yet enabled)
-            const availableItems = config.optionalItems.filter(item => !CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds));
-            const disabledDefaults = config.defaultItems.filter(item => !CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds));
-
-            if (availableItems.length > 0 || disabledDefaults.length > 0) {
-                html += `<div>
-                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">Available to Add</h3>
-                    <div class="space-y-1">`;
-
-                disabledDefaults.forEach(item => {
-                    html += renderCriteriaItem(item, config, false, false);
-                });
-
-                availableItems.forEach(item => {
-                    html += renderCriteriaItem(item, config, false, false);
-                });
-
-                html += `</div></div>`;
-            }
-
-            container.innerHTML = html;
-
-            // Add event listeners
-            container.querySelectorAll('.criteria-toggle').forEach(btn => {
-                btn.addEventListener('click', handleCriteriaToggle);
-            });
-            container.querySelectorAll('.criteria-remove').forEach(btn => {
-                btn.addEventListener('click', handleCriteriaRemove);
-            });
-        }
-
-        function countEnabled(config, defaultIds, customItems) {
-            let count = customItems.length;
-            [...config.defaultItems, ...config.optionalItems].forEach(item => {
-                if (CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds)) {
-                    count++;
-                }
-            });
-            return count;
-        }
-
-        function renderCriteriaItem(item, config, isEnabled, isCustom) {
-            const bgClass = isEnabled ? `bg-${config.color}-bg` : '';
-            const iconColor = isEnabled ? `text-${config.color}` : 'text-text-tertiary';
-            const actionIcon = isEnabled ? 'remove_circle' : 'add_circle';
-            const actionColor = isEnabled ? 'text-text-tertiary hover:text-error' : 'text-success';
-
-            return `
-                <div class="criteria-item flex items-center gap-3 p-3 rounded-xl ${bgClass}">
-                    <span class="material-symbols-outlined ${iconColor} text-xl shrink-0">${config.icon}</span>
-                    <span class="flex-1 text-text-primary text-sm">${escapeHtml(item.label)}</span>
-                    ${isCustom ? `
-                        <button class="criteria-remove p-1.5 rounded-lg hover:bg-error-bg transition-colors" data-id="${item.id}" title="Remove custom item">
-                            <span class="material-symbols-outlined text-error text-lg">delete</span>
-                        </button>
-                    ` : `
-                        <button class="criteria-toggle p-1.5 rounded-lg hover:bg-bg-tertiary transition-colors ${actionColor}" data-id="${item.id}" data-enabled="${isEnabled}" title="${isEnabled ? 'Remove' : 'Add'}">
-                            <span class="material-symbols-outlined text-xl">${actionIcon}</span>
-                        </button>
-                    `}
-                </div>
-            `;
-        }
-
-        function handleCriteriaToggle(event) {
-            const btn = event.currentTarget;
-            const itemId = btn.dataset.id;
-            const config = categoryConfig[currentCriteriaTab];
-            const defaultIds = config.defaultItems.map(i => i.id);
-            const allIds = [...config.defaultItems, ...config.optionalItems].map(i => i.id);
-
-            CriteriaStore.toggleItem(config.storeKey, itemId, allIds);
-            renderCriteriaContent();
-        }
-
-        function handleCriteriaRemove(event) {
-            const btn = event.currentTarget;
-            const itemId = btn.dataset.id;
-            const config = categoryConfig[currentCriteriaTab];
-
-            CriteriaStore.removeCustomItem(config.storeKey, itemId);
-            renderCriteriaContent();
-        }
-
-        // Add custom item
-        window.addCustomItem = function() {
-            const input = document.getElementById('custom-item-input');
-            const label = input.value.trim();
-
-            if (!label) {
-                alert('Please enter a custom criteria');
-                return;
-            }
-
-            const config = categoryConfig[currentCriteriaTab];
-            CriteriaStore.addCustomItem(config.storeKey, { label });
-
-            input.value = '';
-            renderCriteriaContent();
-        };
-
-        // Reset all criteria
-        window.resetAllCriteria = function() {
-            pendingAction = () => {
-                CriteriaStore.resetAll();
-                renderCriteriaContent();
-            };
-            document.getElementById('confirm-title').textContent = 'Reset Criteria';
-            document.getElementById('confirm-message').textContent = 'This will reset all evaluation criteria to defaults and remove any custom items. Continue?';
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        };
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
 
         // Update storage stats
         function updateStorageStats() {
@@ -1041,16 +734,8 @@
             closeConfirmModal();
         };
 
-        // Handle Enter key on custom input
-        document.getElementById('custom-item-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addCustomItem();
-            }
-        });
-
         // Initialize
         updateStorageStats();
-        switchCriteriaTab('green');
     </script>
 </body>
 </html>

@@ -1,18 +1,37 @@
-import { greenFlags } from '../data/green-flags.js';
-import { redFlags } from '../data/red-flags.js';
-import { dealbreakers } from '../data/dealbreakers.js';
+import { greenFlags, getDefaultGreenFlags } from '../data/green-flags.js';
+import { redFlags, getDefaultRedFlags } from '../data/red-flags.js';
+import { dealbreakers, getDefaultDealbreakers } from '../data/dealbreakers.js';
+import { CriteriaStore } from './criteria-store.js';
 
-const GREEN_TOTAL = greenFlags.length; // 20
-const RED_TOTAL = redFlags.length; // 23
-const DEALBREAKER_TOTAL = dealbreakers.length; // 15
+// Get enabled items for a category (filters against CriteriaStore)
+function getEnabledItemIds(category, allItems, getDefaultFn) {
+  const defaultIds = getDefaultFn().map(i => i.id);
+  const customItems = CriteriaStore.getCustomItems(category);
+
+  const enabledBuiltIn = allItems.filter(item =>
+    CriteriaStore.isEnabled(category, item.id, defaultIds)
+  ).map(i => i.id);
+
+  return [...enabledBuiltIn, ...customItems.map(i => i.id)];
+}
 
 export function calculateGrade(profile) {
-  const greenCount = profile.greenFlags.length;
-  const redCount = profile.redFlags.length;
-  const dealbreakerCount = profile.dealbreakers.length;
+  // Get enabled criteria IDs
+  const enabledGreenFlagIds = getEnabledItemIds('greenFlags', greenFlags, getDefaultGreenFlags);
+  const enabledRedFlagIds = getEnabledItemIds('redFlags', redFlags, getDefaultRedFlags);
+  const enabledDealbreakerIds = getEnabledItemIds('dealbreakers', dealbreakers, getDefaultDealbreakers);
 
-  const greenPercent = (greenCount / GREEN_TOTAL) * 100;
-  const redPercent = (redCount / RED_TOTAL) * 100;
+  const GREEN_TOTAL = enabledGreenFlagIds.length;
+  const RED_TOTAL = enabledRedFlagIds.length;
+  const DEALBREAKER_TOTAL = enabledDealbreakerIds.length;
+
+  // Filter profile's checked items to only count those still in enabled criteria
+  const greenCount = profile.greenFlags.filter(id => enabledGreenFlagIds.includes(id)).length;
+  const redCount = profile.redFlags.filter(id => enabledRedFlagIds.includes(id)).length;
+  const dealbreakerCount = profile.dealbreakers.filter(id => enabledDealbreakerIds.includes(id)).length;
+
+  const greenPercent = GREEN_TOTAL > 0 ? (greenCount / GREEN_TOTAL) * 100 : 0;
+  const redPercent = RED_TOTAL > 0 ? (redCount / RED_TOTAL) * 100 : 0;
 
   const details = {
     greenPercent: Math.round(greenPercent),

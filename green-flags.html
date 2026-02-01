@@ -106,11 +106,16 @@
         .sidebar-collapsed .sidebar-collapse-icon { transform: rotate(180deg); }
         .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
         .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; width: auto; }
         .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
         .sidebar-collapsed .sidebar-profile { justify-content: center; }
         .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
         .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        /* Hide criteria dropdown when collapsed */
+        .sidebar-collapsed #criteria-dropdown { display: none; }
+        /* Show collapsed-only items */
+        .sidebar-collapsed-only { display: none; }
+        .sidebar-collapsed .sidebar-collapsed-only { display: flex !important; flex-direction: column; align-items: center; }
         .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
         .theme-btn-active span { color: var(--color-accent) !important; }
 
@@ -294,10 +299,6 @@
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
-                    <span class="font-medium sidebar-label">Archives</span>
-                </a>
 
                 <!-- Criteria Dropdown -->
                 <div class="mt-2">
@@ -331,6 +332,15 @@
 
             <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Archived Link -->
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200 mb-4" href="archives.html" title="Archived">
+                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
+                    <span class="font-medium sidebar-label">Archived</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="mb-4 border-t border-white/10 sidebar-hideable"></div>
+
                 <!-- Theme Toggle Row -->
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
@@ -346,10 +356,21 @@
                     </button>
                 </div>
 
-                <!-- Collapsed state: just collapse icon -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                </button>
+                <!-- Collapsed state items -->
+                <div class="sidebar-collapsed-only flex-col items-center gap-2 mb-4">
+                    <!-- Collapsed: Theme Toggle -->
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Toggle theme">
+                        <span id="collapsed-theme-icon" class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                    </button>
+                    <!-- Collapsed: User Profile -->
+                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
+                        U
+                    </a>
+                    <!-- Collapsed: Expand Button -->
+                    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Expand sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
 
                 <!-- User Profile -->
                 <a href="settings.html" class="sidebar-profile flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors duration-200 sidebar-hideable">
@@ -408,12 +429,22 @@
             function updateSidebarThemeButtons(theme) {
                 const lightBtn = document.getElementById('theme-light');
                 const darkBtn = document.getElementById('theme-dark');
+                const collapsedIcon = document.getElementById('collapsed-theme-icon');
                 if (lightBtn && darkBtn) {
                     lightBtn.classList.remove('theme-btn-active');
                     darkBtn.classList.remove('theme-btn-active');
                     if (theme === 'light') lightBtn.classList.add('theme-btn-active');
                     if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
                 }
+                // Update collapsed theme icon
+                if (collapsedIcon) {
+                    collapsedIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
             }
 
             (function() {

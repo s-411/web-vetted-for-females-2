@@ -46,6 +46,7 @@
             --color-error-bg: #fef2f2;
             --color-info: #2563eb;
             --color-info-bg: #eff6ff;
+            --color-primary-bg: #faf5ff;
             --font-display: 'Manrope', system-ui, sans-serif;
             --font-serif: 'Playfair Display', Georgia, serif;
             --sidebar-width: 16rem;
@@ -76,6 +77,7 @@
             --color-error-bg: rgba(239, 68, 68, 0.15);
             --color-info: #3b82f6;
             --color-info-bg: rgba(59, 130, 246, 0.15);
+            --color-primary-bg: rgba(147, 51, 234, 0.15);
             color-scheme: dark;
         }
 
@@ -97,10 +99,15 @@
         .sidebar-collapsed .sidebar-collapse-icon { transform: rotate(180deg); }
         .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
         .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; width: auto; }
         .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
         .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
         .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        /* Hide criteria dropdown when collapsed */
+        .sidebar-collapsed #criteria-dropdown { display: none; }
+        /* Show collapsed-only items */
+        .sidebar-collapsed-only { display: none; }
+        .sidebar-collapsed .sidebar-collapsed-only { display: flex !important; flex-direction: column; align-items: center; }
         .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
         .theme-btn-active span { color: var(--color-accent) !important; }
 
@@ -182,6 +189,7 @@
                         'error-bg': 'var(--color-error-bg)',
                         'info': 'var(--color-info)',
                         'info-bg': 'var(--color-info-bg)',
+                        'primary-bg': 'var(--color-primary-bg)',
                     },
                     fontFamily: {
                         'display': 'var(--font-display)',
@@ -208,20 +216,14 @@
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
-                    <span class="font-medium sidebar-label">Archives</span>
-                </a>
-
-                <div class="my-4 border-t border-white/10"></div>
 
                 <!-- Criteria Dropdown -->
                 <button onclick="toggleCriteriaDropdown()" class="sidebar-nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" title="Criteria">
                     <span class="material-symbols-outlined shrink-0">checklist</span>
                     <span class="font-medium sidebar-label flex-1 text-left">Criteria</span>
-                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(-90deg);">expand_more</span>
+                    <span id="criteria-chevron" class="material-symbols-outlined text-sm sidebar-label transition-transform duration-200" style="transform: rotate(0deg);">expand_more</span>
                 </button>
-                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0px;">
+                <div id="criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 400px;">
                     <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="green-flags.html" title="Green Flags">
                         <span class="material-symbols-outlined text-success shrink-0 text-xl">thumb_up</span>
                         <span class="font-medium sidebar-label text-sm">Green Flags</span>
@@ -242,6 +244,15 @@
             </nav>
 
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Archived Link -->
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200 mb-4" href="archives.html" title="Archived">
+                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
+                    <span class="font-medium sidebar-label">Archived</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="mb-4 border-t border-white/10 sidebar-hideable"></div>
+
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
                         <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
@@ -255,9 +266,21 @@
                         <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted hover:text-text-inverse">keyboard_double_arrow_left</span>
                     </button>
                 </div>
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                </button>
+                <!-- Collapsed state items -->
+                <div class="sidebar-collapsed-only flex-col items-center gap-2 mb-4">
+                    <!-- Collapsed: Theme Toggle -->
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Toggle theme">
+                        <span id="collapsed-theme-icon" class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                    </button>
+                    <!-- Collapsed: User Profile -->
+                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
+                        U
+                    </a>
+                    <!-- Collapsed: Expand Button -->
+                    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Expand sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
 
                 <!-- User Profile -->
                 <a href="settings.html" class="sidebar-profile flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors duration-200 sidebar-hideable">
@@ -316,12 +339,22 @@
             function updateSidebarThemeButtons(theme) {
                 const lightBtn = document.getElementById('theme-light');
                 const darkBtn = document.getElementById('theme-dark');
+                const collapsedIcon = document.getElementById('collapsed-theme-icon');
                 if (lightBtn && darkBtn) {
                     lightBtn.classList.remove('theme-btn-active');
                     darkBtn.classList.remove('theme-btn-active');
                     if (theme === 'light') lightBtn.classList.add('theme-btn-active');
                     if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
                 }
+                // Update collapsed theme icon
+                if (collapsedIcon) {
+                    collapsedIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
             }
 
             (function() {
@@ -447,7 +480,7 @@
     <script type="module">
         import { Store } from './src/js/store.js';
         import { CriteriaStore } from './src/js/criteria-store.js';
-        import { getGradeColor, getGradeDescription } from './src/js/grading.js';
+        import { calculateGrade, getGradeColor, getGradeDescription } from './src/js/grading.js';
         import { getInitials, getAvatarColor, getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
         import { greenFlags, getDefaultGreenFlags } from './src/data/green-flags.js';
         import { redFlags, getDefaultRedFlags } from './src/data/red-flags.js';
@@ -492,7 +525,10 @@
 
         // Render profile info
         function renderProfileInfo() {
-            const colors = getGradeColor(profile.grade);
+            // Recalculate grade based on current enabled criteria
+            const gradeResult = calculateGrade(profile);
+            const grade = gradeResult.grade;
+            const colors = getGradeColor(grade);
             const initials = getInitials(profile.name);
             const avatarColor = getAvatarColor(profile.id);
 
@@ -502,9 +538,9 @@
 
             const gradeEl = document.getElementById('profile-grade');
             gradeEl.className = `px-5 py-2 rounded-full text-xl font-bold ${colors.bg} ${colors.text}`;
-            gradeEl.textContent = profile.grade;
+            gradeEl.textContent = grade;
 
-            document.getElementById('profile-grade-desc').textContent = getGradeDescription(profile.grade);
+            document.getElementById('profile-grade-desc').textContent = getGradeDescription(grade);
 
             // Load notes
             document.getElementById('profile-notes').value = profile.notes || '';
@@ -512,10 +548,18 @@
 
         // Render grade breakdown
         function renderGradeBreakdown() {
-            const greenCount = profile.greenFlags.length;
-            const redCount = profile.redFlags.length;
-            const dbCount = profile.dealbreakers.length;
-            const investmentCount = Array.isArray(profile.investmentStages) ? profile.investmentStages.length : 0;
+            // Filter to only count items that are still in enabled criteria
+            const enabledGreenFlagIds = enabledGreenFlags.map(f => f.id);
+            const enabledRedFlagIds = enabledRedFlags.map(f => f.id);
+            const enabledDealbreakerIds = enabledDealbreakers.map(f => f.id);
+            const enabledInvestmentIds = enabledInvestmentStages.map(f => f.id);
+
+            const greenCount = profile.greenFlags.filter(id => enabledGreenFlagIds.includes(id)).length;
+            const redCount = profile.redFlags.filter(id => enabledRedFlagIds.includes(id)).length;
+            const dbCount = profile.dealbreakers.filter(id => enabledDealbreakerIds.includes(id)).length;
+            const investmentCount = Array.isArray(profile.investmentStages)
+                ? profile.investmentStages.filter(id => enabledInvestmentIds.includes(id)).length
+                : 0;
 
             const greenPercent = (greenCount / GREEN_TOTAL) * 100;
             const redPercent = (redCount / RED_TOTAL) * 100;
@@ -646,7 +690,7 @@
         function renderDealbreakerItem(db) {
             const isChecked = profile.dealbreakers.includes(db.id);
             const iconColor = isChecked ? 'text-primary' : 'text-text-tertiary';
-            const itemBg = isChecked ? 'bg-primary/10' : '';
+            const itemBg = isChecked ? 'bg-primary-bg' : '';
             return `
                 <label class="flag-item flex items-start gap-4 p-4 cursor-pointer ${itemBg}">
                     <input type="checkbox" class="flag-checkbox" data-flag-type="dealbreakers" data-flag-id="${db.id}" ${isChecked ? 'checked' : ''} />
@@ -661,9 +705,8 @@
 
         function renderInvestmentItem(stage) {
             const checkedStages = Array.isArray(profile.investmentStages) ? profile.investmentStages : [];
-            // Support both stage.stage (number) for built-in and stage.id for custom items
-            const stageId = stage.id || stage.stage;
-            const isChecked = checkedStages.includes(stageId) || checkedStages.includes(stage.stage);
+            const stageId = stage.id;
+            const isChecked = checkedStages.includes(stageId);
             const iconColor = isChecked ? 'text-info' : 'text-text-tertiary';
             const itemBg = isChecked ? 'bg-info-bg' : '';
             const description = stage.description || '';
@@ -694,9 +737,7 @@
 
         function handleInvestmentToggle(event) {
             const cb = event.target;
-            const rawStageId = cb.dataset.stageId;
-            // Handle both numeric (built-in) and string (custom) stage IDs
-            const stageId = rawStageId.startsWith('custom-') ? rawStageId : parseInt(rawStageId, 10);
+            const stageId = cb.dataset.stageId;
             const isChecked = cb.checked;
 
             profile = Store.toggleInvestmentStage(profileId, stageId, isChecked);
