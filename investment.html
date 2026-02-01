@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Investment Tracker - Vetted</title>
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg"/>
+    <title>Investment Stages Criteria - Vetted</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -13,54 +14,31 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ============================================
-         DESIGN TOKENS
-         ============================================
-         All design decisions are tokenized here.
-         Change a value once, update everywhere.
-    -->
     <style>
         :root {
-            /* ==========================================
-               COLOR TOKENS
-               ========================================== */
-
-            /* Primary Brand Colors */
             --color-primary: #7f13ec;
             --color-primary-hover: #6b0fcc;
             --color-primary-dark: #4c0b8f;
             --color-primary-light: #a855f7;
-
-            /* Secondary / Accent Colors */
-            --color-accent: #d4af37;          /* Gold */
-            --color-accent-light: #f3e5ab;    /* Light Gold */
+            --color-accent: #d4af37;
+            --color-accent-light: #f3e5ab;
             --color-accent-hover: #c9a227;
-
-            /* Neutral / Base Colors */
             --color-plum: #2a173b;
             --color-plum-light: #4a2c63;
             --color-plum-muted: rgba(42, 23, 59, 0.6);
-
-            /* Background Colors */
-            --color-bg-primary: #f7f4ed;      /* Warm Tan */
+            --color-bg-primary: #f7f4ed;
             --color-bg-secondary: #ffffff;
             --color-bg-tertiary: #f8f7f4;
             --color-bg-sidebar: var(--color-plum);
             --color-bg-card: var(--color-bg-secondary);
-
-            /* Text Colors */
             --color-text-primary: var(--color-plum);
             --color-text-secondary: rgba(42, 23, 59, 0.6);
             --color-text-tertiary: rgba(42, 23, 59, 0.4);
             --color-text-inverse: #ffffff;
             --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
             --color-border: rgba(42, 23, 59, 0.05);
             --color-border-hover: rgba(42, 23, 59, 0.15);
             --color-border-accent: rgba(212, 175, 55, 0.3);
-
-            /* Status Colors */
             --color-success: #16a34a;
             --color-success-bg: #f0fdf4;
             --color-warning: #ca8a04;
@@ -69,66 +47,36 @@
             --color-error-bg: #fef2f2;
             --color-info: #2563eb;
             --color-info-bg: #eff6ff;
-
-            /* Category Colors */
-            --color-water: #3b82f6;
-            --color-water-bg: #eff6ff;
-            --color-sleep: var(--color-primary);
-            --color-sleep-bg: #faf5ff;
-            --color-mood: #eab308;
-            --color-mood-bg: #fefce8;
-            --color-energy: #ec4899;
-            --color-energy-bg: #fdf2f8;
-            --color-social: #f59e0b;
-            --color-social-bg: #fffbeb;
-
-            /* Event Colors */
-            --color-event-primary: var(--color-primary);
-            --color-event-secondary: #14b8a6;
-            --color-event-tertiary: #d1d5db;
+            --font-display: 'Manrope', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --sidebar-width: 16rem;
+            --sidebar-collapsed-width: 4.5rem;
         }
 
-        /* ==========================================
-           DARK MODE COLORS
-           ========================================== */
         html.dark {
-            /* Primary Brand Colors - slightly brighter for dark bg */
             --color-primary: #9333ea;
             --color-primary-hover: #a855f7;
             --color-primary-dark: #7c3aed;
             --color-primary-light: #c084fc;
-
-            /* Accent stays warm gold */
             --color-accent: #d4af37;
             --color-accent-light: #b8942e;
             --color-accent-hover: #e5c158;
-
-            /* Dark neutrals */
             --color-plum: #f8f7f4;
             --color-plum-light: #e5e4e1;
             --color-plum-muted: rgba(248, 247, 244, 0.6);
-
-            /* Background Colors - deep plum/purple tones */
             --color-bg-primary: #1a1625;
             --color-bg-secondary: #241e30;
             --color-bg-tertiary: #2d2640;
             --color-bg-sidebar: #13101a;
             --color-bg-card: #241e30;
-
-            /* Text Colors - light on dark */
             --color-text-primary: #f8f7f4;
             --color-text-secondary: rgba(248, 247, 244, 0.7);
             --color-text-tertiary: rgba(248, 247, 244, 0.5);
-            /* text-inverse stays white - used on dark sidebar */
             --color-text-inverse: #ffffff;
             --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
             --color-border: rgba(255, 255, 255, 0.08);
             --color-border-hover: rgba(255, 255, 255, 0.15);
             --color-border-accent: rgba(212, 175, 55, 0.4);
-
-            /* Status Colors - adjusted for dark bg */
             --color-success: #22c55e;
             --color-success-bg: rgba(34, 197, 94, 0.15);
             --color-warning: #eab308;
@@ -137,151 +85,9 @@
             --color-error-bg: rgba(239, 68, 68, 0.15);
             --color-info: #3b82f6;
             --color-info-bg: rgba(59, 130, 246, 0.15);
-
-            /* Category Colors - adjusted for dark bg */
-            --color-water: #60a5fa;
-            --color-water-bg: rgba(96, 165, 250, 0.15);
-            --color-sleep-bg: rgba(147, 51, 234, 0.15);
-            --color-mood: #facc15;
-            --color-mood-bg: rgba(250, 204, 21, 0.15);
-            --color-energy: #f472b6;
-            --color-energy-bg: rgba(244, 114, 182, 0.15);
-            --color-social: #fbbf24;
-            --color-social-bg: rgba(251, 191, 36, 0.15);
-
-            /* Scrollbar for dark mode */
             color-scheme: dark;
         }
 
-        /* ==========================================
-           TYPOGRAPHY TOKENS (in :root)
-           ========================================== */
-        :root {
-            /* Font Families */
-            --font-display: 'Manrope', system-ui, sans-serif;
-            --font-serif: 'Playfair Display', Georgia, serif;
-
-            /* Font Sizes */
-            --text-xs: 0.75rem;      /* 12px */
-            --text-sm: 0.875rem;     /* 14px */
-            --text-base: 1rem;       /* 16px */
-            --text-lg: 1.125rem;     /* 18px */
-            --text-xl: 1.25rem;      /* 20px */
-            --text-2xl: 1.5rem;      /* 24px */
-            --text-3xl: 1.875rem;    /* 30px */
-            --text-4xl: 2.25rem;     /* 36px */
-            --text-5xl: 3rem;        /* 48px */
-
-            /* Font Weights */
-            --font-normal: 400;
-            --font-medium: 500;
-            --font-semibold: 600;
-            --font-bold: 700;
-
-            /* Line Heights */
-            --leading-tight: 1.25;
-            --leading-normal: 1.5;
-            --leading-relaxed: 1.625;
-
-            /* Letter Spacing */
-            --tracking-tight: -0.025em;
-            --tracking-normal: 0;
-            --tracking-wide: 0.025em;
-            --tracking-wider: 0.05em;
-            --tracking-widest: 0.1em;
-
-            /* ==========================================
-               SPACING TOKENS
-               ========================================== */
-
-            --space-0: 0;
-            --space-1: 0.25rem;      /* 4px */
-            --space-2: 0.5rem;       /* 8px */
-            --space-3: 0.75rem;      /* 12px */
-            --space-4: 1rem;         /* 16px */
-            --space-5: 1.25rem;      /* 20px */
-            --space-6: 1.5rem;       /* 24px */
-            --space-8: 2rem;         /* 32px */
-            --space-10: 2.5rem;      /* 40px */
-            --space-12: 3rem;        /* 48px */
-            --space-16: 4rem;        /* 64px */
-
-            /* ==========================================
-               BORDER RADIUS TOKENS
-               ========================================== */
-
-            --radius-none: 0;
-            --radius-sm: 0.25rem;    /* 4px */
-            --radius-md: 0.5rem;     /* 8px */
-            --radius-lg: 0.75rem;    /* 12px */
-            --radius-xl: 1rem;       /* 16px */
-            --radius-2xl: 1.5rem;    /* 24px */
-            --radius-full: 9999px;
-
-            /* ==========================================
-               SHADOW TOKENS
-               ========================================== */
-
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
-
-            /* ==========================================
-               TRANSITION TOKENS
-               ========================================== */
-
-            --transition-fast: 150ms ease;
-            --transition-base: 200ms ease;
-            --transition-slow: 300ms ease;
-            --transition-slower: 500ms ease;
-
-            /* ==========================================
-               SIZE TOKENS
-               ========================================== */
-
-            /* Sidebar */
-            --sidebar-width: 16rem;  /* 256px */
-            --sidebar-collapsed-width: 4.5rem;  /* 72px */
-
-            /* Header */
-            --header-height: 4rem;   /* 64px */
-
-            /* Avatar Sizes */
-            --avatar-sm: 1.5rem;     /* 24px */
-            --avatar-md: 2.5rem;     /* 40px */
-            --avatar-lg: 3.5rem;     /* 56px */
-
-            /* Icon Sizes */
-            --icon-sm: 1rem;         /* 16px */
-            --icon-md: 1.5rem;       /* 24px */
-            --icon-lg: 2rem;         /* 32px */
-
-            /* Button Heights */
-            --btn-height-sm: 2rem;
-            --btn-height-md: 2.5rem;
-            --btn-height-lg: 3rem;
-
-            /* Stat Icon Size */
-            --stat-icon-size: 3rem;  /* 48px */
-
-            /* ==========================================
-               Z-INDEX TOKENS
-               ========================================== */
-
-            --z-base: 0;
-            --z-dropdown: 10;
-            --z-sticky: 20;
-            --z-header: 30;
-            --z-overlay: 40;
-            --z-modal: 50;
-            --z-toast: 60;
-        }
-
-        /* ==========================================
-           MATERIAL ICONS CONFIGURATION
-           ========================================== */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -289,262 +95,193 @@
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        /* ==========================================
-           CUSTOM SCROLLBAR
-           ========================================== */
-        ::-webkit-scrollbar {
-            width: 6px;
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 9999px; }
+
+        .sidebar-transition { transition: width 300ms ease, padding 300ms ease; }
+        .sidebar-collapsed .sidebar-label { opacity: 0; width: 0; overflow: hidden; }
+        .sidebar-expanded .sidebar-label { opacity: 1; width: auto; transition: opacity 200ms ease 100ms; }
+        .sidebar-collapsed .sidebar-hideable { display: none; }
+        .sidebar-collapsed .sidebar-collapse-icon { transform: rotate(180deg); }
+        .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
+        .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-profile { justify-content: center; }
+        .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
+        .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
+        .theme-btn-active span { color: var(--color-accent) !important; }
+
+        /* Drag and Drop Styles */
+        .criteria-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+            cursor: grab;
+            user-select: none;
         }
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        .criteria-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        ::-webkit-scrollbar-thumb {
-            background: var(--color-accent);
-            border-radius: var(--radius-full);
+        .criteria-card:active {
+            cursor: grabbing;
+        }
+        .criteria-card.dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+        /* Column-specific drag-over colors - Green for adding, Red for removing */
+        [data-column="active"] .criteria-card.drag-over,
+        .drop-zone[data-column="active"] .criteria-card.drag-over {
+            border-top: 3px solid var(--color-success) !important;
+            margin-top: -3px;
+        }
+        [data-column="available"] .criteria-card.drag-over,
+        .drop-zone[data-column="available"] .criteria-card.drag-over {
+            border-top: 3px solid var(--color-error) !important;
+            margin-top: -3px;
         }
 
-        /* Sidebar Collapse Transitions */
-        .sidebar-transition {
-            transition: width 300ms ease, padding 300ms ease;
+        /* Drop zone highlight */
+        .drop-zone {
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            min-height: 200px;
         }
-        .sidebar-collapsed .sidebar-label {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
+        .drop-zone[data-column="active"].drag-over-zone {
+            background: rgba(22, 163, 74, 0.05);
         }
-        .sidebar-expanded .sidebar-label {
+        .drop-zone[data-column="active"].drag-over-zone::after {
+            content: 'Drop here';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            inset: 0;
+            background: rgba(22, 163, 74, 0.05);
+            color: var(--color-success);
+            font-weight: 600;
+            pointer-events: none;
+        }
+        .drop-zone[data-column="available"].drag-over-zone {
+            background: rgba(220, 38, 38, 0.05);
+        }
+        .drop-zone[data-column="available"].drag-over-zone::after {
+            content: 'Drop here';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            inset: 0;
+            background: rgba(220, 38, 38, 0.05);
+            color: var(--color-error);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* Animation for adding/removing */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+        @keyframes flashGreen {
+            0% { background-color: var(--color-success); }
+            100% { background-color: var(--color-bg-tertiary); }
+        }
+        @keyframes flashRed {
+            0% { background-color: var(--color-error); }
+            100% { background-color: var(--color-bg-tertiary); }
+        }
+        .slide-in-left { animation: slideInLeft 0.3s ease forwards; }
+        .slide-in-right { animation: slideInRight 0.3s ease forwards; }
+        .fade-out { animation: fadeOut 0.2s ease forwards; }
+        .flash-green { animation: flashGreen 1s ease forwards; }
+        .flash-red { animation: flashRed 1s ease forwards; }
+
+        /* Column styling */
+        .column-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Drag handle */
+        .drag-handle {
+            cursor: grab;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+        .criteria-card:hover .drag-handle {
             opacity: 1;
-            width: auto;
-            transition: opacity 200ms ease 100ms;
-        }
-        .sidebar-collapsed .sidebar-hideable {
-            display: none;
-        }
-        .sidebar-collapsed .sidebar-collapse-icon {
-            transform: rotate(180deg);
-        }
-        /* Collapsed state - center icons */
-        .sidebar-collapsed .sidebar-logo {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        .sidebar-collapsed .sidebar-nav {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-nav-item {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-bottom {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-profile {
-            justify-content: center;
-        }
-        .sidebar-collapsed .sidebar-collapse-btn {
-            justify-content: center;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-collapsed-show {
-            display: flex !important;
-        }
-        .theme-btn-active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .theme-btn-active span {
-            color: var(--color-accent) !important;
         }
 
-        /* Modal backdrop */
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-        }
-
-        /* Stage card styles */
-        .stage-card {
-            transition: all 200ms ease;
-        }
-        .stage-card:hover {
-            transform: translateX(4px);
-        }
-        .stage-card.completed {
-            border-color: var(--color-info);
-            background: var(--color-info-bg);
+        /* Stage number badge */
+        .stage-badge {
+            min-width: 1.75rem;
+            height: 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
     </style>
 
-    <!-- Tailwind Config Using Design Tokens -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Primary
                         'primary': 'var(--color-primary)',
                         'primary-hover': 'var(--color-primary-hover)',
-                        'primary-dark': 'var(--color-primary-dark)',
                         'primary-light': 'var(--color-primary-light)',
-
-                        // Accent
                         'accent': 'var(--color-accent)',
                         'accent-light': 'var(--color-accent-light)',
-                        'accent-hover': 'var(--color-accent-hover)',
-
-                        // Neutrals
                         'plum': 'var(--color-plum)',
-                        'plum-light': 'var(--color-plum-light)',
-                        'plum-muted': 'var(--color-plum-muted)',
-
-                        // Backgrounds
                         'bg-primary': 'var(--color-bg-primary)',
                         'bg-secondary': 'var(--color-bg-secondary)',
                         'bg-tertiary': 'var(--color-bg-tertiary)',
                         'bg-sidebar': 'var(--color-bg-sidebar)',
                         'bg-card': 'var(--color-bg-card)',
-
-                        // Text
                         'text-primary': 'var(--color-text-primary)',
                         'text-secondary': 'var(--color-text-secondary)',
                         'text-tertiary': 'var(--color-text-tertiary)',
                         'text-inverse': 'var(--color-text-inverse)',
                         'text-inverse-muted': 'var(--color-text-inverse-muted)',
-
-                        // Borders
                         'border-default': 'var(--color-border)',
                         'border-hover': 'var(--color-border-hover)',
-                        'border-accent': 'var(--color-border-accent)',
-
-                        // Status
                         'success': 'var(--color-success)',
                         'success-bg': 'var(--color-success-bg)',
                         'warning': 'var(--color-warning)',
-                        'warning-bg': 'var(--color-warning-bg)',
                         'error': 'var(--color-error)',
                         'error-bg': 'var(--color-error-bg)',
-                        'info': 'var(--color-info)',
-                        'info-bg': 'var(--color-info-bg)',
-
-                        // Categories
-                        'water': 'var(--color-water)',
-                        'water-bg': 'var(--color-water-bg)',
-                        'sleep': 'var(--color-sleep)',
-                        'sleep-bg': 'var(--color-sleep-bg)',
-                        'mood': 'var(--color-mood)',
-                        'mood-bg': 'var(--color-mood-bg)',
-                        'energy': 'var(--color-energy)',
-                        'energy-bg': 'var(--color-energy-bg)',
-                        'social': 'var(--color-social)',
-                        'social-bg': 'var(--color-social-bg)',
-
-                        // Events
-                        'event-primary': 'var(--color-event-primary)',
-                        'event-secondary': 'var(--color-event-secondary)',
-                        'event-tertiary': 'var(--color-event-tertiary)',
                     },
                     fontFamily: {
                         'display': 'var(--font-display)',
                         'serif': 'var(--font-serif)',
                     },
-                    fontSize: {
-                        'xs': 'var(--text-xs)',
-                        'sm': 'var(--text-sm)',
-                        'base': 'var(--text-base)',
-                        'lg': 'var(--text-lg)',
-                        'xl': 'var(--text-xl)',
-                        '2xl': 'var(--text-2xl)',
-                        '3xl': 'var(--text-3xl)',
-                        '4xl': 'var(--text-4xl)',
-                        '5xl': 'var(--text-5xl)',
-                    },
-                    fontWeight: {
-                        'normal': 'var(--font-normal)',
-                        'medium': 'var(--font-medium)',
-                        'semibold': 'var(--font-semibold)',
-                        'bold': 'var(--font-bold)',
-                    },
-                    lineHeight: {
-                        'tight': 'var(--leading-tight)',
-                        'normal': 'var(--leading-normal)',
-                        'relaxed': 'var(--leading-relaxed)',
-                    },
-                    letterSpacing: {
-                        'tight': 'var(--tracking-tight)',
-                        'normal': 'var(--tracking-normal)',
-                        'wide': 'var(--tracking-wide)',
-                        'wider': 'var(--tracking-wider)',
-                        'widest': 'var(--tracking-widest)',
-                    },
-                    spacing: {
-                        '0': 'var(--space-0)',
-                        '1': 'var(--space-1)',
-                        '2': 'var(--space-2)',
-                        '3': 'var(--space-3)',
-                        '4': 'var(--space-4)',
-                        '5': 'var(--space-5)',
-                        '6': 'var(--space-6)',
-                        '8': 'var(--space-8)',
-                        '10': 'var(--space-10)',
-                        '12': 'var(--space-12)',
-                        '16': 'var(--space-16)',
-                        'sidebar': 'var(--sidebar-width)',
-                        'header': 'var(--header-height)',
-                    },
-                    borderRadius: {
-                        'none': 'var(--radius-none)',
-                        'sm': 'var(--radius-sm)',
-                        'DEFAULT': 'var(--radius-md)',
-                        'md': 'var(--radius-md)',
-                        'lg': 'var(--radius-lg)',
-                        'xl': 'var(--radius-xl)',
-                        '2xl': 'var(--radius-2xl)',
-                        'full': 'var(--radius-full)',
-                    },
-                    boxShadow: {
-                        'sm': 'var(--shadow-sm)',
-                        'DEFAULT': 'var(--shadow-md)',
-                        'md': 'var(--shadow-md)',
-                        'lg': 'var(--shadow-lg)',
-                        'xl': 'var(--shadow-xl)',
-                        'card': 'var(--shadow-card)',
-                    },
-                    transitionDuration: {
-                        'fast': '150ms',
-                        'DEFAULT': '200ms',
-                        'slow': '300ms',
-                        'slower': '500ms',
-                    },
                     width: {
                         'sidebar': 'var(--sidebar-width)',
                         'sidebar-collapsed': 'var(--sidebar-collapsed-width)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                    },
-                    height: {
-                        'header': 'var(--header-height)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                        'btn-sm': 'var(--btn-height-sm)',
-                        'btn-md': 'var(--btn-height-md)',
-                        'btn-lg': 'var(--btn-height-lg)',
-                    },
-                    zIndex: {
-                        'base': 'var(--z-base)',
-                        'dropdown': 'var(--z-dropdown)',
-                        'sticky': 'var(--z-sticky)',
-                        'header': 'var(--z-header)',
-                        'overlay': 'var(--z-overlay)',
-                        'modal': 'var(--z-modal)',
-                        'toast': 'var(--z-toast)',
                     },
                 },
             },
@@ -555,12 +292,11 @@
     <div class="flex h-screen w-full">
         <!-- Sidebar -->
         <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
-            <!-- Logo (Clickable to toggle) -->
+            <!-- Logo -->
             <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
-                <span class="material-symbols-outlined text-accent text-3xl shrink-0">verified_user</span>
+                <span class="material-symbols-outlined text-accent text-3xl shrink-0 icon-filled">verified_user</span>
                 <div class="sidebar-label sidebar-hideable">
                     <h1 class="font-serif text-2xl font-bold text-text-inverse">Vetted</h1>
-                    <p class="text-text-inverse-muted text-sm mt-1">Know Your Worth</p>
                 </div>
             </div>
 
@@ -574,23 +310,40 @@
                     <span class="material-symbols-outlined shrink-0">inventory_2</span>
                     <span class="font-medium sidebar-label">Archives</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
-                    <span class="material-symbols-outlined shrink-0">settings</span>
-                    <span class="font-medium sidebar-label">Settings</span>
-                </a>
 
-                <!-- Divider -->
-                <div class="my-4 border-t border-white/10"></div>
-
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Home">
-                    <span class="material-symbols-outlined shrink-0">home</span>
-                    <span class="font-medium sidebar-label">Home</span>
-                </a>
+                <!-- Criteria Dropdown -->
+                <div class="mt-2">
+                    <button onclick="toggleCriteriaDropdown()" class="sidebar-nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" title="Criteria">
+                        <span class="material-symbols-outlined shrink-0">checklist</span>
+                        <span class="font-medium sidebar-label flex-1 text-left">Criteria</span>
+                        <span class="material-symbols-outlined text-lg sidebar-label transition-transform duration-200" id="criteria-chevron">expand_more</span>
+                    </button>
+                    <div id="criteria-dropdown" class="overflow-hidden transition-all duration-200 max-h-96">
+                        <div class="pl-4 mt-1 space-y-1">
+                            <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="green-flags.html" title="Green Flags">
+                                <span class="material-symbols-outlined text-success shrink-0">thumb_up</span>
+                                <span class="font-medium sidebar-label text-sm">Green Flags</span>
+                            </a>
+                            <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="red-flags.html" title="Red Flags">
+                                <span class="material-symbols-outlined text-error shrink-0">flag</span>
+                                <span class="font-medium sidebar-label text-sm">Red Flags</span>
+                            </a>
+                            <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="dealbreakers.html" title="Dealbreakers">
+                                <span class="material-symbols-outlined text-primary-light shrink-0">block</span>
+                                <span class="font-medium sidebar-label text-sm">Dealbreakers</span>
+                            </a>
+                            <a class="sidebar-nav-item flex items-center gap-4 px-4 py-2.5 rounded-lg bg-white/5 text-text-inverse transition-all duration-200" href="investment.html" title="Investment">
+                                <span class="material-symbols-outlined text-accent shrink-0">trending_up</span>
+                                <span class="font-medium sidebar-label text-sm">Investment</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </nav>
 
             <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
-                <!-- Theme & Collapse Row -->
+                <!-- Theme Toggle Row -->
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
                         <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
@@ -610,22 +363,24 @@
                     <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
                 </button>
 
-                <!-- Privacy Note -->
-                <div class="sidebar-hideable text-center">
-                    <p class="text-xs text-text-inverse-muted flex items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-sm">lock</span>
-                        Data stored locally
-                    </p>
-                </div>
+                <!-- User Profile -->
+                <a href="settings.html" class="sidebar-profile flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors duration-200 sidebar-hideable">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm shrink-0">
+                        U
+                    </div>
+                    <div class="sidebar-label flex-1 min-w-0">
+                        <p class="font-medium text-text-inverse text-sm truncate">User</p>
+                        <p class="text-xs text-text-inverse-muted">Settings</p>
+                    </div>
+                    <span class="material-symbols-outlined text-text-inverse-muted text-lg sidebar-label">chevron_right</span>
+                </a>
             </div>
         </aside>
 
-        <!-- Sidebar Toggle Script -->
         <script>
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');
                 const isExpanded = sidebar.classList.contains('sidebar-expanded');
-
                 if (isExpanded) {
                     sidebar.classList.remove('sidebar-expanded', 'w-sidebar');
                     sidebar.classList.add('sidebar-collapsed', 'w-sidebar-collapsed');
@@ -635,22 +390,29 @@
                 }
             }
 
-            // Theme Management
+            function toggleCriteriaDropdown() {
+                const dropdown = document.getElementById('criteria-dropdown');
+                const chevron = document.getElementById('criteria-chevron');
+                const isOpen = dropdown.style.maxHeight !== '0px';
+
+                if (isOpen) {
+                    dropdown.style.maxHeight = '0px';
+                    chevron.style.transform = 'rotate(-90deg)';
+                } else {
+                    dropdown.style.maxHeight = '400px';
+                    chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+
             function setTheme(theme) {
                 const html = document.documentElement;
-
                 if (theme === 'dark') {
                     html.classList.remove('light');
                     html.classList.add('dark');
-                } else if (theme === 'light') {
+                } else {
                     html.classList.remove('dark');
                     html.classList.add('light');
-                } else {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    html.classList.remove('light', 'dark');
-                    html.classList.add(prefersDark ? 'dark' : 'light');
                 }
-
                 localStorage.setItem('theme', theme);
                 updateSidebarThemeButtons(theme);
             }
@@ -666,177 +428,436 @@
                 }
             }
 
-            // Initialize theme on page load
             (function() {
                 const savedTheme = localStorage.getItem('theme') || 'light';
                 setTheme(savedTheme);
-
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                    if (localStorage.getItem('theme') === 'system') {
-                        setTheme('system');
-                    }
-                });
             })();
         </script>
 
         <!-- Main Content -->
         <main class="flex-1 flex flex-col h-full overflow-hidden">
-            <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8">
-                <div class="max-w-3xl mx-auto">
-                    <!-- Back Button -->
-                    <a id="back-link" href="profile.html" class="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors duration-200 mb-6">
-                        <span class="material-symbols-outlined text-xl">arrow_back</span>
-                        <span class="font-medium">Back to Profile</span>
-                    </a>
+            <!-- Header -->
+            <div class="shrink-0 p-6 pb-4 border-b border-border-default bg-bg-card">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-accent text-3xl icon-filled">trending_up</span>
+                    </div>
+                    <div>
+                        <h1 class="font-serif text-3xl font-bold text-text-primary">Investment Stages</h1>
+                        <p class="text-text-secondary">Manage relationship milestones to track in your evaluations</p>
+                    </div>
+                </div>
+            </div>
 
-                    <!-- Header -->
-                    <div class="bg-info-bg rounded-2xl border border-info/20 p-6 mb-8">
-                        <div class="flex items-start gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-bg-card flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-3xl text-info">trending_up</span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h1 class="font-serif text-3xl font-bold text-text-primary mb-1">Investment Tracker</h1>
-                                <p id="profile-name" class="text-text-secondary mb-3">Loading...</p>
+            <!-- Two Column Layout -->
+            <div class="flex-1 overflow-hidden p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <!-- Left Column: Active Criteria -->
+                    <div class="flex flex-col bg-bg-card rounded-2xl border border-border-default shadow-sm overflow-hidden">
+                        <div class="column-header shrink-0 p-4 border-b border-border-default bg-bg-sidebar">
+                            <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <div class="flex-1 h-2 bg-bg-card rounded-full overflow-hidden">
-                                        <div id="progress-bar" class="h-full bg-info rounded-full transition-all duration-500" style="width: 0%"></div>
-                                    </div>
-                                    <span id="progress-text" class="text-sm font-semibold text-info whitespace-nowrap">Stage 0 of 10</span>
+                                    <span class="material-symbols-outlined text-accent">check_circle</span>
+                                    <h2 class="font-semibold text-text-inverse">Active Stages</h2>
                                 </div>
+                                <span id="active-count" class="px-2.5 py-1 bg-accent text-bg-sidebar text-xs font-bold rounded-full">0</span>
                             </div>
+                            <p class="text-xs text-text-inverse-muted mt-1">Drag to reorder - Click - to remove</p>
+                        </div>
+                        <div id="active-list" class="flex-1 overflow-y-auto p-4 drop-zone relative" data-column="active">
+                            <!-- Active criteria cards rendered here -->
                         </div>
                     </div>
 
-                    <!-- Instructions -->
-                    <p class="text-text-secondary mb-6">Click on any stage to mark it as completed. Each stage is independent — check only the ones that apply.</p>
+                    <!-- Right Column: Available Criteria -->
+                    <div class="flex flex-col bg-bg-card rounded-2xl border border-border-default shadow-sm overflow-hidden">
+                        <div class="column-header shrink-0 p-4 border-b border-border-default bg-bg-sidebar">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-accent">playlist_add</span>
+                                    <h2 class="font-semibold text-text-inverse">Available</h2>
+                                </div>
+                                <span id="available-count" class="px-2.5 py-1 bg-text-inverse-muted text-bg-sidebar text-xs font-bold rounded-full">0</span>
+                            </div>
+                            <p class="text-xs text-text-inverse-muted mt-1">Click + to add to active list</p>
+                        </div>
 
-                    <!-- Stages Timeline -->
-                    <div id="stages-container" class="relative">
-                        <!-- Vertical line -->
-                        <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-border-default"></div>
+                        <!-- Add Custom Input -->
+                        <div class="shrink-0 p-4 border-b border-border-default bg-bg-sidebar">
+                            <form onsubmit="addCustomItem(event)" class="flex gap-2">
+                                <input type="text" id="custom-input" placeholder="Add your own milestone..." class="flex-1 px-4 py-2.5 bg-bg-card border border-border-default rounded-xl text-text-primary placeholder-text-tertiary text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                                <button type="submit" class="px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors flex items-center gap-1 shrink-0">
+                                    <span class="material-symbols-outlined text-lg">add</span>
+                                    Add
+                                </button>
+                            </form>
+                        </div>
 
-                        <!-- Stages will be rendered here -->
+                        <div id="available-list" class="flex-1 overflow-y-auto p-4 drop-zone relative" data-column="available">
+                            <!-- Available criteria cards rendered here -->
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Investment Tracker JavaScript -->
+    <!-- JavaScript -->
     <script type="module">
-        import { Store } from './src/js/store.js';
-        import { getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
-        import { investmentStages } from './src/data/investment-stages.js';
+        import { CriteriaStore } from './src/js/criteria-store.js';
+        import { investmentStages, getDefaultInvestmentStages } from './src/data/investment-stages.js';
 
-        // Get profile ID from URL
-        const profileId = getProfileIdFromUrl();
+        const STORAGE_KEY = 'vetted_investment_stages_order';
+        let activeItems = [];
+        let availableItems = [];
+        let draggedItem = null;
+        let draggedElement = null;
+        let placeholder = null;
 
-        // Redirect if no valid profile
-        if (!profileId) {
-            window.location.href = 'index.html';
-        }
+        // Load state
+        function loadState() {
+            const defaultItems = getDefaultInvestmentStages();
+            const defaultIds = defaultItems.map(f => f.id);
+            const customItems = CriteriaStore.getCustomItems('investmentStages');
 
-        let profile = Store.getProfile(profileId);
+            // Combine all items
+            const allItems = [...investmentStages, ...customItems];
 
-        if (!profile) {
-            window.location.href = 'index.html';
-        }
+            // Get saved order
+            const savedOrder = localStorage.getItem(STORAGE_KEY);
+            let activeIds;
 
-        // Migrate old data format if needed (single number to array)
-        function getCheckedStages() {
-            if (Array.isArray(profile.investmentStages)) {
-                return profile.investmentStages;
+            if (savedOrder) {
+                try {
+                    activeIds = JSON.parse(savedOrder);
+                } catch (e) {
+                    activeIds = [...defaultIds];
+                }
+            } else {
+                activeIds = [...defaultIds];
             }
-            // Legacy: convert old single number to empty array (user will re-check)
-            return [];
-        }
 
-        // Update page title and back link
-        document.title = `Investment Tracker - ${profile.name} - Vetted`;
-        document.getElementById('back-link').href = `profile.html?id=${profileId}`;
-        document.getElementById('profile-name').textContent = escapeHtml(profile.name);
+            // Build active and available lists
+            activeItems = [];
+            availableItems = [];
 
-        // Render a single stage card
-        function renderStageCard(stageData, checkedStages) {
-            const { stage, label, description } = stageData;
-            const isChecked = checkedStages.includes(stage);
+            // Add active items in saved order
+            activeIds.forEach(id => {
+                const item = allItems.find(i => i.id === id);
+                if (item) activeItems.push(item);
+            });
 
-            const iconHtml = isChecked
-                ? `<span class="material-symbols-outlined text-xl text-info icon-filled">check_circle</span>`
-                : `<span class="material-symbols-outlined text-xl text-text-tertiary">radio_button_unchecked</span>`;
-
-            const numberBgClass = isChecked
-                ? 'bg-info text-white'
-                : 'bg-bg-tertiary text-text-tertiary';
-
-            const stateClass = isChecked ? 'completed' : '';
-
-            return `
-                <div class="stage-card relative pl-16 pb-6 cursor-pointer group" data-stage="${stage}">
-                    <!-- Stage indicator on timeline -->
-                    <div class="absolute left-0 w-12 h-12 rounded-full bg-bg-card border-2 ${isChecked ? 'border-info' : 'border-border-default'} flex items-center justify-center z-10">
-                        ${iconHtml}
-                    </div>
-
-                    <!-- Stage card content -->
-                    <div class="stage-card ${stateClass} bg-bg-card rounded-xl border border-border-default p-4 ml-2 hover:border-info/50 hover:shadow-md transition-all duration-200">
-                        <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-lg ${numberBgClass} flex items-center justify-center shrink-0 font-bold text-sm">
-                                ${stage}
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="font-semibold text-text-primary mb-1">${escapeHtml(label)}</h3>
-                                <p class="text-sm text-text-secondary">${escapeHtml(description)}</p>
-                            </div>
-                            ${isChecked ? `<span class="material-symbols-outlined text-info shrink-0">check</span>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Render all stages
-        function renderStages() {
-            const container = document.getElementById('stages-container');
-            const checkedStages = getCheckedStages();
-            const checkedCount = checkedStages.length;
-
-            // Update progress
-            const progressPercent = (checkedCount / 10) * 100;
-            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-            document.getElementById('progress-text').textContent = `${checkedCount} of 10 checked`;
-
-            // Render stage cards
-            container.innerHTML = `
-                <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-border-default"></div>
-                ${investmentStages.map(stage => renderStageCard(stage, checkedStages)).join('')}
-            `;
-
-            // Add click handlers
-            container.querySelectorAll('.stage-card[data-stage]').forEach(card => {
-                card.addEventListener('click', () => {
-                    const clickedStage = parseInt(card.dataset.stage, 10);
-                    handleStageClick(clickedStage);
-                });
+            // Add remaining items to available
+            allItems.forEach(item => {
+                if (!activeIds.includes(item.id)) {
+                    availableItems.push(item);
+                }
             });
         }
 
-        // Handle stage click - toggle individual stage
-        function handleStageClick(stageId) {
-            const checkedStages = getCheckedStages();
-            const isCurrentlyChecked = checkedStages.includes(stageId);
-
-            // Toggle this stage
-            profile = Store.toggleInvestmentStage(profileId, stageId, !isCurrentlyChecked);
-
-            // Re-render
-            renderStages();
+        // Save state
+        function saveState() {
+            const activeIds = activeItems.map(i => i.id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(activeIds));
         }
 
-        // Initialize page
-        renderStages();
+        // Create a card element
+        function createCard(item, isActive) {
+            const card = document.createElement('div');
+            card.className = 'criteria-card bg-bg-tertiary border border-border-default rounded-xl p-4 mb-3 flex items-center gap-3';
+            card.setAttribute('draggable', 'true');
+            card.dataset.id = item.id;
+            card.dataset.column = isActive ? 'active' : 'available';
+
+            const isCustom = item.isCustom || item.id.startsWith('custom-');
+            const stageNumber = item.stage || '';
+
+            card.innerHTML = `
+                <span class="drag-handle material-symbols-outlined text-text-tertiary text-lg shrink-0">drag_indicator</span>
+                ${stageNumber ? `<span class="stage-badge bg-accent/20 text-accent">${stageNumber}</span>` : ''}
+                <div class="flex-1 min-w-0">
+                    <span class="text-text-primary text-sm leading-relaxed block">${escapeHtml(item.label)}</span>
+                    ${item.description ? `<span class="text-text-tertiary text-xs block mt-0.5 truncate">${escapeHtml(item.description)}</span>` : ''}
+                </div>
+                ${isCustom ? `
+                    <button class="delete-btn p-2 rounded-lg hover:bg-error-bg transition-colors text-text-tertiary hover:text-error shrink-0" title="Delete">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                ` : ''}
+                <button class="toggle-btn p-2 rounded-lg transition-colors shrink-0 ${isActive ? 'hover:bg-error-bg text-text-tertiary hover:text-error' : 'hover:bg-primary/10 text-text-tertiary hover:text-primary'}" title="${isActive ? 'Remove' : 'Add'}">
+                    <span class="material-symbols-outlined text-xl">${isActive ? 'remove_circle' : 'add_circle'}</span>
+                </button>
+            `;
+
+            // Toggle button
+            card.querySelector('.toggle-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                animateToggle(item.id, card, isActive);
+            });
+
+            // Delete button
+            const deleteBtn = card.querySelector('.delete-btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteCustomItem(item.id, card);
+                });
+            }
+
+            // Drag events
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('dragleave', handleDragLeave);
+            card.addEventListener('drop', handleDrop);
+
+            return card;
+        }
+
+        // Animate toggle between columns
+        function animateToggle(itemId, card, wasActive) {
+            card.classList.add('fade-out');
+
+            setTimeout(() => {
+                if (wasActive) {
+                    // Move to available
+                    const idx = activeItems.findIndex(i => i.id === itemId);
+                    if (idx > -1) {
+                        const item = activeItems.splice(idx, 1)[0];
+                        availableItems.unshift(item);
+                    }
+                } else {
+                    // Move to active (add to top)
+                    const idx = availableItems.findIndex(i => i.id === itemId);
+                    if (idx > -1) {
+                        const item = availableItems.splice(idx, 1)[0];
+                        activeItems.unshift(item);
+                    }
+                }
+
+                saveState();
+                render();
+
+                // Animate the new card with flash
+                setTimeout(() => {
+                    const newCard = document.querySelector(`[data-id="${itemId}"]`);
+                    if (newCard) {
+                        newCard.classList.add(wasActive ? 'slide-in-right' : 'slide-in-left');
+                        // Flash green when adding to active, red when removing
+                        newCard.classList.add(wasActive ? 'flash-red' : 'flash-green');
+                    }
+                }, 50);
+            }, 200);
+        }
+
+        // Delete custom item
+        function deleteCustomItem(itemId, card) {
+            if (!confirm('Delete this custom milestone?')) return;
+
+            card.classList.add('fade-out');
+            setTimeout(() => {
+                CriteriaStore.removeCustomItem('investmentStages', itemId);
+                activeItems = activeItems.filter(i => i.id !== itemId);
+                availableItems = availableItems.filter(i => i.id !== itemId);
+                saveState();
+                render();
+            }, 200);
+        }
+
+        // Add custom item
+        window.addCustomItem = function(e) {
+            e.preventDefault();
+            const input = document.getElementById('custom-input');
+            const label = input.value.trim();
+            if (!label) return;
+
+            const newItem = CriteriaStore.addCustomItem('investmentStages', { label, description: 'Custom milestone' });
+            availableItems.unshift(newItem);
+            input.value = '';
+            render();
+
+            // Animate
+            setTimeout(() => {
+                const newCard = document.querySelector(`[data-id="${newItem.id}"]`);
+                if (newCard) {
+                    newCard.classList.add('slide-in-right');
+                    newCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, 50);
+        };
+
+        // Drag handlers
+        function handleDragStart(e) {
+            draggedItem = e.target.dataset.id;
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', draggedItem);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.drag-over, .drag-over-zone').forEach(el => {
+                el.classList.remove('drag-over', 'drag-over-zone');
+            });
+            draggedItem = null;
+            draggedElement = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const card = e.target.closest('.criteria-card');
+            if (card && card !== draggedElement) {
+                document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+                card.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            const card = e.target.closest('.criteria-card');
+            if (card) {
+                card.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.querySelectorAll('.drag-over, .drag-over-zone').forEach(el => {
+                el.classList.remove('drag-over', 'drag-over-zone');
+            });
+
+            if (!draggedItem) return;
+
+            const dropTarget = e.target.closest('.criteria-card') || e.target.closest('.drop-zone');
+            if (!dropTarget) return;
+
+            const sourceColumn = draggedElement.dataset.column;
+            const targetColumn = dropTarget.dataset.column || dropTarget.closest('.drop-zone')?.dataset.column;
+
+            if (!targetColumn) return;
+
+            // Find and remove the item from source
+            let item;
+            if (sourceColumn === 'active') {
+                const idx = activeItems.findIndex(i => i.id === draggedItem);
+                if (idx > -1) item = activeItems.splice(idx, 1)[0];
+            } else {
+                const idx = availableItems.findIndex(i => i.id === draggedItem);
+                if (idx > -1) item = availableItems.splice(idx, 1)[0];
+            }
+
+            if (!item) return;
+
+            // Determine if crossing columns
+            const crossingColumns = sourceColumn !== targetColumn;
+
+            // Insert into target
+            if (targetColumn === 'active') {
+                if (dropTarget.classList.contains('criteria-card')) {
+                    const targetId = dropTarget.dataset.id;
+                    const idx = activeItems.findIndex(i => i.id === targetId);
+                    activeItems.splice(idx, 0, item);
+                } else {
+                    activeItems.push(item);
+                }
+            } else {
+                if (dropTarget.classList.contains('criteria-card')) {
+                    const targetId = dropTarget.dataset.id;
+                    const idx = availableItems.findIndex(i => i.id === targetId);
+                    availableItems.splice(idx, 0, item);
+                } else {
+                    availableItems.unshift(item);
+                }
+            }
+
+            saveState();
+            render();
+
+            // Flash animation when crossing columns
+            if (crossingColumns) {
+                setTimeout(() => {
+                    const newCard = document.querySelector(`[data-id="${item.id}"]`);
+                    if (newCard) {
+                        newCard.classList.add(targetColumn === 'active' ? 'flash-green' : 'flash-red');
+                    }
+                }, 50);
+            }
+        }
+
+        // Setup drop zones
+        function setupDropZones() {
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (!e.target.closest('.criteria-card')) {
+                        zone.classList.add('drag-over-zone');
+                    }
+                });
+                zone.addEventListener('dragleave', (e) => {
+                    if (!zone.contains(e.relatedTarget)) {
+                        zone.classList.remove('drag-over-zone');
+                    }
+                });
+                zone.addEventListener('drop', handleDrop);
+            });
+        }
+
+        // Render
+        function render() {
+            const activeList = document.getElementById('active-list');
+            const availableList = document.getElementById('available-list');
+
+            // Clear
+            activeList.innerHTML = '';
+            availableList.innerHTML = '';
+
+            // Render active
+            if (activeItems.length === 0) {
+                activeList.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined text-4xl mb-2">playlist_add</span>
+                        <p class="text-sm">No active stages</p>
+                        <p class="text-xs mt-1">Add items from the right column</p>
+                    </div>
+                `;
+            } else {
+                activeItems.forEach(item => {
+                    activeList.appendChild(createCard(item, true));
+                });
+            }
+
+            // Render available
+            if (availableItems.length === 0) {
+                availableList.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined text-4xl mb-2">check_circle</span>
+                        <p class="text-sm">All stages are active</p>
+                        <p class="text-xs mt-1">Add custom milestones above</p>
+                    </div>
+                `;
+            } else {
+                availableItems.forEach(item => {
+                    availableList.appendChild(createCard(item, false));
+                });
+            }
+
+            // Update counts
+            document.getElementById('active-count').textContent = activeItems.length;
+            document.getElementById('available-count').textContent = availableItems.length;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        loadState();
+        render();
+        setupDropZones();
     </script>
 </body>
 </html>
