@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Vetted - Relationship Vetting</title>
+    <title>Profile Detail - Vetted</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -554,8 +554,8 @@
 
             <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
-                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">dashboard</span>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
+                    <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
@@ -663,34 +663,40 @@
         <main class="flex-1 flex flex-col h-full overflow-hidden">
             <!-- Scrollable Content -->
             <div class="flex-1 overflow-y-auto p-8">
-                <div class="max-w-6xl mx-auto">
-                    <!-- Header Section -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                        <div>
-                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Your Profiles</h1>
-                            <p class="text-text-secondary" id="profile-count">Loading...</p>
+                <div class="max-w-4xl mx-auto">
+                    <!-- Back Button -->
+                    <a href="index.html" class="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors duration-200 mb-6">
+                        <span class="material-symbols-outlined text-xl">arrow_back</span>
+                        <span class="font-medium">Back to Profiles</span>
+                    </a>
+
+                    <!-- Profile Header -->
+                    <div id="profile-header" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 mb-6">
+                        <!-- Content will be rendered by JavaScript -->
+                    </div>
+
+                    <!-- Grade Breakdown Section -->
+                    <div class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 mb-6">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-4">Grade Breakdown</h2>
+                        <div id="grade-breakdown" class="space-y-4">
+                            <!-- Content will be rendered by JavaScript -->
                         </div>
-                        <button onclick="openAddModal()" class="px-5 py-2.5 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 self-start md:self-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Profile
+                    </div>
+
+                    <!-- Action Cards Grid -->
+                    <div id="action-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <!-- Content will be rendered by JavaScript -->
+                    </div>
+
+                    <!-- Archive/Delete Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border-default">
+                        <button id="archive-btn" onclick="handleArchive()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-secondary rounded-xl font-semibold hover:bg-border-hover hover:text-text-primary transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">inventory_2</span>
+                            Archive Profile
                         </button>
-                    </div>
-
-                    <!-- Profile Grid -->
-                    <div id="profile-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Profiles will be rendered here by JavaScript -->
-                    </div>
-
-                    <!-- Empty State (hidden by default) -->
-                    <div id="empty-state" class="hidden text-center py-16">
-                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-bg-tertiary flex items-center justify-center">
-                            <span class="material-symbols-outlined text-5xl text-text-tertiary">person_search</span>
-                        </div>
-                        <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">No profiles yet</h2>
-                        <p class="text-text-secondary mb-6 max-w-md mx-auto">Start evaluating someone by adding your first profile. All data stays private on your device.</p>
-                        <button onclick="openAddModal()" class="px-6 py-3 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 mx-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Your First Profile
+                        <button id="delete-btn" onclick="handleDelete()" class="flex-1 px-4 py-3 bg-error-bg text-error rounded-xl font-semibold hover:bg-error hover:text-white transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">delete</span>
+                            Delete Profile
                         </button>
                     </div>
                 </div>
@@ -698,125 +704,207 @@
         </main>
     </div>
 
-    <!-- Add Profile Modal -->
-    <div id="add-modal" class="fixed inset-0 z-modal hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeAddModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-                <button onclick="closeAddModal()" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
-                    <span class="material-symbols-outlined text-text-secondary">close</span>
-                </button>
-                <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">Add New Profile</h2>
-                <p class="text-text-secondary text-sm mb-6">Enter a name or nickname to identify this person.</p>
-                <form onsubmit="handleAddProfile(event)">
-                    <label class="block mb-4">
-                        <span class="text-sm font-medium text-text-primary mb-2 block">Name</span>
-                        <input type="text" id="profile-name-input" placeholder="e.g., John, Coffee Shop Guy" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
-                    </label>
-                    <div class="flex gap-3">
-                        <button type="button" onclick="closeAddModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="flex-1 px-4 py-3 bg-primary text-text-inverse rounded-xl font-semibold hover:bg-primary-hover transition-colors">
-                            Create Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard JavaScript -->
+    <!-- Profile Detail JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
         import { getGradeColor, getGradeDescription } from './src/js/grading.js';
-        import { getInitials, getAvatarColor, formatRelativeTime, escapeHtml } from './src/js/utils.js';
+        import { getInitials, getAvatarColor, getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
 
-        // Make functions available globally
-        window.openAddModal = function() {
-            document.getElementById('add-modal').classList.remove('hidden');
-            document.getElementById('profile-name-input').focus();
-        };
+        // Constants for totals
+        const GREEN_TOTAL = 20;
+        const RED_TOTAL = 23;
+        const DEALBREAKER_TOTAL = 15;
+        const INVESTMENT_TOTAL = 10;
 
-        window.closeAddModal = function() {
-            document.getElementById('add-modal').classList.add('hidden');
-            document.getElementById('profile-name-input').value = '';
-        };
+        // Get profile ID from URL
+        const profileId = getProfileIdFromUrl();
 
-        window.handleAddProfile = function(event) {
-            event.preventDefault();
-            const name = document.getElementById('profile-name-input').value.trim();
-            if (name) {
-                Store.createProfile(name);
-                closeAddModal();
-                renderProfiles();
-            }
-        };
+        // Redirect if no valid profile
+        if (!profileId) {
+            window.location.href = 'index.html';
+        }
 
-        function renderProfileCard(profile) {
+        const profile = Store.getProfile(profileId);
+
+        if (!profile) {
+            window.location.href = 'index.html';
+        }
+
+        // Update page title
+        document.title = `${profile.name} - Vetted`;
+
+        // Render profile header
+        function renderProfileHeader() {
             const colors = getGradeColor(profile.grade);
             const initials = getInitials(profile.name);
             const avatarColor = getAvatarColor(profile.id);
-            const greenCount = profile.greenFlags.length;
-            const redCount = profile.redFlags.length;
-            const dbCount = profile.dealbreakers.length;
 
-            return `
-                <article onclick="window.location.href='profile.html?id=${profile.id}'" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 cursor-pointer hover:shadow-lg hover:border-border-hover transition-all duration-200 group">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="h-14 w-14 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0" style="background-color: ${avatarColor}">
-                            ${escapeHtml(initials)}
+            document.getElementById('profile-header').innerHTML = `
+                <div class="flex items-start gap-6">
+                    <div class="h-20 w-20 rounded-full flex items-center justify-center text-white font-bold text-2xl shrink-0" style="background-color: ${avatarColor}">
+                        ${escapeHtml(initials)}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 mb-2 flex-wrap">
+                            <h1 class="font-serif text-3xl font-bold text-text-primary">${escapeHtml(profile.name)}</h1>
+                            <span class="px-4 py-1.5 ${colors.bg} ${colors.text} rounded-full text-lg font-bold">
+                                ${profile.grade}
+                            </span>
                         </div>
-                        <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold">
-                            ${profile.grade}
-                        </span>
+                        <p class="text-text-secondary">${getGradeDescription(profile.grade)}</p>
                     </div>
-                    <h3 class="font-serif text-xl font-bold text-text-primary mb-1 group-hover:text-primary transition-colors">${escapeHtml(profile.name)}</h3>
-                    <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(profile.grade)}</p>
-                    <div class="flex items-center gap-4 text-sm">
-                        <span class="flex items-center gap-1 text-success">
-                            <span class="material-symbols-outlined text-base">thumb_up</span>
-                            ${greenCount}
-                        </span>
-                        <span class="flex items-center gap-1 text-warning">
-                            <span class="material-symbols-outlined text-base">flag</span>
-                            ${redCount}
-                        </span>
-                        <span class="flex items-center gap-1 text-error">
-                            <span class="material-symbols-outlined text-base">block</span>
-                            ${dbCount}
-                        </span>
-                    </div>
-                    <p class="text-xs text-text-tertiary mt-4 pt-4 border-t border-border-default">
-                        Updated ${formatRelativeTime(profile.updatedAt)}
-                    </p>
-                </article>
+                </div>
             `;
         }
 
-        function renderProfiles() {
-            const profiles = Store.getProfiles(false);
-            const grid = document.getElementById('profile-grid');
-            const emptyState = document.getElementById('empty-state');
-            const countEl = document.getElementById('profile-count');
+        // Render grade breakdown with progress bars
+        function renderGradeBreakdown() {
+            const greenCount = profile.greenFlags.length;
+            const redCount = profile.redFlags.length;
+            const dbCount = profile.dealbreakers.length;
+            const investmentStage = profile.investmentStage || 0;
 
-            if (profiles.length === 0) {
-                grid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                countEl.textContent = 'No profiles yet';
-            } else {
-                grid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
-                countEl.textContent = `${profiles.length} profile${profiles.length !== 1 ? 's' : ''}`;
+            const greenPercent = (greenCount / GREEN_TOTAL) * 100;
+            const redPercent = (redCount / RED_TOTAL) * 100;
+            const dbPercent = (dbCount / DEALBREAKER_TOTAL) * 100;
+            const investmentPercent = (investmentStage / INVESTMENT_TOTAL) * 100;
 
-                // Sort by updatedAt descending
-                profiles.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-                grid.innerHTML = profiles.map(renderProfileCard).join('');
-            }
+            document.getElementById('grade-breakdown').innerHTML = `
+                <!-- Green Flags -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-success">thumb_up</span>
+                            <span class="font-medium text-text-primary">Green Flags</span>
+                        </div>
+                        <span class="text-sm font-semibold text-text-secondary">${greenCount} of ${GREEN_TOTAL}</span>
+                    </div>
+                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-success rounded-full transition-all duration-500" style="width: ${greenPercent}%"></div>
+                    </div>
+                </div>
+
+                <!-- Red Flags -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-warning">flag</span>
+                            <span class="font-medium text-text-primary">Red Flags</span>
+                        </div>
+                        <span class="text-sm font-semibold text-text-secondary">${redCount} of ${RED_TOTAL}</span>
+                    </div>
+                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-warning rounded-full transition-all duration-500" style="width: ${redPercent}%"></div>
+                    </div>
+                </div>
+
+                <!-- Dealbreakers -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-error">block</span>
+                            <span class="font-medium text-text-primary">Dealbreakers</span>
+                        </div>
+                        <span class="text-sm font-semibold text-text-secondary">${dbCount} of ${DEALBREAKER_TOTAL}</span>
+                    </div>
+                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-error rounded-full transition-all duration-500" style="width: ${dbPercent}%"></div>
+                    </div>
+                </div>
+
+                <!-- Investment Stage -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-info">trending_up</span>
+                            <span class="font-medium text-text-primary">Investment</span>
+                        </div>
+                        <span class="text-sm font-semibold text-text-secondary">${investmentStage} of ${INVESTMENT_TOTAL} stages</span>
+                    </div>
+                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-info rounded-full transition-all duration-500" style="width: ${investmentPercent}%"></div>
+                    </div>
+                </div>
+            `;
         }
 
-        // Initialize on page load
-        renderProfiles();
+        // Render action cards
+        function renderActionCards() {
+            const cards = [
+                {
+                    href: `green-flags.html?id=${profileId}`,
+                    title: 'Green Flags',
+                    icon: 'thumb_up',
+                    bgColor: 'bg-success-bg',
+                    textColor: 'text-success',
+                    borderColor: 'border-success/20',
+                    hoverBorder: 'hover:border-success/40'
+                },
+                {
+                    href: `red-flags.html?id=${profileId}`,
+                    title: 'Red Flags',
+                    icon: 'flag',
+                    bgColor: 'bg-warning-bg',
+                    textColor: 'text-warning',
+                    borderColor: 'border-warning/20',
+                    hoverBorder: 'hover:border-warning/40'
+                },
+                {
+                    href: `dealbreakers.html?id=${profileId}`,
+                    title: 'Dealbreakers',
+                    icon: 'block',
+                    bgColor: 'bg-error-bg',
+                    textColor: 'text-error',
+                    borderColor: 'border-error/20',
+                    hoverBorder: 'hover:border-error/40'
+                },
+                {
+                    href: `investment.html?id=${profileId}`,
+                    title: 'Investment Tracker',
+                    icon: 'trending_up',
+                    bgColor: 'bg-info-bg',
+                    textColor: 'text-info',
+                    borderColor: 'border-info/20',
+                    hoverBorder: 'hover:border-info/40'
+                }
+            ];
+
+            document.getElementById('action-cards').innerHTML = cards.map(card => `
+                <a href="${card.href}" class="${card.bgColor} rounded-2xl border ${card.borderColor} ${card.hoverBorder} p-6 transition-all duration-200 hover:shadow-md group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-bg-card flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl ${card.textColor}">${card.icon}</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-text-primary group-hover:${card.textColor.replace('text-', '')} transition-colors">${card.title}</h3>
+                            <p class="text-sm text-text-secondary">View and edit</p>
+                        </div>
+                        <span class="material-symbols-outlined text-text-tertiary group-hover:text-text-secondary transition-colors">chevron_right</span>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Handle archive
+        window.handleArchive = function() {
+            if (confirm(`Are you sure you want to archive "${profile.name}"? You can restore it later from the Archives.`)) {
+                Store.archiveProfile(profileId);
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Handle delete
+        window.handleDelete = function() {
+            if (confirm(`Are you sure you want to permanently delete "${profile.name}"? This action cannot be undone.`)) {
+                Store.deleteProfile(profileId);
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Initialize page
+        renderProfileHeader();
+        renderGradeBreakdown();
+        renderActionCards();
     </script>
 </body>
 </html>

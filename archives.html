@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Vetted - Relationship Vetting</title>
+    <title>Archives - Vetted</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -554,12 +554,12 @@
 
             <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
-                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">dashboard</span>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
+                    <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
+                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">inventory_2</span>
                     <span class="font-medium sidebar-label">Archives</span>
                 </a>
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
@@ -667,93 +667,57 @@
                     <!-- Header Section -->
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         <div>
-                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Your Profiles</h1>
-                            <p class="text-text-secondary" id="profile-count">Loading...</p>
+                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Archives</h1>
+                            <p class="text-text-secondary" id="archive-count">Loading...</p>
                         </div>
-                        <button onclick="openAddModal()" class="px-5 py-2.5 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 self-start md:self-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Profile
-                        </button>
+                        <a href="index.html" class="px-5 py-2.5 bg-bg-tertiary text-text-primary border border-border-default rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-border-hover transition-colors duration-200 self-start md:self-auto">
+                            <span class="material-symbols-outlined text-lg">arrow_back</span>
+                            Back to Profiles
+                        </a>
                     </div>
 
-                    <!-- Profile Grid -->
-                    <div id="profile-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Profiles will be rendered here by JavaScript -->
+                    <!-- Archive Grid -->
+                    <div id="archive-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Archived profiles will be rendered here by JavaScript -->
                     </div>
 
                     <!-- Empty State (hidden by default) -->
                     <div id="empty-state" class="hidden text-center py-16">
                         <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-bg-tertiary flex items-center justify-center">
-                            <span class="material-symbols-outlined text-5xl text-text-tertiary">person_search</span>
+                            <span class="material-symbols-outlined text-5xl text-text-tertiary">inventory_2</span>
                         </div>
-                        <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">No profiles yet</h2>
-                        <p class="text-text-secondary mb-6 max-w-md mx-auto">Start evaluating someone by adding your first profile. All data stays private on your device.</p>
-                        <button onclick="openAddModal()" class="px-6 py-3 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 mx-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Your First Profile
-                        </button>
+                        <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">No archived profiles</h2>
+                        <p class="text-text-secondary mb-6 max-w-md mx-auto">When you archive a profile, it will appear here. Archived profiles can be restored or permanently deleted.</p>
+                        <a href="index.html" class="px-6 py-3 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 mx-auto inline-flex">
+                            <span class="material-symbols-outlined text-lg">arrow_back</span>
+                            Back to Profiles
+                        </a>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Add Profile Modal -->
-    <div id="add-modal" class="fixed inset-0 z-modal hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeAddModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-                <button onclick="closeAddModal()" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
-                    <span class="material-symbols-outlined text-text-secondary">close</span>
-                </button>
-                <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">Add New Profile</h2>
-                <p class="text-text-secondary text-sm mb-6">Enter a name or nickname to identify this person.</p>
-                <form onsubmit="handleAddProfile(event)">
-                    <label class="block mb-4">
-                        <span class="text-sm font-medium text-text-primary mb-2 block">Name</span>
-                        <input type="text" id="profile-name-input" placeholder="e.g., John, Coffee Shop Guy" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
-                    </label>
-                    <div class="flex gap-3">
-                        <button type="button" onclick="closeAddModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="flex-1 px-4 py-3 bg-primary text-text-inverse rounded-xl font-semibold hover:bg-primary-hover transition-colors">
-                            Create Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard JavaScript -->
+    <!-- Archives JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
         import { getGradeColor, getGradeDescription } from './src/js/grading.js';
         import { getInitials, getAvatarColor, formatRelativeTime, escapeHtml } from './src/js/utils.js';
 
         // Make functions available globally
-        window.openAddModal = function() {
-            document.getElementById('add-modal').classList.remove('hidden');
-            document.getElementById('profile-name-input').focus();
+        window.restoreProfile = function(id) {
+            Store.restoreProfile(id);
+            renderArchivedProfiles();
         };
 
-        window.closeAddModal = function() {
-            document.getElementById('add-modal').classList.add('hidden');
-            document.getElementById('profile-name-input').value = '';
-        };
-
-        window.handleAddProfile = function(event) {
-            event.preventDefault();
-            const name = document.getElementById('profile-name-input').value.trim();
-            if (name) {
-                Store.createProfile(name);
-                closeAddModal();
-                renderProfiles();
+        window.deleteProfile = function(id, name) {
+            if (confirm(`Are you sure you want to permanently delete "${name}"? This action cannot be undone.`)) {
+                Store.deleteProfile(id);
+                renderArchivedProfiles();
             }
         };
 
-        function renderProfileCard(profile) {
+        function renderArchivedProfileCard(profile) {
             const colors = getGradeColor(profile.grade);
             const initials = getInitials(profile.name);
             const avatarColor = getAvatarColor(profile.id);
@@ -762,18 +726,18 @@
             const dbCount = profile.dealbreakers.length;
 
             return `
-                <article onclick="window.location.href='profile.html?id=${profile.id}'" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 cursor-pointer hover:shadow-lg hover:border-border-hover transition-all duration-200 group">
+                <article class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 group">
                     <div class="flex items-start justify-between mb-4">
-                        <div class="h-14 w-14 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0" style="background-color: ${avatarColor}">
+                        <div class="h-14 w-14 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0 opacity-60" style="background-color: ${avatarColor}">
                             ${escapeHtml(initials)}
                         </div>
-                        <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold">
+                        <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold opacity-60">
                             ${profile.grade}
                         </span>
                     </div>
-                    <h3 class="font-serif text-xl font-bold text-text-primary mb-1 group-hover:text-primary transition-colors">${escapeHtml(profile.name)}</h3>
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-1">${escapeHtml(profile.name)}</h3>
                     <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(profile.grade)}</p>
-                    <div class="flex items-center gap-4 text-sm">
+                    <div class="flex items-center gap-4 text-sm mb-4">
                         <span class="flex items-center gap-1 text-success">
                             <span class="material-symbols-outlined text-base">thumb_up</span>
                             ${greenCount}
@@ -787,36 +751,46 @@
                             ${dbCount}
                         </span>
                     </div>
-                    <p class="text-xs text-text-tertiary mt-4 pt-4 border-t border-border-default">
-                        Updated ${formatRelativeTime(profile.updatedAt)}
+                    <p class="text-xs text-text-tertiary mb-4 pt-4 border-t border-border-default">
+                        Archived ${formatRelativeTime(profile.archivedAt || profile.updatedAt)}
                     </p>
+                    <div class="flex gap-2">
+                        <button onclick="restoreProfile('${profile.id}')" class="flex-1 px-4 py-2.5 bg-success text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                            <span class="material-symbols-outlined text-lg">restore</span>
+                            Restore
+                        </button>
+                        <button onclick="deleteProfile('${profile.id}', '${escapeHtml(profile.name).replace(/'/g, "\\'")}')" class="flex-1 px-4 py-2.5 bg-error text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                            <span class="material-symbols-outlined text-lg">delete_forever</span>
+                            Delete
+                        </button>
+                    </div>
                 </article>
             `;
         }
 
-        function renderProfiles() {
-            const profiles = Store.getProfiles(false);
-            const grid = document.getElementById('profile-grid');
+        function renderArchivedProfiles() {
+            const profiles = Store.getArchivedProfiles();
+            const grid = document.getElementById('archive-grid');
             const emptyState = document.getElementById('empty-state');
-            const countEl = document.getElementById('profile-count');
+            const countEl = document.getElementById('archive-count');
 
             if (profiles.length === 0) {
                 grid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
-                countEl.textContent = 'No profiles yet';
+                countEl.textContent = 'No archived profiles';
             } else {
                 grid.classList.remove('hidden');
                 emptyState.classList.add('hidden');
-                countEl.textContent = `${profiles.length} profile${profiles.length !== 1 ? 's' : ''}`;
+                countEl.textContent = `${profiles.length} archived profile${profiles.length !== 1 ? 's' : ''}`;
 
-                // Sort by updatedAt descending
-                profiles.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-                grid.innerHTML = profiles.map(renderProfileCard).join('');
+                // Sort by archivedAt or updatedAt descending
+                profiles.sort((a, b) => new Date(b.archivedAt || b.updatedAt) - new Date(a.archivedAt || a.updatedAt));
+                grid.innerHTML = profiles.map(renderArchivedProfileCard).join('');
             }
         }
 
         // Initialize on page load
-        renderProfiles();
+        renderArchivedProfiles();
     </script>
 </body>
 </html>

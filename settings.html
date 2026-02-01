@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Settings - Bloom</title>
+    <title>Settings - Vetted</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -148,6 +148,9 @@
             --avatar-sm: 1.5rem;
             --avatar-md: 2.5rem;
             --avatar-lg: 3.5rem;
+
+            /* Z-Index */
+            --z-modal: 50;
         }
 
         .material-symbols-outlined {
@@ -197,32 +200,9 @@
         .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
         .theme-btn-active span { color: var(--color-accent) !important; }
 
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: var(--color-border-hover);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: background 200ms ease;
-        }
-        .toggle-switch.active {
-            background: var(--color-primary);
-        }
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 200ms ease;
-        }
-        .toggle-switch.active::after {
-            transform: translateX(20px);
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
         }
     </style>
 
@@ -309,6 +289,9 @@
                         'avatar-md': 'var(--avatar-md)',
                         'avatar-lg': 'var(--avatar-lg)',
                     },
+                    zIndex: {
+                        'modal': 'var(--z-modal)',
+                    },
                 },
             },
         }
@@ -320,40 +303,27 @@
         <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
             <!-- Logo (Clickable to toggle) -->
             <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
-                <span class="material-symbols-outlined text-accent text-3xl shrink-0">local_florist</span>
+                <span class="material-symbols-outlined text-accent text-3xl shrink-0">verified_user</span>
                 <div class="sidebar-label sidebar-hideable">
-                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Bloom</h1>
-                    <p class="text-text-inverse-muted text-sm mt-1">Wellness & Lifestyle</p>
+                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Vetted</h1>
+                    <p class="text-text-inverse-muted text-sm mt-1">Know Your Worth</p>
                 </div>
             </div>
 
             <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Dashboard">
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
-                    <span class="font-medium sidebar-label">Dashboard</span>
+                    <span class="font-medium sidebar-label">Profiles</span>
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="components.html" title="Components">
-                    <span class="material-symbols-outlined shrink-0">widgets</span>
-                    <span class="font-medium sidebar-label">Components</span>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
+                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
+                    <span class="font-medium sidebar-label">Archives</span>
                 </a>
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
                     <span class="material-symbols-outlined text-accent icon-filled shrink-0">settings</span>
                     <span class="font-medium sidebar-label">Settings</span>
                 </a>
-
-                <!-- Premium Card (under Settings) -->
-                <div class="mt-4 sidebar-hideable">
-                    <div class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-4 text-text-inverse">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="material-symbols-outlined text-accent-light icon-filled text-xl">star</span>
-                            <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">PRO</span>
-                        </div>
-                        <p class="font-medium text-sm leading-tight mb-1">Upgrade to Premium</p>
-                        <p class="text-xs text-text-inverse-muted mb-3">Unlock advanced insights.</p>
-                        <button class="w-full py-2 bg-bg-secondary text-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-accent-light transition-colors duration-200">Explore</button>
-                    </div>
-                </div>
             </nav>
 
             <!-- Bottom Section -->
@@ -378,21 +348,12 @@
                     <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
                 </button>
 
-                <!-- Profile and Notification Row -->
-                <div class="sidebar-profile flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
-                        </div>
-                        <div class="sidebar-label sidebar-hideable">
-                            <p class="text-sm font-semibold text-text-inverse">Sophia R.</p>
-                            <p class="text-xs text-text-inverse-muted">Free Plan</p>
-                        </div>
-                    </div>
-                    <button class="relative p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 sidebar-hideable" title="Notifications">
-                        <span class="material-symbols-outlined text-text-inverse-muted hover:text-text-inverse">notifications</span>
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
-                    </button>
+                <!-- Privacy Note -->
+                <div class="sidebar-hideable text-center">
+                    <p class="text-xs text-text-inverse-muted flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-sm">lock</span>
+                        Data stored locally
+                    </p>
                 </div>
             </div>
         </aside>
@@ -412,10 +373,6 @@
                 }
             }
 
-            function toggleSwitch(element) {
-                element.classList.toggle('active');
-            }
-
             // Theme Management
             function setTheme(theme) {
                 const html = document.documentElement;
@@ -427,7 +384,6 @@
                     html.classList.remove('dark');
                     html.classList.add('light');
                 } else {
-                    // System preference
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     html.classList.remove('light', 'dark');
                     html.classList.add(prefersDark ? 'dark' : 'light');
@@ -486,79 +442,8 @@
                     <!-- Page Header -->
                     <div class="mb-8">
                         <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Settings</h1>
-                        <p class="text-text-secondary">Manage your account preferences and app settings.</p>
+                        <p class="text-text-secondary">Manage your data and app preferences.</p>
                     </div>
-
-                    <!-- Profile Section -->
-                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
-                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Profile</h2>
-
-                        <div class="flex items-start gap-6 mb-6">
-                            <div class="relative">
-                                <div class="h-20 w-20 rounded-full bg-bg-tertiary overflow-hidden">
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
-                                </div>
-                                <button class="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full flex items-center justify-center hover:bg-primary-hover transition-colors duration-200">
-                                    <span class="material-symbols-outlined text-text-inverse text-sm">edit</span>
-                                </button>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="font-semibold text-text-primary mb-1">Sophia Richardson</h3>
-                                <p class="text-sm text-text-secondary mb-3">sophia.r@email.com</p>
-                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-accent-light text-plum text-xs font-bold rounded-full">
-                                    <span class="material-symbols-outlined text-sm">workspace_premium</span>
-                                    Free Plan
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-text-secondary mb-2">Full Name</label>
-                                <input type="text" value="Sophia Richardson" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-text-secondary mb-2">Email Address</label>
-                                <input type="email" value="sophia.r@email.com" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200">
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Notifications Section -->
-                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
-                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Notifications</h2>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between py-3 border-b border-border-default">
-                                <div>
-                                    <p class="font-medium text-text-primary">Push Notifications</p>
-                                    <p class="text-sm text-text-tertiary">Receive notifications on your device</p>
-                                </div>
-                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-                            </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-default">
-                                <div>
-                                    <p class="font-medium text-text-primary">Email Reminders</p>
-                                    <p class="text-sm text-text-tertiary">Daily wellness reminders via email</p>
-                                </div>
-                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
-                            </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-default">
-                                <div>
-                                    <p class="font-medium text-text-primary">Cycle Predictions</p>
-                                    <p class="text-sm text-text-tertiary">Get notified about upcoming cycle phases</p>
-                                </div>
-                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-                            </div>
-                            <div class="flex items-center justify-between py-3">
-                                <div>
-                                    <p class="font-medium text-text-primary">Weekly Summary</p>
-                                    <p class="text-sm text-text-tertiary">Receive a weekly wellness report</p>
-                                </div>
-                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-                            </div>
-                        </div>
-                    </section>
 
                     <!-- Appearance Section -->
                     <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
@@ -585,56 +470,232 @@
                         </div>
                     </section>
 
-                    <!-- Privacy Section -->
+                    <!-- Data Management Section -->
                     <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
-                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Privacy & Security</h2>
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-2">Data Management</h2>
+                        <p class="text-sm text-text-secondary mb-6">Your data is stored locally on this device. Export it to back up or transfer to another device.</p>
 
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between py-3 border-b border-border-default">
-                                <div>
-                                    <p class="font-medium text-text-primary">Two-Factor Authentication</p>
-                                    <p class="text-sm text-text-tertiary">Add an extra layer of security</p>
+                            <!-- Export Data -->
+                            <div class="flex items-center justify-between p-4 bg-bg-tertiary rounded-xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="h-12 w-12 rounded-full bg-info-bg flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-info text-xl">download</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-text-primary">Export Data</p>
+                                        <p class="text-sm text-text-tertiary">Download all your profiles as a JSON file</p>
+                                    </div>
                                 </div>
-                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                                <button onclick="exportData()" class="px-4 py-2 bg-info text-white rounded-lg text-sm font-semibold hover:bg-info/90 transition-colors">
+                                    Export
+                                </button>
                             </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-default">
-                                <div>
-                                    <p class="font-medium text-text-primary">Data Sharing</p>
-                                    <p class="text-sm text-text-tertiary">Allow anonymous usage data collection</p>
+
+                            <!-- Import Data -->
+                            <div class="flex items-center justify-between p-4 bg-bg-tertiary rounded-xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="h-12 w-12 rounded-full bg-success-bg flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-success text-xl">upload</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-text-primary">Import Data</p>
+                                        <p class="text-sm text-text-tertiary">Restore profiles from a backup file</p>
+                                    </div>
                                 </div>
-                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                                <label class="px-4 py-2 bg-success text-white rounded-lg text-sm font-semibold hover:bg-success/90 transition-colors cursor-pointer">
+                                    Import
+                                    <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                                </label>
                             </div>
-                            <div class="flex items-center justify-between py-3">
-                                <div>
-                                    <p class="font-medium text-text-primary">Profile Visibility</p>
-                                    <p class="text-sm text-text-tertiary">Make your profile visible to community</p>
+
+                            <!-- Data Stats -->
+                            <div class="p-4 bg-bg-tertiary rounded-xl">
+                                <div class="flex items-center gap-4 mb-3">
+                                    <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-primary text-xl">storage</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-text-primary">Storage</p>
+                                        <p class="text-sm text-text-tertiary" id="storage-info">Calculating...</p>
+                                    </div>
                                 </div>
-                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                                <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-border-default">
+                                    <div class="text-center">
+                                        <p class="text-2xl font-bold text-text-primary" id="active-count">0</p>
+                                        <p class="text-xs text-text-tertiary">Active Profiles</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-2xl font-bold text-text-primary" id="archived-count">0</p>
+                                        <p class="text-xs text-text-tertiary">Archived</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-2xl font-bold text-text-primary" id="total-count">0</p>
+                                        <p class="text-xs text-text-tertiary">Total</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Privacy Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-2">Privacy</h2>
+                        <p class="text-sm text-text-secondary mb-6">Your privacy is our priority.</p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
+                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
+                                <div>
+                                    <p class="font-medium text-success">100% Local Storage</p>
+                                    <p class="text-sm text-text-secondary">All your data is stored only on your device. Nothing is sent to any server.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
+                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
+                                <div>
+                                    <p class="font-medium text-success">No Tracking</p>
+                                    <p class="text-sm text-text-secondary">No analytics, no cookies, no tracking of any kind.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-success-bg rounded-xl">
+                                <span class="material-symbols-outlined text-success text-xl mt-0.5">check_circle</span>
+                                <div>
+                                    <p class="font-medium text-success">No Account Required</p>
+                                    <p class="text-sm text-text-secondary">Use the app without creating an account or sharing any personal information.</p>
+                                </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- Danger Zone -->
                     <section class="bg-error-bg rounded-2xl border border-error/20 p-6 mb-6">
-                        <h2 class="font-serif text-xl font-bold text-error mb-4">Danger Zone</h2>
-                        <p class="text-sm text-text-secondary mb-4">Once you delete your account, there is no going back. Please be certain.</p>
-                        <button class="px-5 py-2.5 bg-error text-text-inverse rounded-xl text-sm font-semibold hover:bg-error/90 transition-colors duration-200">
-                            Delete Account
+                        <h2 class="font-serif text-xl font-bold text-error mb-2">Danger Zone</h2>
+                        <p class="text-sm text-text-secondary mb-4">This action cannot be undone. All your profiles and data will be permanently deleted.</p>
+                        <button onclick="clearAllData()" class="px-5 py-2.5 bg-error text-white rounded-xl text-sm font-semibold hover:bg-error/90 transition-colors duration-200 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">delete_forever</span>
+                            Clear All Data
                         </button>
                     </section>
 
-                    <!-- Save Button -->
-                    <div class="flex justify-end gap-3">
-                        <button class="px-6 py-3 bg-bg-secondary border border-border-default rounded-xl text-sm font-semibold text-text-primary hover:border-border-hover transition-colors duration-200">
-                            Cancel
-                        </button>
-                        <button class="px-6 py-3 bg-primary text-text-inverse rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors duration-200">
-                            Save Changes
-                        </button>
-                    </div>
+                    <!-- About Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-4">About Vetted</h2>
+                        <p class="text-text-secondary text-sm mb-4">A focused relationship vetting tool to help you evaluate potential partners objectively.</p>
+                        <div class="flex items-center gap-4 text-sm text-text-tertiary">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-base">code</span>
+                                Version 1.0.0
+                            </span>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-modal hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeConfirmModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                <h2 class="font-serif text-xl font-bold text-text-primary mb-2" id="confirm-title">Confirm Action</h2>
+                <p class="text-text-secondary text-sm mb-6" id="confirm-message">Are you sure?</p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="confirmAction()" id="confirm-btn" class="flex-1 px-4 py-3 bg-error text-white rounded-xl font-semibold hover:bg-error/90 transition-colors">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings JavaScript -->
+    <script type="module">
+        import { Store } from './src/js/store.js';
+
+        let pendingAction = null;
+
+        // Update storage stats
+        function updateStorageStats() {
+            const profiles = Store.getProfiles(true);
+            const archived = Store.getArchivedProfiles();
+            const active = profiles.length - archived.length;
+
+            document.getElementById('active-count').textContent = active;
+            document.getElementById('archived-count').textContent = archived.length;
+            document.getElementById('total-count').textContent = profiles.length;
+
+            // Calculate storage size
+            const data = Store.exportData();
+            const bytes = new Blob([data]).size;
+            const kb = (bytes / 1024).toFixed(1);
+            document.getElementById('storage-info').textContent = `${kb} KB used in localStorage`;
+        }
+
+        // Export data
+        window.exportData = function() {
+            const data = Store.exportData();
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `vetted-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // Import data
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const success = Store.importData(e.target.result);
+                if (success) {
+                    alert('Data imported successfully!');
+                    updateStorageStats();
+                } else {
+                    alert('Failed to import data. Please check the file format.');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        };
+
+        // Clear all data
+        window.clearAllData = function() {
+            pendingAction = () => {
+                Store.clearAllData();
+                updateStorageStats();
+                alert('All data has been cleared.');
+            };
+            document.getElementById('confirm-title').textContent = 'Clear All Data';
+            document.getElementById('confirm-message').textContent = 'This will permanently delete all your profiles and cannot be undone. Are you sure?';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        };
+
+        window.closeConfirmModal = function() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            pendingAction = null;
+        };
+
+        window.confirmAction = function() {
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+            closeConfirmModal();
+        };
+
+        // Initialize
+        updateStorageStats();
+    </script>
 </body>
 </html>
