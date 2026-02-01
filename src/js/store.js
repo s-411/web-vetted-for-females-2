@@ -72,16 +72,17 @@ export const Store = {
       createdAt: now,
       updatedAt: now,
       isArchived: false,
+      notes: '',
       greenFlags: [],
       redFlags: [],
       dealbreakers: [],
-      investmentStage: 0,
+      investmentStages: [],
       grade: 'C',
       gradeDetails: {
         greenPercent: 0,
         redPercent: 0,
         dealbreakerCount: 0,
-        investmentStage: 0,
+        investmentCount: 0,
       },
     };
 
@@ -96,6 +97,17 @@ export const Store = {
     if (!data.profiles[id]) return null;
 
     data.profiles[id].name = name.trim();
+    data.profiles[id].updatedAt = new Date().toISOString();
+    saveData(data);
+    return data.profiles[id];
+  },
+
+  // Update profile notes
+  updateProfileNotes(id, notes) {
+    const data = loadData();
+    if (!data.profiles[id]) return null;
+
+    data.profiles[id].notes = notes;
     data.profiles[id].updatedAt = new Date().toISOString();
     saveData(data);
     return data.profiles[id];
@@ -129,14 +141,30 @@ export const Store = {
     return profile;
   },
 
-  // Set investment stage
-  setInvestmentStage(id, stage) {
+  // Toggle investment stage (each stage is independent)
+  toggleInvestmentStage(id, stageId, isChecked) {
     const data = loadData();
     const profile = data.profiles[id];
     if (!profile) return null;
 
-    profile.investmentStage = stage;
-    profile.gradeDetails.investmentStage = stage;
+    // Migrate old data format if needed
+    if (!Array.isArray(profile.investmentStages)) {
+      profile.investmentStages = [];
+    }
+
+    if (isChecked) {
+      if (!profile.investmentStages.includes(stageId)) {
+        profile.investmentStages.push(stageId);
+      }
+    } else {
+      const index = profile.investmentStages.indexOf(stageId);
+      if (index > -1) {
+        profile.investmentStages.splice(index, 1);
+      }
+    }
+
+    // Update grade details with count
+    profile.gradeDetails.investmentCount = profile.investmentStages.length;
     profile.updatedAt = new Date().toISOString();
 
     saveData(data);

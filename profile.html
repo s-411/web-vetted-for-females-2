@@ -13,54 +13,31 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ============================================
-         DESIGN TOKENS
-         ============================================
-         All design decisions are tokenized here.
-         Change a value once, update everywhere.
-    -->
     <style>
         :root {
-            /* ==========================================
-               COLOR TOKENS
-               ========================================== */
-
-            /* Primary Brand Colors */
             --color-primary: #7f13ec;
             --color-primary-hover: #6b0fcc;
             --color-primary-dark: #4c0b8f;
             --color-primary-light: #a855f7;
-
-            /* Secondary / Accent Colors */
-            --color-accent: #d4af37;          /* Gold */
-            --color-accent-light: #f3e5ab;    /* Light Gold */
+            --color-accent: #d4af37;
+            --color-accent-light: #f3e5ab;
             --color-accent-hover: #c9a227;
-
-            /* Neutral / Base Colors */
             --color-plum: #2a173b;
             --color-plum-light: #4a2c63;
             --color-plum-muted: rgba(42, 23, 59, 0.6);
-
-            /* Background Colors */
-            --color-bg-primary: #f7f4ed;      /* Warm Tan */
+            --color-bg-primary: #f7f4ed;
             --color-bg-secondary: #ffffff;
             --color-bg-tertiary: #f8f7f4;
             --color-bg-sidebar: var(--color-plum);
             --color-bg-card: var(--color-bg-secondary);
-
-            /* Text Colors */
             --color-text-primary: var(--color-plum);
             --color-text-secondary: rgba(42, 23, 59, 0.6);
             --color-text-tertiary: rgba(42, 23, 59, 0.4);
             --color-text-inverse: #ffffff;
             --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
             --color-border: rgba(42, 23, 59, 0.05);
             --color-border-hover: rgba(42, 23, 59, 0.15);
             --color-border-accent: rgba(212, 175, 55, 0.3);
-
-            /* Status Colors */
             --color-success: #16a34a;
             --color-success-bg: #f0fdf4;
             --color-warning: #ca8a04;
@@ -69,66 +46,28 @@
             --color-error-bg: #fef2f2;
             --color-info: #2563eb;
             --color-info-bg: #eff6ff;
-
-            /* Category Colors */
-            --color-water: #3b82f6;
-            --color-water-bg: #eff6ff;
-            --color-sleep: var(--color-primary);
-            --color-sleep-bg: #faf5ff;
-            --color-mood: #eab308;
-            --color-mood-bg: #fefce8;
-            --color-energy: #ec4899;
-            --color-energy-bg: #fdf2f8;
-            --color-social: #f59e0b;
-            --color-social-bg: #fffbeb;
-
-            /* Event Colors */
-            --color-event-primary: var(--color-primary);
-            --color-event-secondary: #14b8a6;
-            --color-event-tertiary: #d1d5db;
+            --font-display: 'Manrope', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --sidebar-width: 16rem;
+            --sidebar-collapsed-width: 4.5rem;
         }
 
-        /* ==========================================
-           DARK MODE COLORS
-           ========================================== */
         html.dark {
-            /* Primary Brand Colors - slightly brighter for dark bg */
             --color-primary: #9333ea;
             --color-primary-hover: #a855f7;
-            --color-primary-dark: #7c3aed;
-            --color-primary-light: #c084fc;
-
-            /* Accent stays warm gold */
-            --color-accent: #d4af37;
-            --color-accent-light: #b8942e;
-            --color-accent-hover: #e5c158;
-
-            /* Dark neutrals */
             --color-plum: #f8f7f4;
             --color-plum-light: #e5e4e1;
             --color-plum-muted: rgba(248, 247, 244, 0.6);
-
-            /* Background Colors - deep plum/purple tones */
             --color-bg-primary: #1a1625;
             --color-bg-secondary: #241e30;
             --color-bg-tertiary: #2d2640;
             --color-bg-sidebar: #13101a;
             --color-bg-card: #241e30;
-
-            /* Text Colors - light on dark */
             --color-text-primary: #f8f7f4;
             --color-text-secondary: rgba(248, 247, 244, 0.7);
             --color-text-tertiary: rgba(248, 247, 244, 0.5);
-            /* text-inverse stays white - used on dark sidebar */
-            --color-text-inverse: #ffffff;
-            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
             --color-border: rgba(255, 255, 255, 0.08);
             --color-border-hover: rgba(255, 255, 255, 0.15);
-            --color-border-accent: rgba(212, 175, 55, 0.4);
-
-            /* Status Colors - adjusted for dark bg */
             --color-success: #22c55e;
             --color-success-bg: rgba(34, 197, 94, 0.15);
             --color-warning: #eab308;
@@ -137,151 +76,9 @@
             --color-error-bg: rgba(239, 68, 68, 0.15);
             --color-info: #3b82f6;
             --color-info-bg: rgba(59, 130, 246, 0.15);
-
-            /* Category Colors - adjusted for dark bg */
-            --color-water: #60a5fa;
-            --color-water-bg: rgba(96, 165, 250, 0.15);
-            --color-sleep-bg: rgba(147, 51, 234, 0.15);
-            --color-mood: #facc15;
-            --color-mood-bg: rgba(250, 204, 21, 0.15);
-            --color-energy: #f472b6;
-            --color-energy-bg: rgba(244, 114, 182, 0.15);
-            --color-social: #fbbf24;
-            --color-social-bg: rgba(251, 191, 36, 0.15);
-
-            /* Scrollbar for dark mode */
             color-scheme: dark;
         }
 
-        /* ==========================================
-           TYPOGRAPHY TOKENS (in :root)
-           ========================================== */
-        :root {
-            /* Font Families */
-            --font-display: 'Manrope', system-ui, sans-serif;
-            --font-serif: 'Playfair Display', Georgia, serif;
-
-            /* Font Sizes */
-            --text-xs: 0.75rem;      /* 12px */
-            --text-sm: 0.875rem;     /* 14px */
-            --text-base: 1rem;       /* 16px */
-            --text-lg: 1.125rem;     /* 18px */
-            --text-xl: 1.25rem;      /* 20px */
-            --text-2xl: 1.5rem;      /* 24px */
-            --text-3xl: 1.875rem;    /* 30px */
-            --text-4xl: 2.25rem;     /* 36px */
-            --text-5xl: 3rem;        /* 48px */
-
-            /* Font Weights */
-            --font-normal: 400;
-            --font-medium: 500;
-            --font-semibold: 600;
-            --font-bold: 700;
-
-            /* Line Heights */
-            --leading-tight: 1.25;
-            --leading-normal: 1.5;
-            --leading-relaxed: 1.625;
-
-            /* Letter Spacing */
-            --tracking-tight: -0.025em;
-            --tracking-normal: 0;
-            --tracking-wide: 0.025em;
-            --tracking-wider: 0.05em;
-            --tracking-widest: 0.1em;
-
-            /* ==========================================
-               SPACING TOKENS
-               ========================================== */
-
-            --space-0: 0;
-            --space-1: 0.25rem;      /* 4px */
-            --space-2: 0.5rem;       /* 8px */
-            --space-3: 0.75rem;      /* 12px */
-            --space-4: 1rem;         /* 16px */
-            --space-5: 1.25rem;      /* 20px */
-            --space-6: 1.5rem;       /* 24px */
-            --space-8: 2rem;         /* 32px */
-            --space-10: 2.5rem;      /* 40px */
-            --space-12: 3rem;        /* 48px */
-            --space-16: 4rem;        /* 64px */
-
-            /* ==========================================
-               BORDER RADIUS TOKENS
-               ========================================== */
-
-            --radius-none: 0;
-            --radius-sm: 0.25rem;    /* 4px */
-            --radius-md: 0.5rem;     /* 8px */
-            --radius-lg: 0.75rem;    /* 12px */
-            --radius-xl: 1rem;       /* 16px */
-            --radius-2xl: 1.5rem;    /* 24px */
-            --radius-full: 9999px;
-
-            /* ==========================================
-               SHADOW TOKENS
-               ========================================== */
-
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
-
-            /* ==========================================
-               TRANSITION TOKENS
-               ========================================== */
-
-            --transition-fast: 150ms ease;
-            --transition-base: 200ms ease;
-            --transition-slow: 300ms ease;
-            --transition-slower: 500ms ease;
-
-            /* ==========================================
-               SIZE TOKENS
-               ========================================== */
-
-            /* Sidebar */
-            --sidebar-width: 16rem;  /* 256px */
-            --sidebar-collapsed-width: 4.5rem;  /* 72px */
-
-            /* Header */
-            --header-height: 4rem;   /* 64px */
-
-            /* Avatar Sizes */
-            --avatar-sm: 1.5rem;     /* 24px */
-            --avatar-md: 2.5rem;     /* 40px */
-            --avatar-lg: 3.5rem;     /* 56px */
-
-            /* Icon Sizes */
-            --icon-sm: 1rem;         /* 16px */
-            --icon-md: 1.5rem;       /* 24px */
-            --icon-lg: 2rem;         /* 32px */
-
-            /* Button Heights */
-            --btn-height-sm: 2rem;
-            --btn-height-md: 2.5rem;
-            --btn-height-lg: 3rem;
-
-            /* Stat Icon Size */
-            --stat-icon-size: 3rem;  /* 48px */
-
-            /* ==========================================
-               Z-INDEX TOKENS
-               ========================================== */
-
-            --z-base: 0;
-            --z-dropdown: 10;
-            --z-sticky: 20;
-            --z-header: 30;
-            --z-overlay: 40;
-            --z-modal: 50;
-            --z-toast: 60;
-        }
-
-        /* ==========================================
-           MATERIAL ICONS CONFIGURATION
-           ========================================== */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -289,126 +86,94 @@
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        /* ==========================================
-           CUSTOM SCROLLBAR
-           ========================================== */
-        ::-webkit-scrollbar {
-            width: 6px;
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 9999px; }
+
+        .sidebar-transition { transition: width 300ms ease, padding 300ms ease; }
+        .sidebar-collapsed .sidebar-label { opacity: 0; width: 0; overflow: hidden; }
+        .sidebar-expanded .sidebar-label { opacity: 1; width: auto; transition: opacity 200ms ease 100ms; }
+        .sidebar-collapsed .sidebar-hideable { display: none; }
+        .sidebar-collapsed .sidebar-collapse-icon { transform: rotate(180deg); }
+        .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
+        .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
+        .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
+        .theme-btn-active span { color: var(--color-accent) !important; }
+
+        .modal-backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+
+        /* Tab styles */
+        .tab-btn {
+            transition: all 200ms ease;
         }
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        .tab-btn.active-green {
+            background: var(--color-success-bg);
+            border-bottom-color: var(--color-success);
+            color: var(--color-success);
         }
-        ::-webkit-scrollbar-thumb {
-            background: var(--color-accent);
-            border-radius: var(--radius-full);
+        .tab-btn.active-red {
+            background: var(--color-error-bg);
+            border-bottom-color: var(--color-error);
+            color: var(--color-error);
+        }
+        .tab-btn.active-dealbreakers {
+            background: rgba(127, 19, 236, 0.1);
+            border-bottom-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+        .tab-btn.active-investment {
+            background: var(--color-info-bg);
+            border-bottom-color: var(--color-info);
+            color: var(--color-info);
+        }
+        .tab-btn:not([class*="active-"]):hover {
+            background: var(--color-bg-tertiary);
         }
 
-        /* Sidebar Collapse Transitions */
-        .sidebar-transition {
-            transition: width 300ms ease, padding 300ms ease;
+        /* Flag item hover */
+        .flag-item {
+            transition: background 150ms ease;
         }
-        .sidebar-collapsed .sidebar-label {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
+        .flag-item:hover {
+            background: var(--color-bg-tertiary);
         }
-        .sidebar-expanded .sidebar-label {
-            opacity: 1;
-            width: auto;
-            transition: opacity 200ms ease 100ms;
-        }
-        .sidebar-collapsed .sidebar-hideable {
+
+        /* Checkbox styling */
+        .flag-checkbox,
+        .investment-checkbox {
             display: none;
-        }
-        .sidebar-collapsed .sidebar-collapse-icon {
-            transform: rotate(180deg);
-        }
-        /* Collapsed state - center icons */
-        .sidebar-collapsed .sidebar-logo {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        .sidebar-collapsed .sidebar-nav {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-nav-item {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-bottom {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-profile {
-            justify-content: center;
-        }
-        .sidebar-collapsed .sidebar-collapse-btn {
-            justify-content: center;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-collapsed-show {
-            display: flex !important;
-        }
-        .theme-btn-active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .theme-btn-active span {
-            color: var(--color-accent) !important;
-        }
-
-        /* Modal backdrop */
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
         }
     </style>
 
-    <!-- Tailwind Config Using Design Tokens -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Primary
                         'primary': 'var(--color-primary)',
                         'primary-hover': 'var(--color-primary-hover)',
                         'primary-dark': 'var(--color-primary-dark)',
                         'primary-light': 'var(--color-primary-light)',
-
-                        // Accent
                         'accent': 'var(--color-accent)',
                         'accent-light': 'var(--color-accent-light)',
-                        'accent-hover': 'var(--color-accent-hover)',
-
-                        // Neutrals
                         'plum': 'var(--color-plum)',
                         'plum-light': 'var(--color-plum-light)',
-                        'plum-muted': 'var(--color-plum-muted)',
-
-                        // Backgrounds
                         'bg-primary': 'var(--color-bg-primary)',
                         'bg-secondary': 'var(--color-bg-secondary)',
                         'bg-tertiary': 'var(--color-bg-tertiary)',
                         'bg-sidebar': 'var(--color-bg-sidebar)',
                         'bg-card': 'var(--color-bg-card)',
-
-                        // Text
                         'text-primary': 'var(--color-text-primary)',
                         'text-secondary': 'var(--color-text-secondary)',
                         'text-tertiary': 'var(--color-text-tertiary)',
                         'text-inverse': 'var(--color-text-inverse)',
                         'text-inverse-muted': 'var(--color-text-inverse-muted)',
-
-                        // Borders
                         'border-default': 'var(--color-border)',
                         'border-hover': 'var(--color-border-hover)',
-                        'border-accent': 'var(--color-border-accent)',
-
-                        // Status
                         'success': 'var(--color-success)',
                         'success-bg': 'var(--color-success-bg)',
                         'warning': 'var(--color-warning)',
@@ -417,122 +182,10 @@
                         'error-bg': 'var(--color-error-bg)',
                         'info': 'var(--color-info)',
                         'info-bg': 'var(--color-info-bg)',
-
-                        // Categories
-                        'water': 'var(--color-water)',
-                        'water-bg': 'var(--color-water-bg)',
-                        'sleep': 'var(--color-sleep)',
-                        'sleep-bg': 'var(--color-sleep-bg)',
-                        'mood': 'var(--color-mood)',
-                        'mood-bg': 'var(--color-mood-bg)',
-                        'energy': 'var(--color-energy)',
-                        'energy-bg': 'var(--color-energy-bg)',
-                        'social': 'var(--color-social)',
-                        'social-bg': 'var(--color-social-bg)',
-
-                        // Events
-                        'event-primary': 'var(--color-event-primary)',
-                        'event-secondary': 'var(--color-event-secondary)',
-                        'event-tertiary': 'var(--color-event-tertiary)',
                     },
                     fontFamily: {
                         'display': 'var(--font-display)',
                         'serif': 'var(--font-serif)',
-                    },
-                    fontSize: {
-                        'xs': 'var(--text-xs)',
-                        'sm': 'var(--text-sm)',
-                        'base': 'var(--text-base)',
-                        'lg': 'var(--text-lg)',
-                        'xl': 'var(--text-xl)',
-                        '2xl': 'var(--text-2xl)',
-                        '3xl': 'var(--text-3xl)',
-                        '4xl': 'var(--text-4xl)',
-                        '5xl': 'var(--text-5xl)',
-                    },
-                    fontWeight: {
-                        'normal': 'var(--font-normal)',
-                        'medium': 'var(--font-medium)',
-                        'semibold': 'var(--font-semibold)',
-                        'bold': 'var(--font-bold)',
-                    },
-                    lineHeight: {
-                        'tight': 'var(--leading-tight)',
-                        'normal': 'var(--leading-normal)',
-                        'relaxed': 'var(--leading-relaxed)',
-                    },
-                    letterSpacing: {
-                        'tight': 'var(--tracking-tight)',
-                        'normal': 'var(--tracking-normal)',
-                        'wide': 'var(--tracking-wide)',
-                        'wider': 'var(--tracking-wider)',
-                        'widest': 'var(--tracking-widest)',
-                    },
-                    spacing: {
-                        '0': 'var(--space-0)',
-                        '1': 'var(--space-1)',
-                        '2': 'var(--space-2)',
-                        '3': 'var(--space-3)',
-                        '4': 'var(--space-4)',
-                        '5': 'var(--space-5)',
-                        '6': 'var(--space-6)',
-                        '8': 'var(--space-8)',
-                        '10': 'var(--space-10)',
-                        '12': 'var(--space-12)',
-                        '16': 'var(--space-16)',
-                        'sidebar': 'var(--sidebar-width)',
-                        'header': 'var(--header-height)',
-                    },
-                    borderRadius: {
-                        'none': 'var(--radius-none)',
-                        'sm': 'var(--radius-sm)',
-                        'DEFAULT': 'var(--radius-md)',
-                        'md': 'var(--radius-md)',
-                        'lg': 'var(--radius-lg)',
-                        'xl': 'var(--radius-xl)',
-                        '2xl': 'var(--radius-2xl)',
-                        'full': 'var(--radius-full)',
-                    },
-                    boxShadow: {
-                        'sm': 'var(--shadow-sm)',
-                        'DEFAULT': 'var(--shadow-md)',
-                        'md': 'var(--shadow-md)',
-                        'lg': 'var(--shadow-lg)',
-                        'xl': 'var(--shadow-xl)',
-                        'card': 'var(--shadow-card)',
-                    },
-                    transitionDuration: {
-                        'fast': '150ms',
-                        'DEFAULT': '200ms',
-                        'slow': '300ms',
-                        'slower': '500ms',
-                    },
-                    width: {
-                        'sidebar': 'var(--sidebar-width)',
-                        'sidebar-collapsed': 'var(--sidebar-collapsed-width)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                    },
-                    height: {
-                        'header': 'var(--header-height)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                        'btn-sm': 'var(--btn-height-sm)',
-                        'btn-md': 'var(--btn-height-md)',
-                        'btn-lg': 'var(--btn-height-lg)',
-                    },
-                    zIndex: {
-                        'base': 'var(--z-base)',
-                        'dropdown': 'var(--z-dropdown)',
-                        'sticky': 'var(--z-sticky)',
-                        'header': 'var(--z-header)',
-                        'overlay': 'var(--z-overlay)',
-                        'modal': 'var(--z-modal)',
-                        'toast': 'var(--z-toast)',
                     },
                 },
             },
@@ -542,8 +195,7 @@
 <body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
     <div class="flex h-screen w-full">
         <!-- Sidebar -->
-        <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
-            <!-- Logo (Clickable to toggle) -->
+        <aside id="sidebar" class="hidden lg:flex flex-col w-64 bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
             <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
                 <span class="material-symbols-outlined text-accent text-3xl shrink-0">verified_user</span>
                 <div class="sidebar-label sidebar-hideable">
@@ -552,7 +204,6 @@
                 </div>
             </div>
 
-            <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
@@ -566,19 +217,14 @@
                     <span class="material-symbols-outlined shrink-0">settings</span>
                     <span class="font-medium sidebar-label">Settings</span>
                 </a>
-
-                <!-- Divider -->
                 <div class="my-4 border-t border-white/10"></div>
-
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="landing.html" title="Landing Page">
                     <span class="material-symbols-outlined shrink-0">home</span>
                     <span class="font-medium sidebar-label">Landing Page</span>
                 </a>
             </nav>
 
-            <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
-                <!-- Theme & Collapse Row -->
                 <div class="flex items-center justify-between mb-4 sidebar-hideable">
                     <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
                         <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
@@ -592,13 +238,9 @@
                         <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted hover:text-text-inverse">keyboard_double_arrow_left</span>
                     </button>
                 </div>
-
-                <!-- Collapsed state: just collapse icon -->
                 <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
                     <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
                 </button>
-
-                <!-- Privacy Note -->
                 <div class="sidebar-hideable text-center">
                     <p class="text-xs text-text-inverse-muted flex items-center justify-center gap-1">
                         <span class="material-symbols-outlined text-sm">lock</span>
@@ -608,37 +250,28 @@
             </div>
         </aside>
 
-        <!-- Sidebar Toggle Script -->
         <script>
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');
                 const isExpanded = sidebar.classList.contains('sidebar-expanded');
-
                 if (isExpanded) {
-                    sidebar.classList.remove('sidebar-expanded', 'w-sidebar');
-                    sidebar.classList.add('sidebar-collapsed', 'w-sidebar-collapsed');
+                    sidebar.classList.remove('sidebar-expanded', 'w-64');
+                    sidebar.classList.add('sidebar-collapsed', 'w-[72px]');
                 } else {
-                    sidebar.classList.remove('sidebar-collapsed', 'w-sidebar-collapsed');
-                    sidebar.classList.add('sidebar-expanded', 'w-sidebar');
+                    sidebar.classList.remove('sidebar-collapsed', 'w-[72px]');
+                    sidebar.classList.add('sidebar-expanded', 'w-64');
                 }
             }
 
-            // Theme Management
             function setTheme(theme) {
                 const html = document.documentElement;
-
                 if (theme === 'dark') {
                     html.classList.remove('light');
                     html.classList.add('dark');
-                } else if (theme === 'light') {
+                } else {
                     html.classList.remove('dark');
                     html.classList.add('light');
-                } else {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    html.classList.remove('light', 'dark');
-                    html.classList.add(prefersDark ? 'dark' : 'light');
                 }
-
                 localStorage.setItem('theme', theme);
                 updateSidebarThemeButtons(theme);
             }
@@ -654,265 +287,408 @@
                 }
             }
 
-            // Initialize theme on page load
             (function() {
                 const savedTheme = localStorage.getItem('theme') || 'light';
                 setTheme(savedTheme);
-
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                    if (localStorage.getItem('theme') === 'system') {
-                        setTheme('system');
-                    }
-                });
             })();
         </script>
 
         <!-- Main Content -->
         <main class="flex-1 flex flex-col h-full overflow-hidden">
-            <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8">
-                <div class="max-w-4xl mx-auto">
+            <div class="flex-1 overflow-y-auto p-6 lg:p-8">
+                <div class="max-w-6xl mx-auto">
                     <!-- Back Button -->
                     <a href="index.html" class="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors duration-200 mb-6">
                         <span class="material-symbols-outlined text-xl">arrow_back</span>
                         <span class="font-medium">Back to Profiles</span>
                     </a>
 
-                    <!-- Profile Header -->
-                    <div id="profile-header" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 mb-6">
-                        <!-- Content will be rendered by JavaScript -->
-                    </div>
+                    <!-- Two Column Layout -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Left Column: Profile Card (1/3) -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 sticky top-6">
+                                <!-- Avatar -->
+                                <div class="flex flex-col items-center text-center mb-6">
+                                    <div id="profile-avatar" class="h-24 w-24 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
+                                        <!-- Avatar rendered by JS -->
+                                    </div>
+                                    <h1 id="profile-name" class="font-serif text-2xl font-bold text-text-primary mb-2">Loading...</h1>
+                                    <div id="profile-grade" class="px-5 py-2 rounded-full text-xl font-bold mb-2">
+                                        <!-- Grade rendered by JS -->
+                                    </div>
+                                    <p id="profile-grade-desc" class="text-sm text-text-secondary"></p>
+                                </div>
 
-                    <!-- Grade Breakdown Section -->
-                    <div class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 mb-6">
-                        <h2 class="font-serif text-xl font-bold text-text-primary mb-4">Grade Breakdown</h2>
-                        <div id="grade-breakdown" class="space-y-4">
-                            <!-- Content will be rendered by JavaScript -->
+                                <!-- Notes Section -->
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Notes</label>
+                                    <textarea id="profile-notes" placeholder="Add private notes about this person..." rows="3" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary text-sm resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"></textarea>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex gap-2">
+                                    <button onclick="showArchiveConfirm()" class="flex-1 px-3 py-2 bg-bg-tertiary text-text-secondary rounded-lg text-sm font-medium hover:bg-border-hover hover:text-text-primary transition-colors flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">inventory_2</span>
+                                        Archive
+                                    </button>
+                                    <button onclick="showDeleteConfirm()" class="flex-1 px-3 py-2 bg-error-bg text-error rounded-lg text-sm font-medium hover:bg-error hover:text-white transition-colors flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">delete</span>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Grade Breakdown (2/3) -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6">
+                                <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Grade Breakdown</h2>
+                                <div id="grade-breakdown" class="space-y-5">
+                                    <!-- Progress bars rendered by JS -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Action Cards Grid -->
-                    <div id="action-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                        <!-- Content will be rendered by JavaScript -->
-                    </div>
+                    <!-- Tabs Section -->
+                    <div class="bg-bg-card rounded-2xl border border-border-default shadow-card overflow-hidden">
+                        <!-- Tab Buttons -->
+                        <div class="flex border-b border-border-default">
+                            <button onclick="switchTab('green')" id="tab-green" class="tab-btn flex-1 px-4 py-4 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-success text-xl">thumb_up</span>
+                                <span class="hidden sm:inline">Green Flags</span>
+                                <span id="count-green" class="px-2 py-0.5 bg-success-bg text-success text-xs font-bold rounded-full">0</span>
+                            </button>
+                            <button onclick="switchTab('red')" id="tab-red" class="tab-btn flex-1 px-4 py-4 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-error text-xl">flag</span>
+                                <span class="hidden sm:inline">Red Flags</span>
+                                <span id="count-red" class="px-2 py-0.5 bg-error-bg text-error text-xs font-bold rounded-full">0</span>
+                            </button>
+                            <button onclick="switchTab('dealbreakers')" id="tab-dealbreakers" class="tab-btn flex-1 px-4 py-4 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-xl">block</span>
+                                <span class="hidden sm:inline">Dealbreakers</span>
+                                <span id="count-dealbreakers" class="px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded-full">0</span>
+                            </button>
+                            <button onclick="switchTab('investment')" id="tab-investment" class="tab-btn flex-1 px-4 py-4 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-info text-xl">trending_up</span>
+                                <span class="hidden sm:inline">Investment</span>
+                                <span id="count-investment" class="px-2 py-0.5 bg-info-bg text-info text-xs font-bold rounded-full">0</span>
+                            </button>
+                        </div>
 
-                    <!-- Archive/Delete Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border-default">
-                        <button id="archive-btn" onclick="handleArchive()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-secondary rounded-xl font-semibold hover:bg-border-hover hover:text-text-primary transition-colors flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">inventory_2</span>
-                            Archive Profile
-                        </button>
-                        <button id="delete-btn" onclick="handleDelete()" class="flex-1 px-4 py-3 bg-error-bg text-error rounded-xl font-semibold hover:bg-error hover:text-white transition-colors flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">delete</span>
-                            Delete Profile
-                        </button>
+                        <!-- Tab Content -->
+                        <div id="tab-content">
+                            <!-- Content rendered by JS -->
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Profile Detail JavaScript -->
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeConfirmModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
+                <h2 id="confirm-title" class="font-serif text-xl font-bold text-text-primary mb-2">Confirm Action</h2>
+                <p id="confirm-message" class="text-text-secondary text-sm mb-6">Are you sure?</p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirm-action-btn" onclick="executeConfirmedAction()" class="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
         import { getGradeColor, getGradeDescription } from './src/js/grading.js';
         import { getInitials, getAvatarColor, getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
+        import { greenFlags } from './src/data/green-flags.js';
+        import { redFlags } from './src/data/red-flags.js';
+        import { dealbreakers } from './src/data/dealbreakers.js';
+        import { investmentStages } from './src/data/investment-stages.js';
 
-        // Constants for totals
-        const GREEN_TOTAL = 20;
-        const RED_TOTAL = 23;
-        const DEALBREAKER_TOTAL = 15;
-        const INVESTMENT_TOTAL = 10;
+        const GREEN_TOTAL = greenFlags.length;
+        const RED_TOTAL = redFlags.length;
+        const DEALBREAKER_TOTAL = dealbreakers.length;
+        const INVESTMENT_TOTAL = investmentStages.length;
 
-        // Get profile ID from URL
         const profileId = getProfileIdFromUrl();
+        if (!profileId) window.location.href = 'index.html';
 
-        // Redirect if no valid profile
-        if (!profileId) {
-            window.location.href = 'index.html';
-        }
+        let profile = Store.getProfile(profileId);
+        if (!profile) window.location.href = 'index.html';
 
-        const profile = Store.getProfile(profileId);
-
-        if (!profile) {
-            window.location.href = 'index.html';
-        }
+        let currentTab = 'green';
+        let pendingAction = null;
 
         // Update page title
         document.title = `${profile.name} - Vetted`;
 
-        // Render profile header
-        function renderProfileHeader() {
+        // Render profile info
+        function renderProfileInfo() {
             const colors = getGradeColor(profile.grade);
             const initials = getInitials(profile.name);
             const avatarColor = getAvatarColor(profile.id);
 
-            document.getElementById('profile-header').innerHTML = `
-                <div class="flex items-start gap-6">
-                    <div class="h-20 w-20 rounded-full flex items-center justify-center text-white font-bold text-2xl shrink-0" style="background-color: ${avatarColor}">
-                        ${escapeHtml(initials)}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-3 mb-2 flex-wrap">
-                            <h1 class="font-serif text-3xl font-bold text-text-primary">${escapeHtml(profile.name)}</h1>
-                            <span class="px-4 py-1.5 ${colors.bg} ${colors.text} rounded-full text-lg font-bold">
-                                ${profile.grade}
-                            </span>
-                        </div>
-                        <p class="text-text-secondary">${getGradeDescription(profile.grade)}</p>
-                    </div>
-                </div>
-            `;
+            document.getElementById('profile-avatar').style.backgroundColor = avatarColor;
+            document.getElementById('profile-avatar').textContent = escapeHtml(initials);
+            document.getElementById('profile-name').textContent = escapeHtml(profile.name);
+
+            const gradeEl = document.getElementById('profile-grade');
+            gradeEl.className = `px-5 py-2 rounded-full text-xl font-bold ${colors.bg} ${colors.text}`;
+            gradeEl.textContent = profile.grade;
+
+            document.getElementById('profile-grade-desc').textContent = getGradeDescription(profile.grade);
+
+            // Load notes
+            document.getElementById('profile-notes').value = profile.notes || '';
         }
 
-        // Render grade breakdown with progress bars
+        // Render grade breakdown
         function renderGradeBreakdown() {
             const greenCount = profile.greenFlags.length;
             const redCount = profile.redFlags.length;
             const dbCount = profile.dealbreakers.length;
-            const investmentStage = profile.investmentStage || 0;
+            const investmentCount = Array.isArray(profile.investmentStages) ? profile.investmentStages.length : 0;
 
             const greenPercent = (greenCount / GREEN_TOTAL) * 100;
             const redPercent = (redCount / RED_TOTAL) * 100;
             const dbPercent = (dbCount / DEALBREAKER_TOTAL) * 100;
-            const investmentPercent = (investmentStage / INVESTMENT_TOTAL) * 100;
+            const investmentPercent = (investmentCount / INVESTMENT_TOTAL) * 100;
 
             document.getElementById('grade-breakdown').innerHTML = `
-                <!-- Green Flags -->
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-success">thumb_up</span>
                             <span class="font-medium text-text-primary">Green Flags</span>
                         </div>
-                        <span class="text-sm font-semibold text-text-secondary">${greenCount} of ${GREEN_TOTAL}</span>
+                        <span class="text-sm font-semibold text-text-secondary">${greenCount} / ${GREEN_TOTAL}</span>
                     </div>
-                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                    <div class="h-3 bg-bg-tertiary rounded-full overflow-hidden">
                         <div class="h-full bg-success rounded-full transition-all duration-500" style="width: ${greenPercent}%"></div>
                     </div>
                 </div>
-
-                <!-- Red Flags -->
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-warning">flag</span>
+                            <span class="material-symbols-outlined text-error">flag</span>
                             <span class="font-medium text-text-primary">Red Flags</span>
                         </div>
-                        <span class="text-sm font-semibold text-text-secondary">${redCount} of ${RED_TOTAL}</span>
+                        <span class="text-sm font-semibold text-text-secondary">${redCount} / ${RED_TOTAL}</span>
                     </div>
-                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
-                        <div class="h-full bg-warning rounded-full transition-all duration-500" style="width: ${redPercent}%"></div>
+                    <div class="h-3 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-error rounded-full transition-all duration-500" style="width: ${redPercent}%"></div>
                     </div>
                 </div>
-
-                <!-- Dealbreakers -->
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-error">block</span>
+                            <span class="material-symbols-outlined text-primary">block</span>
                             <span class="font-medium text-text-primary">Dealbreakers</span>
                         </div>
-                        <span class="text-sm font-semibold text-text-secondary">${dbCount} of ${DEALBREAKER_TOTAL}</span>
+                        <span class="text-sm font-semibold text-text-secondary">${dbCount} / ${DEALBREAKER_TOTAL}</span>
                     </div>
-                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
-                        <div class="h-full bg-error rounded-full transition-all duration-500" style="width: ${dbPercent}%"></div>
+                    <div class="h-3 bg-bg-tertiary rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full transition-all duration-500" style="width: ${dbPercent}%"></div>
                     </div>
                 </div>
-
-                <!-- Investment Stage -->
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-info">trending_up</span>
                             <span class="font-medium text-text-primary">Investment</span>
                         </div>
-                        <span class="text-sm font-semibold text-text-secondary">${investmentStage} of ${INVESTMENT_TOTAL} stages</span>
+                        <span class="text-sm font-semibold text-text-secondary">${investmentCount} / ${INVESTMENT_TOTAL}</span>
                     </div>
-                    <div class="h-2.5 bg-bg-tertiary rounded-full overflow-hidden">
+                    <div class="h-3 bg-bg-tertiary rounded-full overflow-hidden">
                         <div class="h-full bg-info rounded-full transition-all duration-500" style="width: ${investmentPercent}%"></div>
                     </div>
                 </div>
             `;
+
+            // Update tab counts
+            document.getElementById('count-green').textContent = greenCount;
+            document.getElementById('count-red').textContent = redCount;
+            document.getElementById('count-dealbreakers').textContent = dbCount;
+            document.getElementById('count-investment').textContent = investmentCount;
         }
 
-        // Render action cards
-        function renderActionCards() {
-            const cards = [
-                {
-                    href: `green-flags.html?id=${profileId}`,
-                    title: 'Green Flags',
-                    icon: 'thumb_up',
-                    bgColor: 'bg-success-bg',
-                    textColor: 'text-success',
-                    borderColor: 'border-success/20',
-                    hoverBorder: 'hover:border-success/40'
-                },
-                {
-                    href: `red-flags.html?id=${profileId}`,
-                    title: 'Red Flags',
-                    icon: 'flag',
-                    bgColor: 'bg-warning-bg',
-                    textColor: 'text-warning',
-                    borderColor: 'border-warning/20',
-                    hoverBorder: 'hover:border-warning/40'
-                },
-                {
-                    href: `dealbreakers.html?id=${profileId}`,
-                    title: 'Dealbreakers',
-                    icon: 'block',
-                    bgColor: 'bg-error-bg',
-                    textColor: 'text-error',
-                    borderColor: 'border-error/20',
-                    hoverBorder: 'hover:border-error/40'
-                },
-                {
-                    href: `investment.html?id=${profileId}`,
-                    title: 'Investment Tracker',
-                    icon: 'trending_up',
-                    bgColor: 'bg-info-bg',
-                    textColor: 'text-info',
-                    borderColor: 'border-info/20',
-                    hoverBorder: 'hover:border-info/40'
+        // Switch tab
+        window.switchTab = function(tab) {
+            currentTab = tab;
+
+            // Update tab button styles with color-coded active states
+            ['green', 'red', 'dealbreakers', 'investment'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                btn.classList.remove('active-green', 'active-red', 'active-dealbreakers', 'active-investment');
+                if (t === tab) {
+                    btn.classList.add(`active-${t}`);
                 }
-            ];
+            });
 
-            document.getElementById('action-cards').innerHTML = cards.map(card => `
-                <a href="${card.href}" class="${card.bgColor} rounded-2xl border ${card.borderColor} ${card.hoverBorder} p-6 transition-all duration-200 hover:shadow-md group">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-bg-card flex items-center justify-center">
-                            <span class="material-symbols-outlined text-2xl ${card.textColor}">${card.icon}</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-text-primary group-hover:${card.textColor.replace('text-', '')} transition-colors">${card.title}</h3>
-                            <p class="text-sm text-text-secondary">View and edit</p>
-                        </div>
-                        <span class="material-symbols-outlined text-text-tertiary group-hover:text-text-secondary transition-colors">chevron_right</span>
-                    </div>
-                </a>
-            `).join('');
-        }
-
-        // Handle archive
-        window.handleArchive = function() {
-            if (confirm(`Are you sure you want to archive "${profile.name}"? You can restore it later from the Archives.`)) {
-                Store.archiveProfile(profileId);
-                window.location.href = 'index.html';
-            }
+            renderTabContent();
         };
 
-        // Handle delete
-        window.handleDelete = function() {
-            if (confirm(`Are you sure you want to permanently delete "${profile.name}"? This action cannot be undone.`)) {
+        // Render tab content
+        function renderTabContent() {
+            const container = document.getElementById('tab-content');
+            let html = '';
+
+            if (currentTab === 'green') {
+                html = `<div class="divide-y divide-border-default">
+                    ${greenFlags.map(flag => renderFlagItem(flag, 'greenFlags', 'success', 'bg-success-bg', 'thumb_up')).join('')}
+                </div>`;
+            } else if (currentTab === 'red') {
+                html = `<div class="divide-y divide-border-default">
+                    ${redFlags.map(flag => renderFlagItem(flag, 'redFlags', 'error', 'bg-error-bg', 'flag')).join('')}
+                </div>`;
+            } else if (currentTab === 'dealbreakers') {
+                html = `<div class="divide-y divide-border-default">
+                    ${dealbreakers.map(db => renderDealbreakerItem(db)).join('')}
+                </div>`;
+            } else if (currentTab === 'investment') {
+                html = `<div class="divide-y divide-border-default">
+                    ${investmentStages.map(stage => renderInvestmentItem(stage)).join('')}
+                </div>`;
+            }
+
+            container.innerHTML = html;
+
+            // Add event listeners
+            container.querySelectorAll('.flag-checkbox').forEach(cb => {
+                cb.addEventListener('change', handleFlagToggle);
+            });
+            container.querySelectorAll('.investment-checkbox').forEach(cb => {
+                cb.addEventListener('change', handleInvestmentToggle);
+            });
+        }
+
+        function renderFlagItem(flag, flagType, colorClass, bgClass, iconName) {
+            const isChecked = profile[flagType].includes(flag.id);
+            const iconColor = isChecked ? `text-${colorClass}` : 'text-text-tertiary';
+            const itemBg = isChecked ? bgClass : '';
+            return `
+                <label class="flag-item flex items-center gap-4 p-4 cursor-pointer ${itemBg}">
+                    <input type="checkbox" class="flag-checkbox" data-flag-type="${flagType}" data-flag-id="${flag.id}" ${isChecked ? 'checked' : ''} />
+                    <span class="flag-icon material-symbols-outlined ${iconColor} text-3xl shrink-0 ${isChecked ? 'icon-filled' : ''}">${iconName}</span>
+                    <span class="text-text-primary text-base leading-relaxed">${escapeHtml(flag.label)}</span>
+                </label>
+            `;
+        }
+
+        function renderDealbreakerItem(db) {
+            const isChecked = profile.dealbreakers.includes(db.id);
+            const iconColor = isChecked ? 'text-primary' : 'text-text-tertiary';
+            const itemBg = isChecked ? 'bg-primary/10' : '';
+            return `
+                <label class="flag-item flex items-start gap-4 p-4 cursor-pointer ${itemBg}">
+                    <input type="checkbox" class="flag-checkbox" data-flag-type="dealbreakers" data-flag-id="${db.id}" ${isChecked ? 'checked' : ''} />
+                    <span class="flag-icon material-symbols-outlined ${iconColor} text-3xl shrink-0 mt-0.5 ${isChecked ? 'icon-filled' : ''}">block</span>
+                    <div class="flex-1 min-w-0">
+                        <span class="text-text-primary text-base font-medium block mb-1">${escapeHtml(db.label)}</span>
+                        <span class="text-text-secondary text-sm leading-relaxed block">${escapeHtml(db.explanation)}</span>
+                    </div>
+                </label>
+            `;
+        }
+
+        function renderInvestmentItem(stage) {
+            const checkedStages = Array.isArray(profile.investmentStages) ? profile.investmentStages : [];
+            const isChecked = checkedStages.includes(stage.stage);
+            const iconColor = isChecked ? 'text-info' : 'text-text-tertiary';
+            const itemBg = isChecked ? 'bg-info-bg' : '';
+            return `
+                <label class="flag-item flex items-start gap-4 p-4 cursor-pointer ${itemBg}">
+                    <input type="checkbox" class="investment-checkbox" data-stage-id="${stage.stage}" ${isChecked ? 'checked' : ''} />
+                    <span class="flag-icon material-symbols-outlined ${iconColor} text-3xl shrink-0 mt-0.5 ${isChecked ? 'icon-filled' : ''}">trending_up</span>
+                    <div class="flex-1 min-w-0">
+                        <span class="text-text-primary text-base font-medium block mb-1">${escapeHtml(stage.label)}</span>
+                        <span class="text-text-secondary text-sm leading-relaxed block">${escapeHtml(stage.description)}</span>
+                    </div>
+                </label>
+            `;
+        }
+
+        function handleFlagToggle(event) {
+            const cb = event.target;
+            const flagType = cb.dataset.flagType;
+            const flagId = cb.dataset.flagId;
+            const isChecked = cb.checked;
+
+            profile = Store.toggleFlag(profileId, flagType, flagId, isChecked);
+
+            renderProfileInfo();
+            renderGradeBreakdown();
+            renderTabContent();
+        }
+
+        function handleInvestmentToggle(event) {
+            const cb = event.target;
+            const stageId = parseInt(cb.dataset.stageId, 10);
+            const isChecked = cb.checked;
+
+            profile = Store.toggleInvestmentStage(profileId, stageId, isChecked);
+
+            renderGradeBreakdown();
+            renderTabContent();
+        }
+
+        // Notes autosave
+        document.getElementById('profile-notes').addEventListener('input', (e) => {
+            const notes = e.target.value;
+            Store.updateProfileNotes(profileId, notes);
+        });
+
+        // Confirmation modals
+        window.showArchiveConfirm = function() {
+            pendingAction = 'archive';
+            document.getElementById('confirm-title').textContent = 'Archive Profile';
+            document.getElementById('confirm-message').textContent = `Are you sure you want to archive "${profile.name}"? You can restore it later from Archives.`;
+            const btn = document.getElementById('confirm-action-btn');
+            btn.className = 'flex-1 px-4 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-hover transition-colors';
+            btn.textContent = 'Archive';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        };
+
+        window.showDeleteConfirm = function() {
+            pendingAction = 'delete';
+            document.getElementById('confirm-title').textContent = 'Delete Profile';
+            document.getElementById('confirm-message').textContent = `Are you sure you want to permanently delete "${profile.name}"? This action cannot be undone.`;
+            const btn = document.getElementById('confirm-action-btn');
+            btn.className = 'flex-1 px-4 py-3 bg-error text-white rounded-xl font-semibold hover:bg-error/90 transition-colors';
+            btn.textContent = 'Delete';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        };
+
+        window.closeConfirmModal = function() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            pendingAction = null;
+        };
+
+        window.executeConfirmedAction = function() {
+            if (pendingAction === 'archive') {
+                Store.archiveProfile(profileId);
+                window.location.href = 'index.html';
+            } else if (pendingAction === 'delete') {
                 Store.deleteProfile(profileId);
                 window.location.href = 'index.html';
             }
         };
 
-        // Initialize page
-        renderProfileHeader();
+        // Initialize
+        renderProfileInfo();
         renderGradeBreakdown();
-        renderActionCards();
+        switchTab('green');
     </script>
 </body>
 </html>

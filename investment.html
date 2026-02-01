@@ -377,16 +377,6 @@
             border-color: var(--color-info);
             background: var(--color-info-bg);
         }
-        .stage-card.current {
-            border-color: var(--color-info);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-        }
-        .stage-card.future {
-            opacity: 0.6;
-        }
-        .stage-card.future:hover {
-            opacity: 0.8;
-        }
     </style>
 
     <!-- Tailwind Config Using Design Tokens -->
@@ -720,7 +710,7 @@
                     </div>
 
                     <!-- Instructions -->
-                    <p class="text-text-secondary mb-6">Click on a stage to mark it (and all previous stages) as completed. Track how invested he is in building a relationship with you.</p>
+                    <p class="text-text-secondary mb-6">Click on any stage to mark it as completed. Each stage is independent — check only the ones that apply.</p>
 
                     <!-- Stages Timeline -->
                     <div id="stages-container" class="relative">
@@ -754,40 +744,39 @@
             window.location.href = 'index.html';
         }
 
+        // Migrate old data format if needed (single number to array)
+        function getCheckedStages() {
+            if (Array.isArray(profile.investmentStages)) {
+                return profile.investmentStages;
+            }
+            // Legacy: convert old single number to empty array (user will re-check)
+            return [];
+        }
+
         // Update page title and back link
         document.title = `Investment Tracker - ${profile.name} - Vetted`;
         document.getElementById('back-link').href = `profile.html?id=${profileId}`;
         document.getElementById('profile-name').textContent = escapeHtml(profile.name);
 
         // Render a single stage card
-        function renderStageCard(stageData, currentStage) {
+        function renderStageCard(stageData, checkedStages) {
             const { stage, label, description } = stageData;
-            const isCompleted = stage <= currentStage;
-            const isCurrent = stage === currentStage;
-            const isFuture = stage > currentStage;
+            const isChecked = checkedStages.includes(stage);
 
-            let stateClass = '';
-            let iconHtml = '';
-            let numberBgClass = '';
+            const iconHtml = isChecked
+                ? `<span class="material-symbols-outlined text-xl text-info icon-filled">check_circle</span>`
+                : `<span class="material-symbols-outlined text-xl text-text-tertiary">radio_button_unchecked</span>`;
 
-            if (isCompleted && !isCurrent) {
-                stateClass = 'completed';
-                iconHtml = `<span class="material-symbols-outlined text-xl text-info icon-filled">check_circle</span>`;
-                numberBgClass = 'bg-info text-white';
-            } else if (isCurrent) {
-                stateClass = 'current';
-                iconHtml = `<span class="material-symbols-outlined text-xl text-info">radio_button_checked</span>`;
-                numberBgClass = 'bg-info text-white';
-            } else {
-                stateClass = 'future';
-                iconHtml = `<span class="material-symbols-outlined text-xl text-text-tertiary">radio_button_unchecked</span>`;
-                numberBgClass = 'bg-bg-tertiary text-text-tertiary';
-            }
+            const numberBgClass = isChecked
+                ? 'bg-info text-white'
+                : 'bg-bg-tertiary text-text-tertiary';
+
+            const stateClass = isChecked ? 'completed' : '';
 
             return `
                 <div class="stage-card relative pl-16 pb-6 cursor-pointer group" data-stage="${stage}">
                     <!-- Stage indicator on timeline -->
-                    <div class="absolute left-0 w-12 h-12 rounded-full bg-bg-card border-2 ${isCompleted || isCurrent ? 'border-info' : 'border-border-default'} flex items-center justify-center z-10">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-bg-card border-2 ${isChecked ? 'border-info' : 'border-border-default'} flex items-center justify-center z-10">
                         ${iconHtml}
                     </div>
 
@@ -798,10 +787,10 @@
                                 ${stage}
                             </div>
                             <div class="flex-1 min-w-0">
-                                <h3 class="font-semibold text-text-primary mb-1 ${isFuture ? 'text-text-secondary' : ''}">${escapeHtml(label)}</h3>
-                                <p class="text-sm ${isFuture ? 'text-text-tertiary' : 'text-text-secondary'}">${escapeHtml(description)}</p>
+                                <h3 class="font-semibold text-text-primary mb-1">${escapeHtml(label)}</h3>
+                                <p class="text-sm text-text-secondary">${escapeHtml(description)}</p>
                             </div>
-                            ${isCompleted ? `<span class="material-symbols-outlined text-info shrink-0">check</span>` : ''}
+                            ${isChecked ? `<span class="material-symbols-outlined text-info shrink-0">check</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -811,17 +800,18 @@
         // Render all stages
         function renderStages() {
             const container = document.getElementById('stages-container');
-            const currentStage = profile.investmentStage || 0;
+            const checkedStages = getCheckedStages();
+            const checkedCount = checkedStages.length;
 
             // Update progress
-            const progressPercent = (currentStage / 10) * 100;
+            const progressPercent = (checkedCount / 10) * 100;
             document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-            document.getElementById('progress-text').textContent = `Stage ${currentStage} of 10`;
+            document.getElementById('progress-text').textContent = `${checkedCount} of 10 checked`;
 
             // Render stage cards
             container.innerHTML = `
                 <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-border-default"></div>
-                ${investmentStages.map(stage => renderStageCard(stage, currentStage)).join('')}
+                ${investmentStages.map(stage => renderStageCard(stage, checkedStages)).join('')}
             `;
 
             // Add click handlers
@@ -833,24 +823,13 @@
             });
         }
 
-        // Handle stage click
-        function handleStageClick(clickedStage) {
-            const currentStage = profile.investmentStage || 0;
+        // Handle stage click - toggle individual stage
+        function handleStageClick(stageId) {
+            const checkedStages = getCheckedStages();
+            const isCurrentlyChecked = checkedStages.includes(stageId);
 
-            // If clicking the current stage, toggle it off (set to stage - 1)
-            // Otherwise, set to the clicked stage
-            let newStage;
-            if (clickedStage === currentStage) {
-                newStage = clickedStage - 1;
-            } else {
-                newStage = clickedStage;
-            }
-
-            // Ensure stage is within bounds
-            newStage = Math.max(0, Math.min(10, newStage));
-
-            // Update store
-            profile = Store.setInvestmentStage(profileId, newStage);
+            // Toggle this stage
+            profile = Store.toggleInvestmentStage(profileId, stageId, !isCurrentlyChecked);
 
             // Re-render
             renderStages();
