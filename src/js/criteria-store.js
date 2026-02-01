@@ -16,6 +16,11 @@ function getDefaultCriteria() {
     customRedFlags: [],
     customDealbreakers: [],
     customInvestment: [],
+    // Importance weights per criterion (1-5, default 3)
+    weightsGreenFlags: {},
+    weightsRedFlags: {},
+    weightsDealbreakers: {},
+    weightsInvestment: {},
   };
 }
 
@@ -154,9 +159,11 @@ export const CriteriaStore = {
     const data = loadCriteria();
     const enabledKey = `enabled${category.charAt(0).toUpperCase() + category.slice(1)}`;
     const customKey = `custom${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    const weightsKey = `weights${category.charAt(0).toUpperCase() + category.slice(1)}`;
 
     data[enabledKey] = null;
     data[customKey] = [];
+    data[weightsKey] = {};
 
     saveCriteria(data);
   },
@@ -181,5 +188,41 @@ export const CriteriaStore = {
       console.error('Failed to import criteria:', e);
       return false;
     }
+  },
+
+  // Get the importance weight for a criterion (1-5, default 3)
+  getWeight(category, criterionId) {
+    const data = loadCriteria();
+    const key = `weights${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    const weights = data[key] || {};
+    return weights[criterionId] ?? 3; // Default weight is 3
+  },
+
+  // Set the importance weight for a criterion (1-5)
+  setWeight(category, criterionId, weight) {
+    const data = loadCriteria();
+    const key = `weights${category.charAt(0).toUpperCase() + category.slice(1)}`;
+
+    if (!data[key]) data[key] = {};
+
+    // Clamp weight to 1-5
+    const clampedWeight = Math.max(1, Math.min(5, weight));
+
+    if (clampedWeight === 3) {
+      // Remove from storage if default value (saves space)
+      delete data[key][criterionId];
+    } else {
+      data[key][criterionId] = clampedWeight;
+    }
+
+    saveCriteria(data);
+    return clampedWeight;
+  },
+
+  // Get all weights for a category as { id: weight } map
+  getAllWeights(category) {
+    const data = loadCriteria();
+    const key = `weights${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    return data[key] || {};
   },
 };

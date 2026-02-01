@@ -15,33 +15,56 @@ function getEnabledItemIds(category, allItems, getDefaultFn) {
   return [...enabledBuiltIn, ...customItems.map(i => i.id)];
 }
 
+// Calculate weighted sum for a set of criterion IDs
+function getWeightedSum(category, ids) {
+  return ids.reduce((sum, id) => sum + CriteriaStore.getWeight(category, id), 0);
+}
+
 export function calculateGrade(profile) {
   // Get enabled criteria IDs
   const enabledGreenFlagIds = getEnabledItemIds('greenFlags', greenFlags, getDefaultGreenFlags);
   const enabledRedFlagIds = getEnabledItemIds('redFlags', redFlags, getDefaultRedFlags);
   const enabledDealbreakerIds = getEnabledItemIds('dealbreakers', dealbreakers, getDefaultDealbreakers);
 
-  const GREEN_TOTAL = enabledGreenFlagIds.length;
-  const RED_TOTAL = enabledRedFlagIds.length;
-  const DEALBREAKER_TOTAL = enabledDealbreakerIds.length;
-
   // Filter profile's checked items to only count those still in enabled criteria
-  const greenCount = profile.greenFlags.filter(id => enabledGreenFlagIds.includes(id)).length;
-  const redCount = profile.redFlags.filter(id => enabledRedFlagIds.includes(id)).length;
-  const dealbreakerCount = profile.dealbreakers.filter(id => enabledDealbreakerIds.includes(id)).length;
+  const matchedGreenIds = profile.greenFlags.filter(id => enabledGreenFlagIds.includes(id));
+  const matchedRedIds = profile.redFlags.filter(id => enabledRedFlagIds.includes(id));
+  const matchedDealbreakerIds = profile.dealbreakers.filter(id => enabledDealbreakerIds.includes(id));
 
-  const greenPercent = GREEN_TOTAL > 0 ? (greenCount / GREEN_TOTAL) * 100 : 0;
-  const redPercent = RED_TOTAL > 0 ? (redCount / RED_TOTAL) * 100 : 0;
+  // Calculate weighted totals
+  const greenTotalWeight = getWeightedSum('greenFlags', enabledGreenFlagIds);
+  const redTotalWeight = getWeightedSum('redFlags', enabledRedFlagIds);
+  const dealbreakerTotalWeight = getWeightedSum('dealbreakers', enabledDealbreakerIds);
+
+  // Calculate weighted matches
+  const greenMatchedWeight = getWeightedSum('greenFlags', matchedGreenIds);
+  const redMatchedWeight = getWeightedSum('redFlags', matchedRedIds);
+  const dealbreakerMatchedWeight = getWeightedSum('dealbreakers', matchedDealbreakerIds);
+
+  // Calculate weighted percentages
+  const greenPercent = greenTotalWeight > 0 ? (greenMatchedWeight / greenTotalWeight) * 100 : 0;
+  const redPercent = redTotalWeight > 0 ? (redMatchedWeight / redTotalWeight) * 100 : 0;
+
+  // For dealbreakers, we still count them but weight affects severity
+  // A weight-5 dealbreaker counts more than a weight-1 dealbreaker
+  const dealbreakerCount = matchedDealbreakerIds.length;
+  // Weighted dealbreaker score (for more nuanced grading)
+  const dealbreakerWeightedScore = dealbreakerMatchedWeight;
 
   const details = {
     greenPercent: Math.round(greenPercent),
     redPercent: Math.round(redPercent),
     dealbreakerCount,
-    greenCount,
-    redCount,
-    greenTotal: GREEN_TOTAL,
-    redTotal: RED_TOTAL,
-    dealbreakerTotal: DEALBREAKER_TOTAL,
+    dealbreakerWeightedScore,
+    greenCount: matchedGreenIds.length,
+    redCount: matchedRedIds.length,
+    greenTotal: enabledGreenFlagIds.length,
+    redTotal: enabledRedFlagIds.length,
+    dealbreakerTotal: enabledDealbreakerIds.length,
+    greenMatchedWeight,
+    greenTotalWeight,
+    redMatchedWeight,
+    redTotalWeight,
     investmentStage: profile.investmentStage || 0,
   };
 

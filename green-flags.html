@@ -245,6 +245,36 @@
         .criteria-card:hover .drag-handle {
             opacity: 1;
         }
+
+        /* Weight selector */
+        .weight-selector {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .weight-btn {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-tertiary);
+            transition: all 0.15s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+        .weight-btn:hover {
+            background: var(--color-border-hover);
+            color: var(--color-text-primary);
+        }
+        .weight-btn.active {
+            background: var(--color-primary);
+            color: white;
+        }
     </style>
 
     <script>
@@ -788,10 +818,21 @@
             card.dataset.column = isActive ? 'active' : 'available';
 
             const isCustom = item.isCustom || item.id.startsWith('custom-');
+            const currentWeight = CriteriaStore.getWeight(CRITERIA_CATEGORY, item.id);
+
+            // Weight selector HTML (only for active items)
+            const weightSelectorHtml = isActive ? `
+                <div class="weight-selector" title="Importance: 1=Low, 5=Critical">
+                    ${[1,2,3,4,5].map(w => `
+                        <button class="weight-btn ${w === currentWeight ? 'active' : ''}" data-weight="${w}">${w}</button>
+                    `).join('')}
+                </div>
+            ` : '';
 
             card.innerHTML = `
                 <span class="drag-handle material-symbols-outlined text-text-tertiary text-lg shrink-0">drag_indicator</span>
                 <span class="flex-1 text-text-primary text-sm leading-relaxed">${escapeHtml(item.label)}</span>
+                ${weightSelectorHtml}
                 ${isCustom ? `
                     <button class="delete-btn p-2 rounded-lg hover:bg-error-bg transition-colors text-text-tertiary hover:text-error" title="Delete">
                         <span class="material-symbols-outlined text-lg">delete</span>
@@ -816,6 +857,18 @@
                     deleteCustomItem(item.id, card);
                 });
             }
+
+            // Weight selector buttons
+            card.querySelectorAll('.weight-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const weight = parseInt(btn.dataset.weight);
+                    CriteriaStore.setWeight(CRITERIA_CATEGORY, item.id, weight);
+                    // Update UI
+                    card.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
 
             // Drag events
             card.addEventListener('dragstart', handleDragStart);
