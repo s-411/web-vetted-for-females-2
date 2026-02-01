@@ -3,285 +3,54 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Vetted - Relationship Vetting</title>
+    <title>Vetted - Know His Worth Before He Knows Yours</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
     <!-- Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ============================================
-         DESIGN TOKENS
-         ============================================
-         All design decisions are tokenized here.
-         Change a value once, update everywhere.
-    -->
     <style>
         :root {
-            /* ==========================================
-               COLOR TOKENS
-               ========================================== */
-
-            /* Primary Brand Colors */
             --color-primary: #7f13ec;
             --color-primary-hover: #6b0fcc;
             --color-primary-dark: #4c0b8f;
             --color-primary-light: #a855f7;
-
-            /* Secondary / Accent Colors */
-            --color-accent: #d4af37;          /* Gold */
-            --color-accent-light: #f3e5ab;    /* Light Gold */
-            --color-accent-hover: #c9a227;
-
-            /* Neutral / Base Colors */
+            --color-accent: #d4af37;
+            --color-accent-light: #f3e5ab;
             --color-plum: #2a173b;
             --color-plum-light: #4a2c63;
-            --color-plum-muted: rgba(42, 23, 59, 0.6);
-
-            /* Background Colors */
-            --color-bg-primary: #f7f4ed;      /* Warm Tan */
+            --color-bg-primary: #f7f4ed;
             --color-bg-secondary: #ffffff;
-            --color-bg-tertiary: #f8f7f4;
-            --color-bg-sidebar: var(--color-plum);
-            --color-bg-card: var(--color-bg-secondary);
-
-            /* Text Colors */
+            --color-bg-hero: #1a0f24;
             --color-text-primary: var(--color-plum);
             --color-text-secondary: rgba(42, 23, 59, 0.6);
-            --color-text-tertiary: rgba(42, 23, 59, 0.4);
             --color-text-inverse: #ffffff;
-            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
-            --color-border: rgba(42, 23, 59, 0.05);
-            --color-border-hover: rgba(42, 23, 59, 0.15);
-            --color-border-accent: rgba(212, 175, 55, 0.3);
-
-            /* Status Colors */
+            --color-border: rgba(42, 23, 59, 0.08);
             --color-success: #16a34a;
-            --color-success-bg: #f0fdf4;
             --color-warning: #ca8a04;
-            --color-warning-bg: #fefce8;
             --color-error: #dc2626;
-            --color-error-bg: #fef2f2;
-            --color-info: #2563eb;
-            --color-info-bg: #eff6ff;
 
-            /* Category Colors */
-            --color-water: #3b82f6;
-            --color-water-bg: #eff6ff;
-            --color-sleep: var(--color-primary);
-            --color-sleep-bg: #faf5ff;
-            --color-mood: #eab308;
-            --color-mood-bg: #fefce8;
-            --color-energy: #ec4899;
-            --color-energy-bg: #fdf2f8;
-            --color-social: #f59e0b;
-            --color-social-bg: #fffbeb;
-
-            /* Event Colors */
-            --color-event-primary: var(--color-primary);
-            --color-event-secondary: #14b8a6;
-            --color-event-tertiary: #d1d5db;
-        }
-
-        /* ==========================================
-           DARK MODE COLORS
-           ========================================== */
-        html.dark {
-            /* Primary Brand Colors - slightly brighter for dark bg */
-            --color-primary: #9333ea;
-            --color-primary-hover: #a855f7;
-            --color-primary-dark: #7c3aed;
-            --color-primary-light: #c084fc;
-
-            /* Accent stays warm gold */
-            --color-accent: #d4af37;
-            --color-accent-light: #b8942e;
-            --color-accent-hover: #e5c158;
-
-            /* Dark neutrals */
-            --color-plum: #f8f7f4;
-            --color-plum-light: #e5e4e1;
-            --color-plum-muted: rgba(248, 247, 244, 0.6);
-
-            /* Background Colors - deep plum/purple tones */
-            --color-bg-primary: #1a1625;
-            --color-bg-secondary: #241e30;
-            --color-bg-tertiary: #2d2640;
-            --color-bg-sidebar: #13101a;
-            --color-bg-card: #241e30;
-
-            /* Text Colors - light on dark */
-            --color-text-primary: #f8f7f4;
-            --color-text-secondary: rgba(248, 247, 244, 0.7);
-            --color-text-tertiary: rgba(248, 247, 244, 0.5);
-            /* text-inverse stays white - used on dark sidebar */
-            --color-text-inverse: #ffffff;
-            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
-
-            /* Border Colors */
-            --color-border: rgba(255, 255, 255, 0.08);
-            --color-border-hover: rgba(255, 255, 255, 0.15);
-            --color-border-accent: rgba(212, 175, 55, 0.4);
-
-            /* Status Colors - adjusted for dark bg */
-            --color-success: #22c55e;
-            --color-success-bg: rgba(34, 197, 94, 0.15);
-            --color-warning: #eab308;
-            --color-warning-bg: rgba(234, 179, 8, 0.15);
-            --color-error: #ef4444;
-            --color-error-bg: rgba(239, 68, 68, 0.15);
-            --color-info: #3b82f6;
-            --color-info-bg: rgba(59, 130, 246, 0.15);
-
-            /* Category Colors - adjusted for dark bg */
-            --color-water: #60a5fa;
-            --color-water-bg: rgba(96, 165, 250, 0.15);
-            --color-sleep-bg: rgba(147, 51, 234, 0.15);
-            --color-mood: #facc15;
-            --color-mood-bg: rgba(250, 204, 21, 0.15);
-            --color-energy: #f472b6;
-            --color-energy-bg: rgba(244, 114, 182, 0.15);
-            --color-social: #fbbf24;
-            --color-social-bg: rgba(251, 191, 36, 0.15);
-
-            /* Scrollbar for dark mode */
-            color-scheme: dark;
-        }
-
-        /* ==========================================
-           TYPOGRAPHY TOKENS (in :root)
-           ========================================== */
-        :root {
-            /* Font Families */
             --font-display: 'Manrope', system-ui, sans-serif;
             --font-serif: 'Playfair Display', Georgia, serif;
-
-            /* Font Sizes */
-            --text-xs: 0.75rem;      /* 12px */
-            --text-sm: 0.875rem;     /* 14px */
-            --text-base: 1rem;       /* 16px */
-            --text-lg: 1.125rem;     /* 18px */
-            --text-xl: 1.25rem;      /* 20px */
-            --text-2xl: 1.5rem;      /* 24px */
-            --text-3xl: 1.875rem;    /* 30px */
-            --text-4xl: 2.25rem;     /* 36px */
-            --text-5xl: 3rem;        /* 48px */
-
-            /* Font Weights */
-            --font-normal: 400;
-            --font-medium: 500;
-            --font-semibold: 600;
-            --font-bold: 700;
-
-            /* Line Heights */
-            --leading-tight: 1.25;
-            --leading-normal: 1.5;
-            --leading-relaxed: 1.625;
-
-            /* Letter Spacing */
-            --tracking-tight: -0.025em;
-            --tracking-normal: 0;
-            --tracking-wide: 0.025em;
-            --tracking-wider: 0.05em;
-            --tracking-widest: 0.1em;
-
-            /* ==========================================
-               SPACING TOKENS
-               ========================================== */
-
-            --space-0: 0;
-            --space-1: 0.25rem;      /* 4px */
-            --space-2: 0.5rem;       /* 8px */
-            --space-3: 0.75rem;      /* 12px */
-            --space-4: 1rem;         /* 16px */
-            --space-5: 1.25rem;      /* 20px */
-            --space-6: 1.5rem;       /* 24px */
-            --space-8: 2rem;         /* 32px */
-            --space-10: 2.5rem;      /* 40px */
-            --space-12: 3rem;        /* 48px */
-            --space-16: 4rem;        /* 64px */
-
-            /* ==========================================
-               BORDER RADIUS TOKENS
-               ========================================== */
-
-            --radius-none: 0;
-            --radius-sm: 0.25rem;    /* 4px */
-            --radius-md: 0.5rem;     /* 8px */
-            --radius-lg: 0.75rem;    /* 12px */
-            --radius-xl: 1rem;       /* 16px */
-            --radius-2xl: 1.5rem;    /* 24px */
-            --radius-full: 9999px;
-
-            /* ==========================================
-               SHADOW TOKENS
-               ========================================== */
-
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
-
-            /* ==========================================
-               TRANSITION TOKENS
-               ========================================== */
-
-            --transition-fast: 150ms ease;
-            --transition-base: 200ms ease;
-            --transition-slow: 300ms ease;
-            --transition-slower: 500ms ease;
-
-            /* ==========================================
-               SIZE TOKENS
-               ========================================== */
-
-            /* Sidebar */
-            --sidebar-width: 16rem;  /* 256px */
-            --sidebar-collapsed-width: 4.5rem;  /* 72px */
-
-            /* Header */
-            --header-height: 4rem;   /* 64px */
-
-            /* Avatar Sizes */
-            --avatar-sm: 1.5rem;     /* 24px */
-            --avatar-md: 2.5rem;     /* 40px */
-            --avatar-lg: 3.5rem;     /* 56px */
-
-            /* Icon Sizes */
-            --icon-sm: 1rem;         /* 16px */
-            --icon-md: 1.5rem;       /* 24px */
-            --icon-lg: 2rem;         /* 32px */
-
-            /* Button Heights */
-            --btn-height-sm: 2rem;
-            --btn-height-md: 2.5rem;
-            --btn-height-lg: 3rem;
-
-            /* Stat Icon Size */
-            --stat-icon-size: 3rem;  /* 48px */
-
-            /* ==========================================
-               Z-INDEX TOKENS
-               ========================================== */
-
-            --z-base: 0;
-            --z-dropdown: 10;
-            --z-sticky: 20;
-            --z-header: 30;
-            --z-overlay: 40;
-            --z-modal: 50;
-            --z-toast: 60;
+            --font-editorial: 'Cormorant Garamond', Georgia, serif;
         }
 
-        /* ==========================================
-           MATERIAL ICONS CONFIGURATION
-           ========================================== */
+        html.dark {
+            --color-primary: #9333ea;
+            --color-primary-hover: #a855f7;
+            --color-plum: #f8f7f4;
+            --color-bg-primary: #1a1625;
+            --color-bg-secondary: #241e30;
+            --color-bg-hero: #0d0812;
+            --color-text-primary: #f8f7f4;
+            --color-text-secondary: rgba(248, 247, 244, 0.7);
+            --color-border: rgba(255, 255, 255, 0.08);
+        }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -289,542 +58,643 @@
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        /* ==========================================
-           CUSTOM SCROLLBAR
-           ========================================== */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--color-accent);
-            border-radius: var(--radius-full);
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 9999px; }
+
+        /* Hero gradient mesh */
+        .hero-gradient {
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(127, 19, 236, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 60% at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse 50% 80% at 60% 80%, rgba(127, 19, 236, 0.08) 0%, transparent 50%),
+                var(--color-bg-hero);
         }
 
-        /* Sidebar Collapse Transitions */
-        .sidebar-transition {
-            transition: width 300ms ease, padding 300ms ease;
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
         }
-        .sidebar-collapsed .sidebar-label {
-            opacity: 0;
-            width: 0;
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(-2deg); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .float-1 { animation: float 6s ease-in-out infinite; }
+        .float-2 { animation: floatReverse 8s ease-in-out infinite; animation-delay: -2s; }
+        .float-3 { animation: float 7s ease-in-out infinite; animation-delay: -4s; }
+        .pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+
+        /* Staggered reveal animation */
+        @keyframes revealUp {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .reveal { animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .reveal-delay-1 { animation-delay: 0.1s; }
+        .reveal-delay-2 { animation-delay: 0.2s; }
+        .reveal-delay-3 { animation-delay: 0.3s; }
+        .reveal-delay-4 { animation-delay: 0.4s; }
+        .reveal-delay-5 { animation-delay: 0.5s; }
+        .reveal-delay-6 { animation-delay: 0.6s; }
+
+        /* Decorative lines */
+        .accent-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-accent), transparent);
+        }
+
+        /* Card hover effect */
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(127, 19, 236, 0.15);
+        }
+
+        /* Quote styling */
+        .editorial-quote {
+            font-family: var(--font-editorial);
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-accent) 0%, #f0d78c 50%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* CTA button */
+        .cta-btn {
+            position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .sidebar-expanded .sidebar-label {
-            opacity: 1;
-            width: auto;
-            transition: opacity 200ms ease 100ms;
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
         }
-        .sidebar-collapsed .sidebar-hideable {
-            display: none;
-        }
-        .sidebar-collapsed .sidebar-collapse-icon {
-            transform: rotate(180deg);
-        }
-        /* Collapsed state - center icons */
-        .sidebar-collapsed .sidebar-logo {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        .sidebar-collapsed .sidebar-nav {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-nav-item {
-            justify-content: center;
-            padding-left: 0;
-            padding-right: 0;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-bottom {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .sidebar-collapsed .sidebar-profile {
-            justify-content: center;
-        }
-        .sidebar-collapsed .sidebar-collapse-btn {
-            justify-content: center;
-            gap: 0;
-        }
-        .sidebar-collapsed .sidebar-collapsed-show {
-            display: flex !important;
-        }
-        .theme-btn-active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .theme-btn-active span {
-            color: var(--color-accent) !important;
+        .cta-btn:hover::before {
+            left: 100%;
         }
 
-        /* Modal backdrop */
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+        /* Testimonial card */
+        .testimonial-card {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Stats counter effect */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            backdrop-filter: blur(20px);
+            background: rgba(26, 15, 36, 0.95);
         }
     </style>
 
-    <!-- Tailwind Config Using Design Tokens -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Primary
                         'primary': 'var(--color-primary)',
                         'primary-hover': 'var(--color-primary-hover)',
                         'primary-dark': 'var(--color-primary-dark)',
                         'primary-light': 'var(--color-primary-light)',
-
-                        // Accent
                         'accent': 'var(--color-accent)',
                         'accent-light': 'var(--color-accent-light)',
-                        'accent-hover': 'var(--color-accent-hover)',
-
-                        // Neutrals
                         'plum': 'var(--color-plum)',
                         'plum-light': 'var(--color-plum-light)',
-                        'plum-muted': 'var(--color-plum-muted)',
-
-                        // Backgrounds
                         'bg-primary': 'var(--color-bg-primary)',
                         'bg-secondary': 'var(--color-bg-secondary)',
-                        'bg-tertiary': 'var(--color-bg-tertiary)',
-                        'bg-sidebar': 'var(--color-bg-sidebar)',
-                        'bg-card': 'var(--color-bg-card)',
-
-                        // Text
+                        'bg-hero': 'var(--color-bg-hero)',
                         'text-primary': 'var(--color-text-primary)',
                         'text-secondary': 'var(--color-text-secondary)',
-                        'text-tertiary': 'var(--color-text-tertiary)',
                         'text-inverse': 'var(--color-text-inverse)',
-                        'text-inverse-muted': 'var(--color-text-inverse-muted)',
-
-                        // Borders
                         'border-default': 'var(--color-border)',
-                        'border-hover': 'var(--color-border-hover)',
-                        'border-accent': 'var(--color-border-accent)',
-
-                        // Status
                         'success': 'var(--color-success)',
-                        'success-bg': 'var(--color-success-bg)',
                         'warning': 'var(--color-warning)',
-                        'warning-bg': 'var(--color-warning-bg)',
                         'error': 'var(--color-error)',
-                        'error-bg': 'var(--color-error-bg)',
-                        'info': 'var(--color-info)',
-                        'info-bg': 'var(--color-info-bg)',
-
-                        // Categories
-                        'water': 'var(--color-water)',
-                        'water-bg': 'var(--color-water-bg)',
-                        'sleep': 'var(--color-sleep)',
-                        'sleep-bg': 'var(--color-sleep-bg)',
-                        'mood': 'var(--color-mood)',
-                        'mood-bg': 'var(--color-mood-bg)',
-                        'energy': 'var(--color-energy)',
-                        'energy-bg': 'var(--color-energy-bg)',
-                        'social': 'var(--color-social)',
-                        'social-bg': 'var(--color-social-bg)',
-
-                        // Events
-                        'event-primary': 'var(--color-event-primary)',
-                        'event-secondary': 'var(--color-event-secondary)',
-                        'event-tertiary': 'var(--color-event-tertiary)',
                     },
                     fontFamily: {
                         'display': 'var(--font-display)',
                         'serif': 'var(--font-serif)',
-                    },
-                    fontSize: {
-                        'xs': 'var(--text-xs)',
-                        'sm': 'var(--text-sm)',
-                        'base': 'var(--text-base)',
-                        'lg': 'var(--text-lg)',
-                        'xl': 'var(--text-xl)',
-                        '2xl': 'var(--text-2xl)',
-                        '3xl': 'var(--text-3xl)',
-                        '4xl': 'var(--text-4xl)',
-                        '5xl': 'var(--text-5xl)',
-                    },
-                    fontWeight: {
-                        'normal': 'var(--font-normal)',
-                        'medium': 'var(--font-medium)',
-                        'semibold': 'var(--font-semibold)',
-                        'bold': 'var(--font-bold)',
-                    },
-                    lineHeight: {
-                        'tight': 'var(--leading-tight)',
-                        'normal': 'var(--leading-normal)',
-                        'relaxed': 'var(--leading-relaxed)',
-                    },
-                    letterSpacing: {
-                        'tight': 'var(--tracking-tight)',
-                        'normal': 'var(--tracking-normal)',
-                        'wide': 'var(--tracking-wide)',
-                        'wider': 'var(--tracking-wider)',
-                        'widest': 'var(--tracking-widest)',
-                    },
-                    spacing: {
-                        '0': 'var(--space-0)',
-                        '1': 'var(--space-1)',
-                        '2': 'var(--space-2)',
-                        '3': 'var(--space-3)',
-                        '4': 'var(--space-4)',
-                        '5': 'var(--space-5)',
-                        '6': 'var(--space-6)',
-                        '8': 'var(--space-8)',
-                        '10': 'var(--space-10)',
-                        '12': 'var(--space-12)',
-                        '16': 'var(--space-16)',
-                        'sidebar': 'var(--sidebar-width)',
-                        'header': 'var(--header-height)',
-                    },
-                    borderRadius: {
-                        'none': 'var(--radius-none)',
-                        'sm': 'var(--radius-sm)',
-                        'DEFAULT': 'var(--radius-md)',
-                        'md': 'var(--radius-md)',
-                        'lg': 'var(--radius-lg)',
-                        'xl': 'var(--radius-xl)',
-                        '2xl': 'var(--radius-2xl)',
-                        'full': 'var(--radius-full)',
-                    },
-                    boxShadow: {
-                        'sm': 'var(--shadow-sm)',
-                        'DEFAULT': 'var(--shadow-md)',
-                        'md': 'var(--shadow-md)',
-                        'lg': 'var(--shadow-lg)',
-                        'xl': 'var(--shadow-xl)',
-                        'card': 'var(--shadow-card)',
-                    },
-                    transitionDuration: {
-                        'fast': '150ms',
-                        'DEFAULT': '200ms',
-                        'slow': '300ms',
-                        'slower': '500ms',
-                    },
-                    width: {
-                        'sidebar': 'var(--sidebar-width)',
-                        'sidebar-collapsed': 'var(--sidebar-collapsed-width)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                    },
-                    height: {
-                        'header': 'var(--header-height)',
-                        'avatar-sm': 'var(--avatar-sm)',
-                        'avatar-md': 'var(--avatar-md)',
-                        'avatar-lg': 'var(--avatar-lg)',
-                        'stat-icon': 'var(--stat-icon-size)',
-                        'btn-sm': 'var(--btn-height-sm)',
-                        'btn-md': 'var(--btn-height-md)',
-                        'btn-lg': 'var(--btn-height-lg)',
-                    },
-                    zIndex: {
-                        'base': 'var(--z-base)',
-                        'dropdown': 'var(--z-dropdown)',
-                        'sticky': 'var(--z-sticky)',
-                        'header': 'var(--z-header)',
-                        'overlay': 'var(--z-overlay)',
-                        'modal': 'var(--z-modal)',
-                        'toast': 'var(--z-toast)',
+                        'editorial': 'var(--font-editorial)',
                     },
                 },
             },
         }
     </script>
 </head>
-<body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
-    <div class="flex h-screen w-full">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
-            <!-- Logo (Clickable to toggle) -->
-            <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
-                <span class="material-symbols-outlined text-accent text-3xl shrink-0">verified_user</span>
-                <div class="sidebar-label sidebar-hideable">
-                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Vetted</h1>
-                    <p class="text-text-inverse-muted text-sm mt-1">Know Your Worth</p>
-                </div>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
-                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">dashboard</span>
-                    <span class="font-medium sidebar-label">Profiles</span>
+<body class="bg-bg-primary text-text-primary font-display antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="material-symbols-outlined text-accent text-3xl icon-filled">verified_user</span>
+                <span class="font-serif text-2xl font-bold text-text-inverse">Vetted</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-white/70 hover:text-accent transition-colors text-sm font-medium">Features</a>
+                <a href="#how-it-works" class="text-white/70 hover:text-accent transition-colors text-sm font-medium">How It Works</a>
+                <a href="#testimonials" class="text-white/70 hover:text-accent transition-colors text-sm font-medium">Stories</a>
+                <a href="app.html" class="px-5 py-2.5 bg-accent text-plum rounded-full text-sm font-bold hover:bg-accent-light transition-all cta-btn">
+                    Get Started Free
                 </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
-                    <span class="material-symbols-outlined shrink-0">inventory_2</span>
-                    <span class="font-medium sidebar-label">Archives</span>
-                </a>
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
-                    <span class="material-symbols-outlined shrink-0">settings</span>
-                    <span class="font-medium sidebar-label">Settings</span>
-                </a>
-
-                <!-- Divider -->
-                <div class="my-4 border-t border-white/10"></div>
-
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="landing.html" title="Landing Page">
-                    <span class="material-symbols-outlined shrink-0">home</span>
-                    <span class="font-medium sidebar-label">Landing Page</span>
-                </a>
-            </nav>
-
-            <!-- Bottom Section -->
-            <div class="sidebar-bottom p-4 border-t border-white/10">
-                <!-- Theme & Collapse Row -->
-                <div class="flex items-center justify-between mb-4 sidebar-hideable">
-                    <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
-                        <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
-                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
-                        </button>
-                        <button onclick="setTheme('dark')" id="theme-dark" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Dark mode">
-                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">dark_mode</span>
-                        </button>
-                    </div>
-                    <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200" title="Collapse sidebar">
-                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted hover:text-text-inverse">keyboard_double_arrow_left</span>
-                    </button>
-                </div>
-
-                <!-- Collapsed state: just collapse icon -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                </button>
-
-                <!-- Privacy Note -->
-                <div class="sidebar-hideable text-center">
-                    <p class="text-xs text-text-inverse-muted flex items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-sm">lock</span>
-                        Data stored locally
-                    </p>
-                </div>
             </div>
-        </aside>
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-white">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+        </div>
+    </nav>
 
-        <!-- Sidebar Toggle Script -->
-        <script>
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const isExpanded = sidebar.classList.contains('sidebar-expanded');
-
-                if (isExpanded) {
-                    sidebar.classList.remove('sidebar-expanded', 'w-sidebar');
-                    sidebar.classList.add('sidebar-collapsed', 'w-sidebar-collapsed');
-                } else {
-                    sidebar.classList.remove('sidebar-collapsed', 'w-sidebar-collapsed');
-                    sidebar.classList.add('sidebar-expanded', 'w-sidebar');
-                }
-            }
-
-            // Theme Management
-            function setTheme(theme) {
-                const html = document.documentElement;
-
-                if (theme === 'dark') {
-                    html.classList.remove('light');
-                    html.classList.add('dark');
-                } else if (theme === 'light') {
-                    html.classList.remove('dark');
-                    html.classList.add('light');
-                } else {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    html.classList.remove('light', 'dark');
-                    html.classList.add(prefersDark ? 'dark' : 'light');
-                }
-
-                localStorage.setItem('theme', theme);
-                updateSidebarThemeButtons(theme);
-            }
-
-            function updateSidebarThemeButtons(theme) {
-                const lightBtn = document.getElementById('theme-light');
-                const darkBtn = document.getElementById('theme-dark');
-                if (lightBtn && darkBtn) {
-                    lightBtn.classList.remove('theme-btn-active');
-                    darkBtn.classList.remove('theme-btn-active');
-                    if (theme === 'light') lightBtn.classList.add('theme-btn-active');
-                    if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
-                }
-            }
-
-            // Initialize theme on page load
-            (function() {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                setTheme(savedTheme);
-
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                    if (localStorage.getItem('theme') === 'system') {
-                        setTheme('system');
-                    }
-                });
-            })();
-        </script>
-
-        <!-- Main Content -->
-        <main class="flex-1 flex flex-col h-full overflow-hidden">
-            <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8">
-                <div class="max-w-6xl mx-auto">
-                    <!-- Header Section -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                        <div>
-                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Your Profiles</h1>
-                            <p class="text-text-secondary" id="profile-count">Loading...</p>
-                        </div>
-                        <button onclick="openAddModal()" class="px-5 py-2.5 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 self-start md:self-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Profile
-                        </button>
-                    </div>
-
-                    <!-- Profile Grid -->
-                    <div id="profile-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Profiles will be rendered here by JavaScript -->
-                    </div>
-
-                    <!-- Empty State (hidden by default) -->
-                    <div id="empty-state" class="hidden text-center py-16">
-                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-bg-tertiary flex items-center justify-center">
-                            <span class="material-symbols-outlined text-5xl text-text-tertiary">person_search</span>
-                        </div>
-                        <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">No profiles yet</h2>
-                        <p class="text-text-secondary mb-6 max-w-md mx-auto">Start evaluating someone by adding your first profile. All data stays private on your device.</p>
-                        <button onclick="openAddModal()" class="px-6 py-3 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 mx-auto">
-                            <span class="material-symbols-outlined text-lg">add</span>
-                            Add Your First Profile
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Add Profile Modal -->
-    <div id="add-modal" class="fixed inset-0 z-modal hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeAddModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-                <button onclick="closeAddModal()" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
-                    <span class="material-symbols-outlined text-text-secondary">close</span>
-                </button>
-                <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">Add New Profile</h2>
-                <p class="text-text-secondary text-sm mb-6">Enter a name or nickname to identify this person.</p>
-                <form onsubmit="handleAddProfile(event)">
-                    <label class="block mb-4">
-                        <span class="text-sm font-medium text-text-primary mb-2 block">Name</span>
-                        <input type="text" id="profile-name-input" placeholder="e.g., John, Coffee Shop Guy" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
-                    </label>
-                    <div class="flex gap-3">
-                        <button type="button" onclick="closeAddModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="flex-1 px-4 py-3 bg-primary text-text-inverse rounded-xl font-semibold hover:bg-primary-hover transition-colors">
-                            Create Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 hidden mobile-menu">
+        <div class="flex flex-col items-center justify-center h-full gap-8">
+            <a href="#features" onclick="toggleMobileMenu()" class="text-white text-xl font-medium">Features</a>
+            <a href="#how-it-works" onclick="toggleMobileMenu()" class="text-white text-xl font-medium">How It Works</a>
+            <a href="#testimonials" onclick="toggleMobileMenu()" class="text-white text-xl font-medium">Stories</a>
+            <a href="app.html" class="px-8 py-3 bg-accent text-plum rounded-full text-lg font-bold">Get Started Free</a>
+            <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2 text-white">
+                <span class="material-symbols-outlined text-3xl">close</span>
+            </button>
         </div>
     </div>
 
-    <!-- Dashboard JavaScript -->
-    <script type="module">
-        import { Store } from './src/js/store.js';
-        import { getGradeColor, getGradeDescription } from './src/js/grading.js';
-        import { getInitials, getAvatarColor, formatRelativeTime, escapeHtml } from './src/js/utils.js';
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary/10 blur-3xl float-1"></div>
+            <div class="absolute bottom-40 right-20 w-96 h-96 rounded-full bg-accent/10 blur-3xl float-2"></div>
+            <div class="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-primary-light/5 blur-2xl float-3"></div>
 
-        // Make functions available globally
-        window.openAddModal = function() {
-            document.getElementById('add-modal').classList.remove('hidden');
-            document.getElementById('profile-name-input').focus();
-        };
+            <!-- Geometric accents -->
+            <div class="absolute top-32 right-1/4 w-px h-32 bg-gradient-to-b from-accent/50 to-transparent"></div>
+            <div class="absolute bottom-32 left-1/4 w-px h-24 bg-gradient-to-t from-accent/30 to-transparent"></div>
+            <div class="absolute top-1/3 right-10 w-24 h-px bg-gradient-to-r from-transparent to-accent/40"></div>
+        </div>
 
-        window.closeAddModal = function() {
-            document.getElementById('add-modal').classList.add('hidden');
-            document.getElementById('profile-name-input').value = '';
-        };
+        <div class="max-w-6xl mx-auto px-6 pt-32 pb-20 text-center relative z-10">
+            <!-- Badge -->
+            <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
+                <span class="w-2 h-2 rounded-full bg-accent pulse-glow"></span>
+                <span class="text-white/60 text-sm font-medium tracking-wide">Your private relationship intelligence</span>
+            </div>
 
-        window.handleAddProfile = function(event) {
-            event.preventDefault();
-            const name = document.getElementById('profile-name-input').value.trim();
-            if (name) {
-                Store.createProfile(name);
-                closeAddModal();
-                renderProfiles();
-            }
-        };
+            <!-- Main Headline -->
+            <h1 class="reveal reveal-delay-1 font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-text-inverse leading-tight mb-6">
+                Know His Worth<br/>
+                <span class="gradient-text">Before He Knows Yours</span>
+            </h1>
 
-        function renderProfileCard(profile) {
-            const colors = getGradeColor(profile.grade);
-            const initials = getInitials(profile.name);
-            const avatarColor = getAvatarColor(profile.id);
-            const greenCount = profile.greenFlags.length;
-            const redCount = profile.redFlags.length;
-            const dbCount = profile.dealbreakers.length;
+            <!-- Subheadline -->
+            <p class="reveal reveal-delay-2 text-xl md:text-2xl text-white/60 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                Track green flags, red flags, and dealbreakers. Make dating decisions with clarity, not chaos.
+            </p>
 
-            return `
-                <article onclick="window.location.href='profile.html?id=${profile.id}'" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 cursor-pointer hover:shadow-lg hover:border-border-hover transition-all duration-200 group">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="h-14 w-14 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0" style="background-color: ${avatarColor}">
-                            ${escapeHtml(initials)}
-                        </div>
-                        <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold">
-                            ${profile.grade}
-                        </span>
+            <!-- CTA Buttons -->
+            <div class="reveal reveal-delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="app.html" class="group px-8 py-4 bg-accent text-bg-hero rounded-full text-lg font-bold hover:bg-accent-light transition-all cta-btn flex items-center gap-3">
+                    Start Evaluating
+                    <span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+                <a href="#how-it-works" class="px-8 py-4 border border-white/20 text-white rounded-full text-lg font-medium hover:bg-white/5 transition-all">
+                    See How It Works
+                </a>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="reveal reveal-delay-4 flex flex-col md:flex-row items-center justify-center gap-8 text-white/40">
+                <div class="flex items-center gap-3">
+                    <div class="flex -space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white text-xs font-bold border-2 border-bg-hero">A</div>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-hero text-xs font-bold border-2 border-bg-hero">M</div>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-light to-primary flex items-center justify-center text-white text-xs font-bold border-2 border-bg-hero">S</div>
                     </div>
-                    <h3 class="font-serif text-xl font-bold text-text-primary mb-1 group-hover:text-primary transition-colors">${escapeHtml(profile.name)}</h3>
-                    <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(profile.grade)}</p>
-                    <div class="flex items-center gap-4 text-sm">
-                        <span class="flex items-center gap-1 text-success">
-                            <span class="material-symbols-outlined text-base">thumb_up</span>
-                            ${greenCount}
-                        </span>
-                        <span class="flex items-center gap-1 text-warning">
-                            <span class="material-symbols-outlined text-base">flag</span>
-                            ${redCount}
-                        </span>
-                        <span class="flex items-center gap-1 text-error">
-                            <span class="material-symbols-outlined text-base">block</span>
-                            ${dbCount}
-                        </span>
+                    <span class="text-sm">Join thousands of women</span>
+                </div>
+                <div class="hidden md:block w-px h-6 bg-white/20"></div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-accent icon-filled">lock</span>
+                    <span class="text-sm">100% private & secure</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40">
+            <span class="text-xs tracking-widest uppercase">Scroll</span>
+            <div class="w-px h-12 bg-gradient-to-b from-white/40 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- The Problem Section -->
+    <section class="py-24 bg-bg-primary relative">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="accent-line mx-auto mb-8"></div>
+            <p class="editorial-quote text-3xl md:text-4xl lg:text-5xl text-text-primary leading-relaxed mb-8">
+                "I wish I had seen the signs earlier."
+            </p>
+            <p class="text-text-secondary text-lg max-w-2xl mx-auto">
+                Every woman has said this at least once. Vetted helps you see clearly from day one —
+                so you never have to say it again.
+            </p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-bg-secondary">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-accent text-sm font-bold tracking-widest uppercase mb-4 block">Features</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-text-primary mb-4">
+                    Your Relationship Toolkit
+                </h2>
+                <p class="text-text-secondary text-lg max-w-2xl mx-auto">
+                    Everything you need to evaluate compatibility, track patterns, and protect your peace.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Green Flags -->
+                <div class="feature-card bg-bg-primary rounded-3xl p-8 border border-border-default">
+                    <div class="w-14 h-14 rounded-2xl bg-success/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-success text-3xl">thumb_up</span>
                     </div>
-                    <p class="text-xs text-text-tertiary mt-4 pt-4 border-t border-border-default">
-                        Updated ${formatRelativeTime(profile.updatedAt)}
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-3">Green Flags</h3>
+                    <p class="text-text-secondary leading-relaxed">
+                        Track the good stuff. 20 research-backed indicators of healthy relationship potential.
                     </p>
-                </article>
-            `;
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-success/10 text-success text-xs font-medium rounded-full">Consistency</span>
+                        <span class="px-3 py-1 bg-success/10 text-success text-xs font-medium rounded-full">Respect</span>
+                        <span class="px-3 py-1 bg-success/10 text-success text-xs font-medium rounded-full">Growth</span>
+                    </div>
+                </div>
+
+                <!-- Red Flags -->
+                <div class="feature-card bg-bg-primary rounded-3xl p-8 border border-border-default">
+                    <div class="w-14 h-14 rounded-2xl bg-warning/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-warning text-3xl">flag</span>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-3">Red Flags</h3>
+                    <p class="text-text-secondary leading-relaxed">
+                        Spot the patterns before they become problems. 23 warning signs you shouldn't ignore.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-warning/10 text-warning text-xs font-medium rounded-full">Love bombing</span>
+                        <span class="px-3 py-1 bg-warning/10 text-warning text-xs font-medium rounded-full">Gaslighting</span>
+                        <span class="px-3 py-1 bg-warning/10 text-warning text-xs font-medium rounded-full">Isolation</span>
+                    </div>
+                </div>
+
+                <!-- Dealbreakers -->
+                <div class="feature-card bg-bg-primary rounded-3xl p-8 border border-border-default">
+                    <div class="w-14 h-14 rounded-2xl bg-error/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-error text-3xl">block</span>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-3">Dealbreakers</h3>
+                    <p class="text-text-secondary leading-relaxed">
+                        Your non-negotiables. 15 serious concerns that warrant walking away — no exceptions.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-error/10 text-error text-xs font-medium rounded-full">Abuse</span>
+                        <span class="px-3 py-1 bg-error/10 text-error text-xs font-medium rounded-full">Dishonesty</span>
+                        <span class="px-3 py-1 bg-error/10 text-error text-xs font-medium rounded-full">Control</span>
+                    </div>
+                </div>
+
+                <!-- Investment Tracker -->
+                <div class="feature-card bg-bg-primary rounded-3xl p-8 border border-border-default">
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-primary text-3xl">trending_up</span>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-3">Investment Tracker</h3>
+                    <p class="text-text-secondary leading-relaxed">
+                        Measure relationship progression through 10 meaningful stages of emotional investment.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Meeting</span>
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Exclusivity</span>
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Future</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24 bg-bg-primary">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-accent text-sm font-bold tracking-widest uppercase mb-4 block">How It Works</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-text-primary">
+                    Three Steps to Clarity
+                </h2>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                        <span class="font-serif text-3xl font-bold text-accent">1</span>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="font-serif text-2xl font-bold text-text-primary mb-3">Create a Profile</h3>
+                        <p class="text-text-secondary text-lg leading-relaxed">
+                            Add a name or nickname for anyone you're dating or considering. Keep it anonymous — only you know who's who.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Connector -->
+                <div class="hidden md:block w-px h-12 bg-gradient-to-b from-accent/40 to-transparent ml-10"></div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                        <span class="font-serif text-3xl font-bold text-accent">2</span>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="font-serif text-2xl font-bold text-text-primary mb-3">Track What You Notice</h3>
+                        <p class="text-text-secondary text-lg leading-relaxed">
+                            As you interact, check off green flags when you see them. Note red flags and dealbreakers as they appear. Watch the grade update in real-time.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Connector -->
+                <div class="hidden md:block w-px h-12 bg-gradient-to-b from-accent/40 to-transparent ml-10"></div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                        <span class="font-serif text-3xl font-bold text-accent">3</span>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="font-serif text-2xl font-bold text-text-primary mb-3">Make Informed Decisions</h3>
+                        <p class="text-text-secondary text-lg leading-relaxed">
+                            Use the automatic grading system (A+ to F) to see a clear picture. Compare multiple profiles. Move forward — or move on — with confidence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grade System Preview -->
+    <section class="py-24 bg-bg-hero text-text-inverse relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-accent/10 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-accent text-sm font-bold tracking-widest uppercase mb-4 block">Smart Grading</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold mb-4">
+                    See the Full Picture
+                </h2>
+                <p class="text-white/60 text-lg max-w-2xl mx-auto">
+                    Our algorithm weighs green flags against red flags and dealbreakers to give you an honest assessment.
+                </p>
+            </div>
+
+            <!-- Grade Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-success/30">
+                    <span class="text-3xl font-bold text-success">A+</span>
+                    <p class="text-white/50 text-xs mt-2">Exceptional</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-success/20">
+                    <span class="text-3xl font-bold text-success/80">A</span>
+                    <p class="text-white/50 text-xs mt-2">Great</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-success/10">
+                    <span class="text-3xl font-bold text-success/60">B+</span>
+                    <p class="text-white/50 text-xs mt-2">Good</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-warning/30">
+                    <span class="text-3xl font-bold text-warning">C</span>
+                    <p class="text-white/50 text-xs mt-2">Proceed with caution</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-error/20">
+                    <span class="text-3xl font-bold text-error/80">D</span>
+                    <p class="text-white/50 text-xs mt-2">Concerns</p>
+                </div>
+                <div class="bg-white/5 rounded-2xl p-6 text-center border border-error/30">
+                    <span class="text-3xl font-bold text-error">F</span>
+                    <p class="text-white/50 text-xs mt-2">Walk away</p>
+                </div>
+            </div>
+
+            <p class="text-center text-white/40 text-sm mt-8">
+                Any dealbreaker automatically drops the grade to F. Your standards matter.
+            </p>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-24 bg-bg-secondary">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-accent text-sm font-bold tracking-widest uppercase mb-4 block">Real Stories</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-text-primary">
+                    Women Like You
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-bg-primary rounded-3xl p-8">
+                    <div class="flex items-center gap-1 mb-6">
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                    </div>
+                    <p class="text-text-secondary leading-relaxed mb-6">
+                        "I used to make excuses for red flags. Now I track them. The visual progress bars helped me realize I was investing in someone who only scored a D. I ended it before wasting more time."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white text-sm font-bold">S</div>
+                        <div>
+                            <p class="font-semibold text-text-primary">Sarah, 29</p>
+                            <p class="text-text-secondary text-sm">New York</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-bg-primary rounded-3xl p-8">
+                    <div class="flex items-center gap-1 mb-6">
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                    </div>
+                    <p class="text-text-secondary leading-relaxed mb-6">
+                        "The investment tracker is genius. It reminded me not to give 'girlfriend energy' to someone who hadn't even asked me out properly yet. Standards restored."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-hero text-sm font-bold">M</div>
+                        <div>
+                            <p class="font-semibold text-text-primary">Michelle, 34</p>
+                            <p class="text-text-secondary text-sm">Los Angeles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-bg-primary rounded-3xl p-8">
+                    <div class="flex items-center gap-1 mb-6">
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                        <span class="material-symbols-outlined text-accent icon-filled text-lg">star</span>
+                    </div>
+                    <p class="text-text-secondary leading-relaxed mb-6">
+                        "I compared two guys I was talking to side by side. One was all charm, low green flags. The other was quieter but scored an A-. Guess who I'm still dating?"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-light to-primary flex items-center justify-center text-white text-sm font-bold">A</div>
+                        <div>
+                            <p class="font-semibold text-text-primary">Aisha, 27</p>
+                            <p class="text-text-secondary text-sm">Chicago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section class="py-24 bg-bg-primary">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-8">
+                <span class="material-symbols-outlined text-accent text-4xl">lock</span>
+            </div>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-text-primary mb-6">
+                Your Data Stays Yours
+            </h2>
+            <p class="text-text-secondary text-lg leading-relaxed max-w-2xl mx-auto mb-8">
+                Everything is stored locally on your device. No accounts required. No cloud uploads. No one can ever see your profiles, notes, or evaluations except you.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="flex items-center gap-2 text-text-secondary">
+                    <span class="material-symbols-outlined text-success">check_circle</span>
+                    <span>No account needed</span>
+                </div>
+                <div class="flex items-center gap-2 text-text-secondary">
+                    <span class="material-symbols-outlined text-success">check_circle</span>
+                    <span>100% local storage</span>
+                </div>
+                <div class="flex items-center gap-2 text-text-secondary">
+                    <span class="material-symbols-outlined text-success">check_circle</span>
+                    <span>Free forever</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 hero-gradient text-text-inverse relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/20 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <h2 class="font-serif text-4xl md:text-6xl font-bold mb-6">
+                Stop Guessing.<br/>
+                <span class="gradient-text">Start Evaluating.</span>
+            </h2>
+            <p class="text-white/60 text-xl max-w-2xl mx-auto mb-10">
+                You deserve relationships that meet your standards. Vetted helps you see clearly from the first date.
+            </p>
+            <a href="app.html" class="group inline-flex items-center gap-3 px-10 py-5 bg-accent text-bg-hero rounded-full text-xl font-bold hover:bg-accent-light transition-all cta-btn">
+                Get Started — It's Free
+                <span class="material-symbols-outlined text-2xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-bg-hero text-white/40 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-accent text-2xl icon-filled">verified_user</span>
+                    <span class="font-serif text-xl font-bold text-white">Vetted</span>
+                </div>
+                <p class="text-sm">Made with care for women who know their worth.</p>
+                <div class="flex items-center gap-6">
+                    <a href="app.html" class="hover:text-accent transition-colors text-sm">App</a>
+                    <a href="#features" class="hover:text-accent transition-colors text-sm">Features</a>
+                    <a href="#how-it-works" class="hover:text-accent transition-colors text-sm">How It Works</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
 
-        function renderProfiles() {
-            const profiles = Store.getProfiles(false);
-            const grid = document.getElementById('profile-grid');
-            const emptyState = document.getElementById('empty-state');
-            const countEl = document.getElementById('profile-count');
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
 
-            if (profiles.length === 0) {
-                grid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                countEl.textContent = 'No profiles yet';
+        // Navbar background on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-bg-hero/90', 'backdrop-blur-lg');
             } else {
-                grid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
-                countEl.textContent = `${profiles.length} profile${profiles.length !== 1 ? 's' : ''}`;
-
-                // Sort by updatedAt descending
-                profiles.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-                grid.innerHTML = profiles.map(renderProfileCard).join('');
+                nav.classList.remove('bg-bg-hero/90', 'backdrop-blur-lg');
             }
-        }
+        });
 
-        // Initialize on page load
-        renderProfiles();
+        // Initialize theme
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+            }
+        })();
     </script>
 </body>
 </html>

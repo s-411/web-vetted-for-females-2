@@ -204,6 +204,42 @@
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
+
+        /* Criteria Tabs */
+        .criteria-tab.active-green {
+            background: var(--color-success-bg);
+            border-bottom-color: var(--color-success);
+            color: var(--color-success);
+        }
+        .criteria-tab.active-red {
+            background: var(--color-error-bg);
+            border-bottom-color: var(--color-error);
+            color: var(--color-error);
+        }
+        .criteria-tab.active-dealbreakers {
+            background: rgba(127, 19, 236, 0.1);
+            border-bottom-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+        .criteria-tab.active-investment {
+            background: var(--color-info-bg);
+            border-bottom-color: var(--color-info);
+            color: var(--color-info);
+        }
+        .criteria-tab:hover:not([class*="active-"]) {
+            background: var(--color-bg-tertiary);
+        }
+
+        /* Criteria Item */
+        .criteria-item {
+            transition: background 150ms ease;
+        }
+        .criteria-item:hover {
+            background: var(--color-bg-tertiary);
+        }
+        .criteria-item.enabled {
+            background: var(--color-success-bg);
+        }
     </style>
 
     <script>
@@ -312,7 +348,7 @@
 
             <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Profiles">
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="app.html" title="Profiles">
                     <span class="material-symbols-outlined shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
@@ -328,9 +364,9 @@
                 <!-- Divider -->
                 <div class="my-4 border-t border-white/10"></div>
 
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="landing.html" title="Landing Page">
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Home">
                     <span class="material-symbols-outlined shrink-0">home</span>
-                    <span class="font-medium sidebar-label">Landing Page</span>
+                    <span class="font-medium sidebar-label">Home</span>
                 </a>
             </nav>
 
@@ -452,6 +488,56 @@
                         <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Settings</h1>
                         <p class="text-text-secondary">Manage your data and app preferences.</p>
                     </div>
+
+                    <!-- Evaluation Criteria Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="font-serif text-xl font-bold text-text-primary">Evaluation Criteria</h2>
+                                <p class="text-sm text-text-secondary mt-1">Customize which flags, dealbreakers, and milestones to track</p>
+                            </div>
+                            <button onclick="resetAllCriteria()" class="px-3 py-1.5 text-xs font-medium text-text-secondary hover:text-text-primary bg-bg-tertiary hover:bg-border-hover rounded-lg transition-colors">
+                                Reset to Defaults
+                            </button>
+                        </div>
+
+                        <!-- Category Tabs -->
+                        <div class="flex border-b border-border-default mb-6">
+                            <button onclick="switchCriteriaTab('green')" id="criteria-tab-green" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
+                                <span class="material-symbols-outlined text-success text-lg">thumb_up</span>
+                                <span class="hidden sm:inline">Green Flags</span>
+                            </button>
+                            <button onclick="switchCriteriaTab('red')" id="criteria-tab-red" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
+                                <span class="material-symbols-outlined text-error text-lg">flag</span>
+                                <span class="hidden sm:inline">Red Flags</span>
+                            </button>
+                            <button onclick="switchCriteriaTab('dealbreakers')" id="criteria-tab-dealbreakers" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
+                                <span class="material-symbols-outlined text-primary text-lg">block</span>
+                                <span class="hidden sm:inline">Dealbreakers</span>
+                            </button>
+                            <button onclick="switchCriteriaTab('investment')" id="criteria-tab-investment" class="criteria-tab flex-1 px-4 py-3 text-sm font-semibold text-text-secondary border-b-2 border-transparent flex items-center justify-center gap-2 transition-all">
+                                <span class="material-symbols-outlined text-info text-lg">trending_up</span>
+                                <span class="hidden sm:inline">Investment</span>
+                            </button>
+                        </div>
+
+                        <!-- Criteria Content -->
+                        <div id="criteria-content">
+                            <!-- Rendered by JS -->
+                        </div>
+
+                        <!-- Add Custom Item -->
+                        <div class="mt-6 pt-6 border-t border-border-default">
+                            <h3 class="font-semibold text-text-primary mb-3">Add Custom Item</h3>
+                            <div class="flex gap-3">
+                                <input type="text" id="custom-item-input" placeholder="Enter your custom criteria..." class="flex-1 px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                                <button onclick="addCustomItem()" class="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-lg">add</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </section>
 
                     <!-- Appearance Section -->
                     <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">

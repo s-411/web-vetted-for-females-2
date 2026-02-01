@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Dealbreakers - Vetted</title>
+    <title>Vetted - Relationship Vetting</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -365,59 +365,6 @@
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
-
-        /* Accordion Expansion */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 300ms ease, padding 300ms ease, opacity 200ms ease;
-            opacity: 0;
-        }
-        .accordion-content.expanded {
-            max-height: 500px;
-            opacity: 1;
-        }
-        .accordion-icon {
-            transition: transform 200ms ease;
-        }
-        .accordion-expanded .accordion-icon {
-            transform: rotate(180deg);
-        }
-
-        /* Custom error checkbox styling */
-        .dealbreaker-checkbox {
-            appearance: none;
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid var(--color-error);
-            border-radius: var(--radius-sm);
-            background: transparent;
-            cursor: pointer;
-            transition: all 200ms ease;
-            flex-shrink: 0;
-        }
-        .dealbreaker-checkbox:checked {
-            background: var(--color-error);
-            border-color: var(--color-error);
-        }
-        .dealbreaker-checkbox:checked::after {
-            content: '';
-            display: block;
-            width: 5px;
-            height: 9px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-            margin: 1px auto;
-        }
-        .dealbreaker-checkbox:hover {
-            border-color: var(--color-error);
-            background: var(--color-error-bg);
-        }
-        .dealbreaker-checkbox:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
-        }
     </style>
 
     <!-- Tailwind Config Using Design Tokens -->
@@ -607,8 +554,8 @@
 
             <!-- Navigation -->
             <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
-                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="app.html" title="Profiles">
-                    <span class="material-symbols-outlined shrink-0">dashboard</span>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="app.html" title="Profiles">
+                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">dashboard</span>
                     <span class="font-medium sidebar-label">Profiles</span>
                 </a>
                 <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="archives.html" title="Archives">
@@ -724,174 +671,160 @@
         <main class="flex-1 flex flex-col h-full overflow-hidden">
             <!-- Scrollable Content -->
             <div class="flex-1 overflow-y-auto p-8">
-                <div class="max-w-3xl mx-auto">
-                    <!-- Back Button -->
-                    <a id="back-link" href="app.html" class="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors duration-200 mb-6">
-                        <span class="material-symbols-outlined text-xl">arrow_back</span>
-                        <span class="font-medium">Back to Profile</span>
-                    </a>
-
+                <div class="max-w-6xl mx-auto">
                     <!-- Header Section -->
-                    <div class="bg-error-bg rounded-2xl border border-error/20 p-6 mb-6">
-                        <div class="flex items-start justify-between gap-4 flex-wrap">
-                            <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-xl bg-bg-card flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-3xl text-error">block</span>
-                                </div>
-                                <div>
-                                    <h1 class="font-serif text-2xl font-bold text-text-primary">Dealbreakers</h1>
-                                    <p id="profile-name" class="text-text-secondary">Loading...</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm text-text-secondary">Progress</p>
-                                    <p id="progress-count" class="text-lg font-bold text-error">0 of 15</p>
-                                </div>
-                                <span id="grade-badge" class="px-4 py-2 rounded-full text-lg font-bold bg-warning-bg text-warning">
-                                    C
-                                </span>
-                            </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Your Profiles</h1>
+                            <p class="text-text-secondary" id="profile-count">Loading...</p>
                         </div>
+                        <button onclick="openAddModal()" class="px-5 py-2.5 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 self-start md:self-auto">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            Add Profile
+                        </button>
                     </div>
 
-                    <!-- Warning Notice -->
-                    <div class="bg-error-bg/50 border border-error/10 rounded-xl p-4 mb-6">
-                        <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-error shrink-0">warning</span>
-                            <p class="text-sm text-text-secondary">
-                                <strong class="text-error">Important:</strong> Dealbreakers are serious issues that typically indicate the relationship should not continue. Check any that apply to this person. Click on any item to learn more.
-                            </p>
-                        </div>
+                    <!-- Profile Grid -->
+                    <div id="profile-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Profiles will be rendered here by JavaScript -->
                     </div>
 
-                    <!-- Dealbreakers Checklist -->
-                    <div id="dealbreakers-list" class="space-y-3">
-                        <!-- Items will be rendered by JavaScript -->
+                    <!-- Empty State (hidden by default) -->
+                    <div id="empty-state" class="hidden text-center py-16">
+                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-bg-tertiary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-5xl text-text-tertiary">person_search</span>
+                        </div>
+                        <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">No profiles yet</h2>
+                        <p class="text-text-secondary mb-6 max-w-md mx-auto">Start evaluating someone by adding your first profile. All data stays private on your device.</p>
+                        <button onclick="openAddModal()" class="px-6 py-3 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 mx-auto">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            Add Your First Profile
+                        </button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Dealbreakers Page JavaScript -->
+    <!-- Add Profile Modal -->
+    <div id="add-modal" class="fixed inset-0 z-modal hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeAddModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                <button onclick="closeAddModal()" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
+                    <span class="material-symbols-outlined text-text-secondary">close</span>
+                </button>
+                <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">Add New Profile</h2>
+                <p class="text-text-secondary text-sm mb-6">Enter a name or nickname to identify this person.</p>
+                <form onsubmit="handleAddProfile(event)">
+                    <label class="block mb-4">
+                        <span class="text-sm font-medium text-text-primary mb-2 block">Name</span>
+                        <input type="text" id="profile-name-input" placeholder="e.g., John, Coffee Shop Guy" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
+                    </label>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeAddModal()" class="flex-1 px-4 py-3 bg-bg-tertiary text-text-primary rounded-xl font-semibold hover:bg-border-hover transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 px-4 py-3 bg-primary text-text-inverse rounded-xl font-semibold hover:bg-primary-hover transition-colors">
+                            Create Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
-        import { getGradeColor } from './src/js/grading.js';
-        import { getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
-        import { dealbreakers } from './src/data/dealbreakers.js';
+        import { getGradeColor, getGradeDescription } from './src/js/grading.js';
+        import { getInitials, getAvatarColor, formatRelativeTime, escapeHtml } from './src/js/utils.js';
 
-        const DEALBREAKER_TOTAL = 15;
+        // Make functions available globally
+        window.openAddModal = function() {
+            document.getElementById('add-modal').classList.remove('hidden');
+            document.getElementById('profile-name-input').focus();
+        };
 
-        // Get profile ID from URL
-        const profileId = getProfileIdFromUrl();
+        window.closeAddModal = function() {
+            document.getElementById('add-modal').classList.add('hidden');
+            document.getElementById('profile-name-input').value = '';
+        };
 
-        // Redirect if no valid profile
-        if (!profileId) {
-            window.location.href = 'index.html';
-        }
-
-        let profile = Store.getProfile(profileId);
-
-        if (!profile) {
-            window.location.href = 'index.html';
-        }
-
-        // Update page title and back link
-        document.title = `Dealbreakers - ${profile.name} - Vetted`;
-        document.getElementById('back-link').href = `profile.html?id=${profileId}`;
-        document.getElementById('profile-name').textContent = profile.name;
-
-        // Track expanded accordions
-        const expandedItems = new Set();
-
-        // Toggle accordion
-        window.toggleAccordion = function(itemId) {
-            const content = document.getElementById(`content-${itemId}`);
-            const card = document.getElementById(`card-${itemId}`);
-
-            if (expandedItems.has(itemId)) {
-                expandedItems.delete(itemId);
-                content.classList.remove('expanded');
-                card.classList.remove('accordion-expanded');
-            } else {
-                expandedItems.add(itemId);
-                content.classList.add('expanded');
-                card.classList.add('accordion-expanded');
+        window.handleAddProfile = function(event) {
+            event.preventDefault();
+            const name = document.getElementById('profile-name-input').value.trim();
+            if (name) {
+                Store.createProfile(name);
+                closeAddModal();
+                renderProfiles();
             }
         };
 
-        // Handle checkbox change
-        window.handleCheckboxChange = function(flagId, isChecked) {
-            profile = Store.toggleFlag(profileId, 'dealbreakers', flagId, isChecked);
-            updateUI();
-        };
-
-        // Update grade badge and progress
-        function updateUI() {
-            const checkedCount = profile.dealbreakers.length;
+        function renderProfileCard(profile) {
             const colors = getGradeColor(profile.grade);
-
-            // Update progress count
-            document.getElementById('progress-count').textContent = `${checkedCount} of ${DEALBREAKER_TOTAL}`;
-
-            // Update grade badge
-            const gradeBadge = document.getElementById('grade-badge');
-            gradeBadge.textContent = profile.grade;
-            gradeBadge.className = `px-4 py-2 rounded-full text-lg font-bold ${colors.bg} ${colors.text}`;
-        }
-
-        // Render a single dealbreaker item
-        function renderDealbreakerItem(item) {
-            const isChecked = profile.dealbreakers.includes(item.id);
-            const isExpanded = expandedItems.has(item.id);
+            const initials = getInitials(profile.name);
+            const avatarColor = getAvatarColor(profile.id);
+            const greenCount = profile.greenFlags.length;
+            const redCount = profile.redFlags.length;
+            const dbCount = profile.dealbreakers.length;
 
             return `
-                <div id="card-${item.id}" class="bg-bg-card rounded-xl border border-border-default shadow-sm hover:shadow-md hover:border-error/20 transition-all duration-200 ${isExpanded ? 'accordion-expanded' : ''}">
-                    <div class="p-4">
-                        <div class="flex items-start gap-4">
-                            <!-- Checkbox -->
-                            <input
-                                type="checkbox"
-                                id="checkbox-${item.id}"
-                                class="dealbreaker-checkbox mt-0.5"
-                                ${isChecked ? 'checked' : ''}
-                                onchange="handleCheckboxChange('${item.id}', this.checked)"
-                                onclick="event.stopPropagation()"
-                            />
-
-                            <!-- Content (clickable for accordion) -->
-                            <div class="flex-1 cursor-pointer select-none" onclick="toggleAccordion('${item.id}')">
-                                <div class="flex items-center justify-between gap-2">
-                                    <label for="checkbox-${item.id}" class="font-medium text-text-primary cursor-pointer flex items-center gap-2" onclick="event.stopPropagation()">
-                                        <span class="material-symbols-outlined text-error text-lg">${item.icon}</span>
-                                        ${escapeHtml(item.label)}
-                                    </label>
-                                    <span class="material-symbols-outlined text-text-tertiary accordion-icon">expand_more</span>
-                                </div>
-                            </div>
+                <article onclick="window.location.href='profile.html?id=${profile.id}'" class="bg-bg-card rounded-2xl border border-border-default shadow-card p-6 cursor-pointer hover:shadow-lg hover:border-border-hover transition-all duration-200 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="h-14 w-14 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0" style="background-color: ${avatarColor}">
+                            ${escapeHtml(initials)}
                         </div>
-
-                        <!-- Expandable explanation -->
-                        <div id="content-${item.id}" class="accordion-content ${isExpanded ? 'expanded' : ''}">
-                            <div class="mt-4 ml-9 pt-4 border-t border-border-default">
-                                <p class="text-sm text-text-secondary leading-relaxed">${escapeHtml(item.explanation)}</p>
-                            </div>
-                        </div>
+                        <span class="px-3 py-1.5 ${colors.bg} ${colors.text} rounded-full text-sm font-bold">
+                            ${profile.grade}
+                        </span>
                     </div>
-                </div>
+                    <h3 class="font-serif text-xl font-bold text-text-primary mb-1 group-hover:text-primary transition-colors">${escapeHtml(profile.name)}</h3>
+                    <p class="text-xs text-text-tertiary mb-4">${getGradeDescription(profile.grade)}</p>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span class="flex items-center gap-1 text-success">
+                            <span class="material-symbols-outlined text-base">thumb_up</span>
+                            ${greenCount}
+                        </span>
+                        <span class="flex items-center gap-1 text-warning">
+                            <span class="material-symbols-outlined text-base">flag</span>
+                            ${redCount}
+                        </span>
+                        <span class="flex items-center gap-1 text-error">
+                            <span class="material-symbols-outlined text-base">block</span>
+                            ${dbCount}
+                        </span>
+                    </div>
+                    <p class="text-xs text-text-tertiary mt-4 pt-4 border-t border-border-default">
+                        Updated ${formatRelativeTime(profile.updatedAt)}
+                    </p>
+                </article>
             `;
         }
 
-        // Render all dealbreakers
-        function renderDealbreakers() {
-            const container = document.getElementById('dealbreakers-list');
-            container.innerHTML = dealbreakers.map(renderDealbreakerItem).join('');
+        function renderProfiles() {
+            const profiles = Store.getProfiles(false);
+            const grid = document.getElementById('profile-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countEl = document.getElementById('profile-count');
+
+            if (profiles.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                countEl.textContent = 'No profiles yet';
+            } else {
+                grid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                countEl.textContent = `${profiles.length} profile${profiles.length !== 1 ? 's' : ''}`;
+
+                // Sort by updatedAt descending
+                profiles.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                grid.innerHTML = profiles.map(renderProfileCard).join('');
+            }
         }
 
-        // Initialize page
-        renderDealbreakers();
-        updateUI();
+        // Initialize on page load
+        renderProfiles();
     </script>
 </body>
 </html>

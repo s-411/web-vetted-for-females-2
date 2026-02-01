@@ -1,92 +1,140 @@
+// Dealbreakers - Non-negotiable issues that should end a relationship
+// isDefault: true = included by default, false = optional (user can add)
+
 export const dealbreakers = [
+  // DEFAULT DEALBREAKERS (12)
   {
     id: 'db-1',
     label: 'History of cheating',
     icon: 'heart_broken',
     explanation: 'If he\'s cheated before, statistics show he\'s significantly more likely to cheat again. Past behavior is the best predictor of future behavior, especially with infidelity.',
+    isDefault: true,
   },
   {
     id: 'db-2',
     label: 'Physical aggression or violence (any instance)',
     icon: 'dangerous',
     explanation: 'Any physical aggression is an immediate dealbreaker. It almost always escalates over time. There is no acceptable level of physical violence in a relationship - zero tolerance.',
+    isDefault: true,
   },
   {
     id: 'db-3',
     label: 'Emotional abuse patterns',
     icon: 'sentiment_very_dissatisfied',
     explanation: 'Consistent patterns of manipulation, control, criticism, or emotional cruelty indicate deep-seated issues. Emotional abuse often precedes or accompanies physical abuse and causes lasting psychological harm.',
+    isDefault: true,
   },
   {
     id: 'db-4',
     label: 'Narcissistic traits (no empathy, everything is about him)',
     icon: 'person',
     explanation: 'True narcissistic traits mean he\'s incapable of genuine partnership. Everything will revolve around his needs, your feelings won\'t matter, and he\'ll never truly see you as an equal.',
+    isDefault: true,
   },
   {
     id: 'db-5',
     label: 'Substance addiction',
     icon: 'medication',
     explanation: 'Active addiction means you\'ll always come second to the substance. Addicts in active addiction cannot be reliable partners. They need to be in solid recovery before being relationship material.',
+    isDefault: true,
   },
   {
     id: 'db-6',
     label: 'Still legally married or separated',
     icon: 'ring_volume',
     explanation: 'If he\'s not fully divorced, he\'s not available. "Separated" is often code for "still figuring things out with my wife." Don\'t be part of someone else\'s marriage problems.',
+    isDefault: true,
   },
   {
     id: 'db-7',
     label: 'Secret children',
     icon: 'child_care',
     explanation: 'If he hid children from you, what else is he hiding? This level of deception about something so significant indicates a fundamental dishonesty that will pervade the relationship.',
+    isDefault: true,
   },
   {
     id: 'db-8',
     label: 'Lies about significant things',
     icon: 'feedback',
     explanation: 'Major lies about his past, his situation, or important facts destroy the foundation of trust. If he lies about big things, you can never be sure what else isn\'t true.',
+    isDefault: true,
   },
   {
     id: 'db-9',
     label: 'Financial abuse (controls money, won\'t let you work)',
     icon: 'money_off',
     explanation: 'Financial control is a form of abuse designed to create dependency. If he tries to control your money or prevent you from working, he\'s trying to trap you.',
+    isDefault: true,
   },
   {
     id: 'db-10',
     label: 'Isolates you from friends/family',
     icon: 'group_off',
     explanation: 'Isolation is a classic abuse tactic. If he\'s trying to separate you from your support network, he\'s setting up a dynamic where you\'re dependent on him and can\'t easily leave.',
+    isDefault: true,
   },
   {
     id: 'db-11',
     label: 'Threatens self-harm to manipulate you',
     icon: 'crisis_alert',
     explanation: 'Using threats of self-harm to control your behavior is emotional manipulation. It\'s not love - it\'s hostage-taking. This is a serious red flag for an abusive dynamic.',
+    isDefault: true,
   },
   {
     id: 'db-12',
     label: 'Has cheated WITH you on someone else',
     icon: 'group_remove',
     explanation: 'If he cheated with you, he\'ll cheat on you. His willingness to be unfaithful shows his values around commitment. You\'re not special enough to change this pattern.',
+    isDefault: true,
   },
+
+  // OPTIONAL DEALBREAKERS (user can add these)
   {
     id: 'db-13',
     label: 'Criminal history (violent crimes)',
     icon: 'gavel',
     explanation: 'A history of violent crimes indicates a capacity for violence. While people can change, violent tendencies are deeply concerning for intimate relationships where you\'re vulnerable.',
+    isDefault: false,
   },
   {
     id: 'db-14',
     label: 'Refuses therapy when clearly needed',
     icon: 'do_not_disturb',
     explanation: 'If he has obvious issues but refuses to work on them, he\'s not committed to growth. You can\'t fix him, and he\'s showing you he won\'t fix himself. This will never improve.',
+    isDefault: false,
   },
   {
     id: 'db-15',
     label: 'Addiction to gambling or porn affecting the relationship',
     icon: 'casino',
     explanation: 'These addictions destroy relationships through financial ruin and intimacy problems. If the addiction is affecting your relationship and he won\'t address it, it will only get worse.',
+    isDefault: false,
+  },
+  {
+    id: 'db-16',
+    label: 'Wants different things (kids, marriage, lifestyle)',
+    icon: 'diversity_1',
+    explanation: 'Fundamental incompatibilities on major life decisions can\'t be compromised. If you want kids and he doesn\'t (or vice versa), someone will be unhappy.',
+    isDefault: false,
+  },
+  {
+    id: 'db-17',
+    label: 'Untreated mental health issues affecting the relationship',
+    icon: 'psychology',
+    explanation: 'Untreated mental health problems can make a healthy relationship impossible. It\'s not about stigma - it\'s about his willingness to get help.',
+    isDefault: false,
+  },
+  {
+    id: 'db-18',
+    label: 'History of restraining orders',
+    icon: 'security',
+    explanation: 'If someone has sought legal protection from him, that\'s a serious warning that should not be ignored.',
+    isDefault: false,
   },
 ];
+
+// Helper to get default dealbreakers only
+export const getDefaultDealbreakers = () => dealbreakers.filter(d => d.isDefault);
+
+// Helper to get optional dealbreakers only
+export const getOptionalDealbreakers = () => dealbreakers.filter(d => !d.isDefault);
