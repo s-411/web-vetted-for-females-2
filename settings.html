@@ -59,7 +59,45 @@
             --color-error-bg: #fef2f2;
             --color-info: #2563eb;
             --color-info-bg: #eff6ff;
+        }
 
+        /* Dark Mode */
+        html.dark {
+            --color-primary: #9333ea;
+            --color-primary-hover: #a855f7;
+            --color-primary-dark: #7c3aed;
+            --color-primary-light: #c084fc;
+            --color-accent: #d4af37;
+            --color-accent-light: #b8942e;
+            --color-accent-hover: #e5c158;
+            --color-plum: #f8f7f4;
+            --color-plum-light: #e5e4e1;
+            --color-plum-muted: rgba(248, 247, 244, 0.6);
+            --color-bg-primary: #1a1625;
+            --color-bg-secondary: #241e30;
+            --color-bg-tertiary: #2d2640;
+            --color-bg-sidebar: #13101a;
+            --color-bg-card: #241e30;
+            --color-text-primary: #f8f7f4;
+            --color-text-secondary: rgba(248, 247, 244, 0.7);
+            --color-text-tertiary: rgba(248, 247, 244, 0.5);
+            --color-text-inverse: #ffffff;
+            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(255, 255, 255, 0.15);
+            --color-border-accent: rgba(212, 175, 55, 0.4);
+            --color-success: #22c55e;
+            --color-success-bg: rgba(34, 197, 94, 0.15);
+            --color-warning: #eab308;
+            --color-warning-bg: rgba(234, 179, 8, 0.15);
+            --color-error: #ef4444;
+            --color-error-bg: rgba(239, 68, 68, 0.15);
+            --color-info: #3b82f6;
+            --color-info-bg: rgba(59, 130, 246, 0.15);
+            color-scheme: dark;
+        }
+
+        :root {
             /* Typography */
             --font-display: 'Manrope', system-ui, sans-serif;
             --font-serif: 'Playfair Display', Georgia, serif;
@@ -155,6 +193,9 @@
         .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
         .sidebar-collapsed .sidebar-profile { justify-content: center; }
         .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
+        .sidebar-collapsed .sidebar-collapsed-show { display: flex !important; }
+        .theme-btn-active { background: rgba(255, 255, 255, 0.2); }
+        .theme-btn-active span { color: var(--color-accent) !important; }
 
         /* Toggle Switch */
         .toggle-switch {
@@ -315,10 +356,30 @@
                 </div>
             </nav>
 
-            <!-- Bottom Section: Profile, Notification & Collapse Toggle -->
+            <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Theme & Collapse Row -->
+                <div class="flex items-center justify-between mb-4 sidebar-hideable">
+                    <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
+                        <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
+                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                        </button>
+                        <button onclick="setTheme('dark')" id="theme-dark" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Dark mode">
+                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">dark_mode</span>
+                        </button>
+                    </div>
+                    <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200" title="Collapse sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted hover:text-text-inverse">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
+
+                <!-- Collapsed state: just collapse icon -->
+                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
+                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
+                </button>
+
                 <!-- Profile and Notification Row -->
-                <div class="sidebar-profile flex items-center justify-between mb-4">
+                <div class="sidebar-profile flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden shrink-0">
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
@@ -333,12 +394,6 @@
                         <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
                     </button>
                 </div>
-
-                <!-- Collapse Toggle Button -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn flex items-center justify-center gap-2 w-full py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse" title="Toggle sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                    <span class="text-sm font-medium sidebar-label">Collapse</span>
-                </button>
             </div>
         </aside>
 
@@ -360,6 +415,67 @@
             function toggleSwitch(element) {
                 element.classList.toggle('active');
             }
+
+            // Theme Management
+            function setTheme(theme) {
+                const html = document.documentElement;
+
+                if (theme === 'dark') {
+                    html.classList.remove('light');
+                    html.classList.add('dark');
+                } else if (theme === 'light') {
+                    html.classList.remove('dark');
+                    html.classList.add('light');
+                } else {
+                    // System preference
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    html.classList.remove('light', 'dark');
+                    html.classList.add(prefersDark ? 'dark' : 'light');
+                }
+
+                localStorage.setItem('theme', theme);
+                updateThemeButtons(theme);
+                updateSidebarThemeButtons(theme);
+            }
+
+            function updateSidebarThemeButtons(theme) {
+                const lightBtn = document.getElementById('theme-light');
+                const darkBtn = document.getElementById('theme-dark');
+                if (lightBtn && darkBtn) {
+                    lightBtn.classList.remove('theme-btn-active');
+                    darkBtn.classList.remove('theme-btn-active');
+                    if (theme === 'light') {
+                        lightBtn.classList.add('theme-btn-active');
+                    } else if (theme === 'dark') {
+                        darkBtn.classList.add('theme-btn-active');
+                    }
+                }
+            }
+
+            function updateThemeButtons(theme) {
+                const buttons = document.querySelectorAll('[data-theme]');
+                buttons.forEach(btn => {
+                    if (btn.dataset.theme === theme) {
+                        btn.classList.remove('border-border-default');
+                        btn.classList.add('border-primary', 'border-2');
+                    } else {
+                        btn.classList.remove('border-primary', 'border-2');
+                        btn.classList.add('border-border-default', 'border');
+                    }
+                });
+            }
+
+            // Initialize theme on page load
+            (function() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                setTheme(savedTheme);
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (localStorage.getItem('theme') === 'system') {
+                        setTheme('system');
+                    }
+                });
+            })();
         </script>
 
         <!-- Main Content -->
@@ -452,15 +568,15 @@
                             <div>
                                 <label class="block text-sm font-medium text-text-secondary mb-3">Theme</label>
                                 <div class="flex gap-3">
-                                    <button class="flex-1 p-4 bg-bg-tertiary border-2 border-primary rounded-xl text-center">
+                                    <button data-theme="light" onclick="setTheme('light')" class="flex-1 p-4 bg-bg-tertiary border-2 border-primary rounded-xl text-center transition-colors duration-200">
                                         <span class="material-symbols-outlined text-2xl text-primary mb-2">light_mode</span>
                                         <p class="text-sm font-medium text-text-primary">Light</p>
                                     </button>
-                                    <button class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
+                                    <button data-theme="dark" onclick="setTheme('dark')" class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
                                         <span class="material-symbols-outlined text-2xl text-text-secondary mb-2">dark_mode</span>
                                         <p class="text-sm font-medium text-text-primary">Dark</p>
                                     </button>
-                                    <button class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
+                                    <button data-theme="system" onclick="setTheme('system')" class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
                                         <span class="material-symbols-outlined text-2xl text-text-secondary mb-2">devices</span>
                                         <p class="text-sm font-medium text-text-primary">System</p>
                                     </button>

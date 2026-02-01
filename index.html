@@ -86,11 +86,77 @@
             --color-event-primary: var(--color-primary);
             --color-event-secondary: #14b8a6;
             --color-event-tertiary: #d1d5db;
+        }
 
-            /* ==========================================
-               TYPOGRAPHY TOKENS
-               ========================================== */
+        /* ==========================================
+           DARK MODE COLORS
+           ========================================== */
+        html.dark {
+            /* Primary Brand Colors - slightly brighter for dark bg */
+            --color-primary: #9333ea;
+            --color-primary-hover: #a855f7;
+            --color-primary-dark: #7c3aed;
+            --color-primary-light: #c084fc;
 
+            /* Accent stays warm gold */
+            --color-accent: #d4af37;
+            --color-accent-light: #b8942e;
+            --color-accent-hover: #e5c158;
+
+            /* Dark neutrals */
+            --color-plum: #f8f7f4;
+            --color-plum-light: #e5e4e1;
+            --color-plum-muted: rgba(248, 247, 244, 0.6);
+
+            /* Background Colors - deep plum/purple tones */
+            --color-bg-primary: #1a1625;
+            --color-bg-secondary: #241e30;
+            --color-bg-tertiary: #2d2640;
+            --color-bg-sidebar: #13101a;
+            --color-bg-card: #241e30;
+
+            /* Text Colors - light on dark */
+            --color-text-primary: #f8f7f4;
+            --color-text-secondary: rgba(248, 247, 244, 0.7);
+            --color-text-tertiary: rgba(248, 247, 244, 0.5);
+            /* text-inverse stays white - used on dark sidebar */
+            --color-text-inverse: #ffffff;
+            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+            /* Border Colors */
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(255, 255, 255, 0.15);
+            --color-border-accent: rgba(212, 175, 55, 0.4);
+
+            /* Status Colors - adjusted for dark bg */
+            --color-success: #22c55e;
+            --color-success-bg: rgba(34, 197, 94, 0.15);
+            --color-warning: #eab308;
+            --color-warning-bg: rgba(234, 179, 8, 0.15);
+            --color-error: #ef4444;
+            --color-error-bg: rgba(239, 68, 68, 0.15);
+            --color-info: #3b82f6;
+            --color-info-bg: rgba(59, 130, 246, 0.15);
+
+            /* Category Colors - adjusted for dark bg */
+            --color-water: #60a5fa;
+            --color-water-bg: rgba(96, 165, 250, 0.15);
+            --color-sleep-bg: rgba(147, 51, 234, 0.15);
+            --color-mood: #facc15;
+            --color-mood-bg: rgba(250, 204, 21, 0.15);
+            --color-energy: #f472b6;
+            --color-energy-bg: rgba(244, 114, 182, 0.15);
+            --color-social: #fbbf24;
+            --color-social-bg: rgba(251, 191, 36, 0.15);
+
+            /* Scrollbar for dark mode */
+            color-scheme: dark;
+        }
+
+        /* ==========================================
+           TYPOGRAPHY TOKENS (in :root)
+           ========================================== */
+        :root {
             /* Font Families */
             --font-display: 'Manrope', system-ui, sans-serif;
             --font-serif: 'Playfair Display', Georgia, serif;
@@ -283,6 +349,15 @@
         .sidebar-collapsed .sidebar-collapse-btn {
             justify-content: center;
             gap: 0;
+        }
+        .sidebar-collapsed .sidebar-collapsed-show {
+            display: flex !important;
+        }
+        .theme-btn-active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .theme-btn-active span {
+            color: var(--color-accent) !important;
         }
     </style>
 
@@ -500,10 +575,30 @@
                 </div>
             </nav>
 
-            <!-- Bottom Section: Profile, Notification & Collapse Toggle -->
+            <!-- Bottom Section -->
             <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Theme & Collapse Row -->
+                <div class="flex items-center justify-between mb-4 sidebar-hideable">
+                    <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
+                        <button onclick="setTheme('light')" id="theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
+                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                        </button>
+                        <button onclick="setTheme('dark')" id="theme-dark" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Dark mode">
+                            <span class="material-symbols-outlined text-xl text-text-inverse-muted">dark_mode</span>
+                        </button>
+                    </div>
+                    <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200" title="Collapse sidebar">
+                        <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted hover:text-text-inverse">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
+
+                <!-- Collapsed state: just collapse icon -->
+                <button onclick="toggleSidebar()" class="sidebar-collapse-btn hidden sidebar-collapsed-show w-full flex items-center justify-center py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse mb-4" title="Expand sidebar">
+                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
+                </button>
+
                 <!-- Profile and Notification Row -->
-                <div class="sidebar-profile flex items-center justify-between mb-4">
+                <div class="sidebar-profile flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden shrink-0">
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
@@ -518,12 +613,6 @@
                         <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
                     </button>
                 </div>
-
-                <!-- Collapse Toggle Button -->
-                <button onclick="toggleSidebar()" class="sidebar-collapse-btn flex items-center justify-center gap-2 w-full py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse" title="Toggle sidebar">
-                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
-                    <span class="text-sm font-medium sidebar-label">Collapse</span>
-                </button>
             </div>
         </aside>
 
@@ -541,6 +630,49 @@
                     sidebar.classList.add('sidebar-expanded', 'w-sidebar');
                 }
             }
+
+            // Theme Management
+            function setTheme(theme) {
+                const html = document.documentElement;
+
+                if (theme === 'dark') {
+                    html.classList.remove('light');
+                    html.classList.add('dark');
+                } else if (theme === 'light') {
+                    html.classList.remove('dark');
+                    html.classList.add('light');
+                } else {
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    html.classList.remove('light', 'dark');
+                    html.classList.add(prefersDark ? 'dark' : 'light');
+                }
+
+                localStorage.setItem('theme', theme);
+                updateSidebarThemeButtons(theme);
+            }
+
+            function updateSidebarThemeButtons(theme) {
+                const lightBtn = document.getElementById('theme-light');
+                const darkBtn = document.getElementById('theme-dark');
+                if (lightBtn && darkBtn) {
+                    lightBtn.classList.remove('theme-btn-active');
+                    darkBtn.classList.remove('theme-btn-active');
+                    if (theme === 'light') lightBtn.classList.add('theme-btn-active');
+                    if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
+                }
+            }
+
+            // Initialize theme on page load
+            (function() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                setTheme(savedTheme);
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (localStorage.getItem('theme') === 'system') {
+                        setTheme('system');
+                    }
+                });
+            })();
         </script>
 
         <!-- Main Content -->
