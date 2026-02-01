@@ -506,12 +506,6 @@
         </main>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 bg-success text-white rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
-        <span class="material-symbols-outlined">check_circle</span>
-        <span id="toast-message">Saved!</span>
-    </div>
-
     <!-- JavaScript -->
     <script type="module">
         import { CriteriaStore } from './src/js/criteria-store.js';
@@ -601,19 +595,6 @@
             }
         }
 
-        // Show toast notification
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            if (toast && toastMessage) {
-                toastMessage.textContent = message;
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 2500);
-            }
-        }
-
         // Save criteria to CriteriaStore (for profile pages)
         window.saveCriteria = function() {
             const activeIds = activeItems.map(i => i.id);
@@ -627,9 +608,28 @@
             // Update state
             initialActiveIds = [...activeIds];
             hasUnsavedChanges = false;
-            updateSaveButton();
 
-            showToast('Criteria saved!');
+            // Transform button to show "Saved" confirmation
+            const btn = document.getElementById('save-btn');
+            if (btn) {
+                btn.classList.remove('bg-primary', 'hover:bg-primary-hover');
+                btn.classList.add('bg-success');
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Saved
+                `;
+                // Hide after a moment
+                setTimeout(() => {
+                    btn.classList.add('hidden');
+                    // Reset button for next time
+                    btn.classList.remove('bg-success');
+                    btn.classList.add('bg-primary', 'hover:bg-primary-hover');
+                    btn.innerHTML = `
+                        <span class="material-symbols-outlined">save</span>
+                        Save Criteria
+                    `;
+                }, 1500);
+            }
         };
 
         // Save state locally (for drag ordering within session)
