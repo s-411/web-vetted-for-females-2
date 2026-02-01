@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Settings - Bloom</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            /* Primary Brand Colors */
+            --color-primary: #7f13ec;
+            --color-primary-hover: #6b0fcc;
+            --color-primary-dark: #4c0b8f;
+            --color-primary-light: #a855f7;
+
+            /* Secondary / Accent Colors */
+            --color-accent: #d4af37;
+            --color-accent-light: #f3e5ab;
+            --color-accent-hover: #c9a227;
+
+            /* Neutral / Base Colors */
+            --color-plum: #2a173b;
+            --color-plum-light: #4a2c63;
+            --color-plum-muted: rgba(42, 23, 59, 0.6);
+
+            /* Background Colors */
+            --color-bg-primary: #f7f4ed;
+            --color-bg-secondary: #ffffff;
+            --color-bg-tertiary: #f8f7f4;
+            --color-bg-sidebar: var(--color-plum);
+            --color-bg-card: var(--color-bg-secondary);
+
+            /* Text Colors */
+            --color-text-primary: var(--color-plum);
+            --color-text-secondary: rgba(42, 23, 59, 0.6);
+            --color-text-tertiary: rgba(42, 23, 59, 0.4);
+            --color-text-inverse: #ffffff;
+            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+            /* Border Colors */
+            --color-border: rgba(42, 23, 59, 0.05);
+            --color-border-hover: rgba(42, 23, 59, 0.15);
+            --color-border-accent: rgba(212, 175, 55, 0.3);
+
+            /* Status Colors */
+            --color-success: #16a34a;
+            --color-success-bg: #f0fdf4;
+            --color-warning: #ca8a04;
+            --color-warning-bg: #fefce8;
+            --color-error: #dc2626;
+            --color-error-bg: #fef2f2;
+            --color-info: #2563eb;
+            --color-info-bg: #eff6ff;
+
+            /* Typography */
+            --font-display: 'Manrope', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+
+            /* Font Sizes */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+
+            /* Font Weights */
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+
+            /* Spacing */
+            --space-0: 0;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            /* Border Radius */
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
+
+            /* Sizes */
+            --sidebar-width: 16rem;
+            --sidebar-collapsed-width: 4.5rem;
+            --header-height: 4rem;
+            --avatar-sm: 1.5rem;
+            --avatar-md: 2.5rem;
+            --avatar-lg: 3.5rem;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: var(--radius-full);
+        }
+
+        .sidebar-transition {
+            transition: width 300ms ease, padding 300ms ease;
+        }
+        .sidebar-collapsed .sidebar-label {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        .sidebar-expanded .sidebar-label {
+            opacity: 1;
+            width: auto;
+            transition: opacity 200ms ease 100ms;
+        }
+        .sidebar-collapsed .sidebar-hideable {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-collapse-icon {
+            transform: rotate(180deg);
+        }
+        .sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
+        .sidebar-collapsed .sidebar-nav { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-nav-item { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+        .sidebar-collapsed .sidebar-bottom { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .sidebar-collapsed .sidebar-profile { justify-content: center; }
+        .sidebar-collapsed .sidebar-collapse-btn { justify-content: center; gap: 0; }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--color-border-hover);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: background 200ms ease;
+        }
+        .toggle-switch.active {
+            background: var(--color-primary);
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 200ms ease;
+        }
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': 'var(--color-primary)',
+                        'primary-hover': 'var(--color-primary-hover)',
+                        'primary-dark': 'var(--color-primary-dark)',
+                        'primary-light': 'var(--color-primary-light)',
+                        'accent': 'var(--color-accent)',
+                        'accent-light': 'var(--color-accent-light)',
+                        'accent-hover': 'var(--color-accent-hover)',
+                        'plum': 'var(--color-plum)',
+                        'plum-light': 'var(--color-plum-light)',
+                        'plum-muted': 'var(--color-plum-muted)',
+                        'bg-primary': 'var(--color-bg-primary)',
+                        'bg-secondary': 'var(--color-bg-secondary)',
+                        'bg-tertiary': 'var(--color-bg-tertiary)',
+                        'bg-sidebar': 'var(--color-bg-sidebar)',
+                        'bg-card': 'var(--color-bg-card)',
+                        'text-primary': 'var(--color-text-primary)',
+                        'text-secondary': 'var(--color-text-secondary)',
+                        'text-tertiary': 'var(--color-text-tertiary)',
+                        'text-inverse': 'var(--color-text-inverse)',
+                        'text-inverse-muted': 'var(--color-text-inverse-muted)',
+                        'border-default': 'var(--color-border)',
+                        'border-hover': 'var(--color-border-hover)',
+                        'border-accent': 'var(--color-border-accent)',
+                        'success': 'var(--color-success)',
+                        'success-bg': 'var(--color-success-bg)',
+                        'warning': 'var(--color-warning)',
+                        'warning-bg': 'var(--color-warning-bg)',
+                        'error': 'var(--color-error)',
+                        'error-bg': 'var(--color-error-bg)',
+                        'info': 'var(--color-info)',
+                        'info-bg': 'var(--color-info-bg)',
+                    },
+                    fontFamily: {
+                        'display': 'var(--font-display)',
+                        'serif': 'var(--font-serif)',
+                    },
+                    fontSize: {
+                        'xs': 'var(--text-xs)',
+                        'sm': 'var(--text-sm)',
+                        'base': 'var(--text-base)',
+                        'lg': 'var(--text-lg)',
+                        'xl': 'var(--text-xl)',
+                        '2xl': 'var(--text-2xl)',
+                        '3xl': 'var(--text-3xl)',
+                        '4xl': 'var(--text-4xl)',
+                    },
+                    spacing: {
+                        'sidebar': 'var(--sidebar-width)',
+                        'header': 'var(--header-height)',
+                    },
+                    borderRadius: {
+                        'sm': 'var(--radius-sm)',
+                        'DEFAULT': 'var(--radius-md)',
+                        'md': 'var(--radius-md)',
+                        'lg': 'var(--radius-lg)',
+                        'xl': 'var(--radius-xl)',
+                        '2xl': 'var(--radius-2xl)',
+                        'full': 'var(--radius-full)',
+                    },
+                    boxShadow: {
+                        'sm': 'var(--shadow-sm)',
+                        'DEFAULT': 'var(--shadow-md)',
+                        'md': 'var(--shadow-md)',
+                        'card': 'var(--shadow-card)',
+                    },
+                    width: {
+                        'sidebar': 'var(--sidebar-width)',
+                        'sidebar-collapsed': 'var(--sidebar-collapsed-width)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                    },
+                    height: {
+                        'header': 'var(--header-height)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
+    <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
+            <!-- Logo (Clickable to toggle) -->
+            <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined text-accent text-3xl shrink-0">local_florist</span>
+                <div class="sidebar-label sidebar-hideable">
+                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Bloom</h1>
+                    <p class="text-text-inverse-muted text-sm mt-1">Wellness & Lifestyle</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="index.html" title="Dashboard">
+                    <span class="material-symbols-outlined shrink-0">dashboard</span>
+                    <span class="font-medium sidebar-label">Dashboard</span>
+                </a>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="components.html" title="Components">
+                    <span class="material-symbols-outlined shrink-0">widgets</span>
+                    <span class="font-medium sidebar-label">Components</span>
+                </a>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
+                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">settings</span>
+                    <span class="font-medium sidebar-label">Settings</span>
+                </a>
+
+                <!-- Premium Card (under Settings) -->
+                <div class="mt-4 sidebar-hideable">
+                    <div class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-4 text-text-inverse">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="material-symbols-outlined text-accent-light icon-filled text-xl">star</span>
+                            <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">PRO</span>
+                        </div>
+                        <p class="font-medium text-sm leading-tight mb-1">Upgrade to Premium</p>
+                        <p class="text-xs text-text-inverse-muted mb-3">Unlock advanced insights.</p>
+                        <button class="w-full py-2 bg-bg-secondary text-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-accent-light transition-colors duration-200">Explore</button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Bottom Section: Profile, Notification & Collapse Toggle -->
+            <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Profile and Notification Row -->
+                <div class="sidebar-profile flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden shrink-0">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <div class="sidebar-label sidebar-hideable">
+                            <p class="text-sm font-semibold text-text-inverse">Sophia R.</p>
+                            <p class="text-xs text-text-inverse-muted">Free Plan</p>
+                        </div>
+                    </div>
+                    <button class="relative p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 sidebar-hideable" title="Notifications">
+                        <span class="material-symbols-outlined text-text-inverse-muted hover:text-text-inverse">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+                    </button>
+                </div>
+
+                <!-- Collapse Toggle Button -->
+                <button onclick="toggleSidebar()" class="sidebar-collapse-btn flex items-center justify-center gap-2 w-full py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse" title="Toggle sidebar">
+                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
+                    <span class="text-sm font-medium sidebar-label">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sidebar Toggle Script -->
+        <script>
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const isExpanded = sidebar.classList.contains('sidebar-expanded');
+
+                if (isExpanded) {
+                    sidebar.classList.remove('sidebar-expanded', 'w-sidebar');
+                    sidebar.classList.add('sidebar-collapsed', 'w-sidebar-collapsed');
+                } else {
+                    sidebar.classList.remove('sidebar-collapsed', 'w-sidebar-collapsed');
+                    sidebar.classList.add('sidebar-expanded', 'w-sidebar');
+                }
+            }
+
+            function toggleSwitch(element) {
+                element.classList.toggle('active');
+            }
+        </script>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Top Header -->
+            <header class="h-header flex items-center px-8 border-b border-border-default bg-bg-primary">
+                <button class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-bg-tertiary transition-colors duration-200" onclick="toggleSidebar()">
+                    <span class="material-symbols-outlined text-text-primary">menu</span>
+                </button>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-3xl mx-auto">
+                    <!-- Page Header -->
+                    <div class="mb-8">
+                        <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Settings</h1>
+                        <p class="text-text-secondary">Manage your account preferences and app settings.</p>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Profile</h2>
+
+                        <div class="flex items-start gap-6 mb-6">
+                            <div class="relative">
+                                <div class="h-20 w-20 rounded-full bg-bg-tertiary overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
+                                </div>
+                                <button class="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full flex items-center justify-center hover:bg-primary-hover transition-colors duration-200">
+                                    <span class="material-symbols-outlined text-text-inverse text-sm">edit</span>
+                                </button>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-text-primary mb-1">Sophia Richardson</h3>
+                                <p class="text-sm text-text-secondary mb-3">sophia.r@email.com</p>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-accent-light text-plum text-xs font-bold rounded-full">
+                                    <span class="material-symbols-outlined text-sm">workspace_premium</span>
+                                    Free Plan
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-text-secondary mb-2">Full Name</label>
+                                <input type="text" value="Sophia Richardson" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-secondary mb-2">Email Address</label>
+                                <input type="email" value="sophia.r@email.com" class="w-full px-4 py-3 bg-bg-tertiary border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Notifications Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Notifications</h2>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-3 border-b border-border-default">
+                                <div>
+                                    <p class="font-medium text-text-primary">Push Notifications</p>
+                                    <p class="text-sm text-text-tertiary">Receive notifications on your device</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b border-border-default">
+                                <div>
+                                    <p class="font-medium text-text-primary">Email Reminders</p>
+                                    <p class="text-sm text-text-tertiary">Daily wellness reminders via email</p>
+                                </div>
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b border-border-default">
+                                <div>
+                                    <p class="font-medium text-text-primary">Cycle Predictions</p>
+                                    <p class="text-sm text-text-tertiary">Get notified about upcoming cycle phases</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="flex items-center justify-between py-3">
+                                <div>
+                                    <p class="font-medium text-text-primary">Weekly Summary</p>
+                                    <p class="text-sm text-text-tertiary">Receive a weekly wellness report</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Appearance Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Appearance</h2>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-text-secondary mb-3">Theme</label>
+                                <div class="flex gap-3">
+                                    <button class="flex-1 p-4 bg-bg-tertiary border-2 border-primary rounded-xl text-center">
+                                        <span class="material-symbols-outlined text-2xl text-primary mb-2">light_mode</span>
+                                        <p class="text-sm font-medium text-text-primary">Light</p>
+                                    </button>
+                                    <button class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
+                                        <span class="material-symbols-outlined text-2xl text-text-secondary mb-2">dark_mode</span>
+                                        <p class="text-sm font-medium text-text-primary">Dark</p>
+                                    </button>
+                                    <button class="flex-1 p-4 bg-bg-tertiary border border-border-default rounded-xl text-center hover:border-border-hover transition-colors duration-200">
+                                        <span class="material-symbols-outlined text-2xl text-text-secondary mb-2">devices</span>
+                                        <p class="text-sm font-medium text-text-primary">System</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Privacy Section -->
+                    <section class="bg-bg-card rounded-2xl border border-border-default p-6 mb-6 shadow-card">
+                        <h2 class="font-serif text-xl font-bold text-text-primary mb-6">Privacy & Security</h2>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-3 border-b border-border-default">
+                                <div>
+                                    <p class="font-medium text-text-primary">Two-Factor Authentication</p>
+                                    <p class="text-sm text-text-tertiary">Add an extra layer of security</p>
+                                </div>
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b border-border-default">
+                                <div>
+                                    <p class="font-medium text-text-primary">Data Sharing</p>
+                                    <p class="text-sm text-text-tertiary">Allow anonymous usage data collection</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                            </div>
+                            <div class="flex items-center justify-between py-3">
+                                <div>
+                                    <p class="font-medium text-text-primary">Profile Visibility</p>
+                                    <p class="text-sm text-text-tertiary">Make your profile visible to community</p>
+                                </div>
+                                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Danger Zone -->
+                    <section class="bg-error-bg rounded-2xl border border-error/20 p-6 mb-6">
+                        <h2 class="font-serif text-xl font-bold text-error mb-4">Danger Zone</h2>
+                        <p class="text-sm text-text-secondary mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+                        <button class="px-5 py-2.5 bg-error text-text-inverse rounded-xl text-sm font-semibold hover:bg-error/90 transition-colors duration-200">
+                            Delete Account
+                        </button>
+                    </section>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end gap-3">
+                        <button class="px-6 py-3 bg-bg-secondary border border-border-default rounded-xl text-sm font-semibold text-text-primary hover:border-border-hover transition-colors duration-200">
+                            Cancel
+                        </button>
+                        <button class="px-6 py-3 bg-primary text-text-inverse rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors duration-200">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Bloom - Wellness & Lifestyle Dashboard</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ============================================
+         DESIGN TOKENS
+         ============================================
+         All design decisions are tokenized here.
+         Change a value once, update everywhere.
+    -->
+    <style>
+        :root {
+            /* ==========================================
+               COLOR TOKENS
+               ========================================== */
+
+            /* Primary Brand Colors */
+            --color-primary: #7f13ec;
+            --color-primary-hover: #6b0fcc;
+            --color-primary-dark: #4c0b8f;
+            --color-primary-light: #a855f7;
+
+            /* Secondary / Accent Colors */
+            --color-accent: #d4af37;          /* Gold */
+            --color-accent-light: #f3e5ab;    /* Light Gold */
+            --color-accent-hover: #c9a227;
+
+            /* Neutral / Base Colors */
+            --color-plum: #2a173b;
+            --color-plum-light: #4a2c63;
+            --color-plum-muted: rgba(42, 23, 59, 0.6);
+
+            /* Background Colors */
+            --color-bg-primary: #f7f4ed;      /* Warm Tan */
+            --color-bg-secondary: #ffffff;
+            --color-bg-tertiary: #f8f7f4;
+            --color-bg-sidebar: var(--color-plum);
+            --color-bg-card: var(--color-bg-secondary);
+
+            /* Text Colors */
+            --color-text-primary: var(--color-plum);
+            --color-text-secondary: rgba(42, 23, 59, 0.6);
+            --color-text-tertiary: rgba(42, 23, 59, 0.4);
+            --color-text-inverse: #ffffff;
+            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+            /* Border Colors */
+            --color-border: rgba(42, 23, 59, 0.05);
+            --color-border-hover: rgba(42, 23, 59, 0.15);
+            --color-border-accent: rgba(212, 175, 55, 0.3);
+
+            /* Status Colors */
+            --color-success: #16a34a;
+            --color-success-bg: #f0fdf4;
+            --color-warning: #ca8a04;
+            --color-warning-bg: #fefce8;
+            --color-error: #dc2626;
+            --color-error-bg: #fef2f2;
+            --color-info: #2563eb;
+            --color-info-bg: #eff6ff;
+
+            /* Category Colors */
+            --color-water: #3b82f6;
+            --color-water-bg: #eff6ff;
+            --color-sleep: var(--color-primary);
+            --color-sleep-bg: #faf5ff;
+            --color-mood: #eab308;
+            --color-mood-bg: #fefce8;
+            --color-energy: #ec4899;
+            --color-energy-bg: #fdf2f8;
+            --color-social: #f59e0b;
+            --color-social-bg: #fffbeb;
+
+            /* Event Colors */
+            --color-event-primary: var(--color-primary);
+            --color-event-secondary: #14b8a6;
+            --color-event-tertiary: #d1d5db;
+
+            /* ==========================================
+               TYPOGRAPHY TOKENS
+               ========================================== */
+
+            /* Font Families */
+            --font-display: 'Manrope', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+
+            /* Font Sizes */
+            --text-xs: 0.75rem;      /* 12px */
+            --text-sm: 0.875rem;     /* 14px */
+            --text-base: 1rem;       /* 16px */
+            --text-lg: 1.125rem;     /* 18px */
+            --text-xl: 1.25rem;      /* 20px */
+            --text-2xl: 1.5rem;      /* 24px */
+            --text-3xl: 1.875rem;    /* 30px */
+            --text-4xl: 2.25rem;     /* 36px */
+            --text-5xl: 3rem;        /* 48px */
+
+            /* Font Weights */
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+
+            /* Line Heights */
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.625;
+
+            /* Letter Spacing */
+            --tracking-tight: -0.025em;
+            --tracking-normal: 0;
+            --tracking-wide: 0.025em;
+            --tracking-wider: 0.05em;
+            --tracking-widest: 0.1em;
+
+            /* ==========================================
+               SPACING TOKENS
+               ========================================== */
+
+            --space-0: 0;
+            --space-1: 0.25rem;      /* 4px */
+            --space-2: 0.5rem;       /* 8px */
+            --space-3: 0.75rem;      /* 12px */
+            --space-4: 1rem;         /* 16px */
+            --space-5: 1.25rem;      /* 20px */
+            --space-6: 1.5rem;       /* 24px */
+            --space-8: 2rem;         /* 32px */
+            --space-10: 2.5rem;      /* 40px */
+            --space-12: 3rem;        /* 48px */
+            --space-16: 4rem;        /* 64px */
+
+            /* ==========================================
+               BORDER RADIUS TOKENS
+               ========================================== */
+
+            --radius-none: 0;
+            --radius-sm: 0.25rem;    /* 4px */
+            --radius-md: 0.5rem;     /* 8px */
+            --radius-lg: 0.75rem;    /* 12px */
+            --radius-xl: 1rem;       /* 16px */
+            --radius-2xl: 1.5rem;    /* 24px */
+            --radius-full: 9999px;
+
+            /* ==========================================
+               SHADOW TOKENS
+               ========================================== */
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
+
+            /* ==========================================
+               TRANSITION TOKENS
+               ========================================== */
+
+            --transition-fast: 150ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 300ms ease;
+            --transition-slower: 500ms ease;
+
+            /* ==========================================
+               SIZE TOKENS
+               ========================================== */
+
+            /* Sidebar */
+            --sidebar-width: 16rem;  /* 256px */
+            --sidebar-collapsed-width: 4.5rem;  /* 72px */
+
+            /* Header */
+            --header-height: 4rem;   /* 64px */
+
+            /* Avatar Sizes */
+            --avatar-sm: 1.5rem;     /* 24px */
+            --avatar-md: 2.5rem;     /* 40px */
+            --avatar-lg: 3.5rem;     /* 56px */
+
+            /* Icon Sizes */
+            --icon-sm: 1rem;         /* 16px */
+            --icon-md: 1.5rem;       /* 24px */
+            --icon-lg: 2rem;         /* 32px */
+
+            /* Button Heights */
+            --btn-height-sm: 2rem;
+            --btn-height-md: 2.5rem;
+            --btn-height-lg: 3rem;
+
+            /* Stat Icon Size */
+            --stat-icon-size: 3rem;  /* 48px */
+
+            /* ==========================================
+               Z-INDEX TOKENS
+               ========================================== */
+
+            --z-base: 0;
+            --z-dropdown: 10;
+            --z-sticky: 20;
+            --z-header: 30;
+            --z-overlay: 40;
+            --z-modal: 50;
+            --z-toast: 60;
+        }
+
+        /* ==========================================
+           MATERIAL ICONS CONFIGURATION
+           ========================================== */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* ==========================================
+           CUSTOM SCROLLBAR
+           ========================================== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: var(--radius-full);
+        }
+
+        /* Sidebar Collapse Transitions */
+        .sidebar-transition {
+            transition: width 300ms ease, padding 300ms ease;
+        }
+        .sidebar-collapsed .sidebar-label {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        .sidebar-expanded .sidebar-label {
+            opacity: 1;
+            width: auto;
+            transition: opacity 200ms ease 100ms;
+        }
+        .sidebar-collapsed .sidebar-hideable {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-collapse-icon {
+            transform: rotate(180deg);
+        }
+        /* Collapsed state - center icons */
+        .sidebar-collapsed .sidebar-logo {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sidebar-collapsed .sidebar-nav {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .sidebar-collapsed .sidebar-nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+            gap: 0;
+        }
+        .sidebar-collapsed .sidebar-bottom {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .sidebar-collapsed .sidebar-profile {
+            justify-content: center;
+        }
+        .sidebar-collapsed .sidebar-collapse-btn {
+            justify-content: center;
+            gap: 0;
+        }
+    </style>
+
+    <!-- Tailwind Config Using Design Tokens -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Primary
+                        'primary': 'var(--color-primary)',
+                        'primary-hover': 'var(--color-primary-hover)',
+                        'primary-dark': 'var(--color-primary-dark)',
+                        'primary-light': 'var(--color-primary-light)',
+
+                        // Accent
+                        'accent': 'var(--color-accent)',
+                        'accent-light': 'var(--color-accent-light)',
+                        'accent-hover': 'var(--color-accent-hover)',
+
+                        // Neutrals
+                        'plum': 'var(--color-plum)',
+                        'plum-light': 'var(--color-plum-light)',
+                        'plum-muted': 'var(--color-plum-muted)',
+
+                        // Backgrounds
+                        'bg-primary': 'var(--color-bg-primary)',
+                        'bg-secondary': 'var(--color-bg-secondary)',
+                        'bg-tertiary': 'var(--color-bg-tertiary)',
+                        'bg-sidebar': 'var(--color-bg-sidebar)',
+                        'bg-card': 'var(--color-bg-card)',
+
+                        // Text
+                        'text-primary': 'var(--color-text-primary)',
+                        'text-secondary': 'var(--color-text-secondary)',
+                        'text-tertiary': 'var(--color-text-tertiary)',
+                        'text-inverse': 'var(--color-text-inverse)',
+                        'text-inverse-muted': 'var(--color-text-inverse-muted)',
+
+                        // Borders
+                        'border-default': 'var(--color-border)',
+                        'border-hover': 'var(--color-border-hover)',
+                        'border-accent': 'var(--color-border-accent)',
+
+                        // Status
+                        'success': 'var(--color-success)',
+                        'success-bg': 'var(--color-success-bg)',
+                        'warning': 'var(--color-warning)',
+                        'warning-bg': 'var(--color-warning-bg)',
+                        'error': 'var(--color-error)',
+                        'error-bg': 'var(--color-error-bg)',
+                        'info': 'var(--color-info)',
+                        'info-bg': 'var(--color-info-bg)',
+
+                        // Categories
+                        'water': 'var(--color-water)',
+                        'water-bg': 'var(--color-water-bg)',
+                        'sleep': 'var(--color-sleep)',
+                        'sleep-bg': 'var(--color-sleep-bg)',
+                        'mood': 'var(--color-mood)',
+                        'mood-bg': 'var(--color-mood-bg)',
+                        'energy': 'var(--color-energy)',
+                        'energy-bg': 'var(--color-energy-bg)',
+                        'social': 'var(--color-social)',
+                        'social-bg': 'var(--color-social-bg)',
+
+                        // Events
+                        'event-primary': 'var(--color-event-primary)',
+                        'event-secondary': 'var(--color-event-secondary)',
+                        'event-tertiary': 'var(--color-event-tertiary)',
+                    },
+                    fontFamily: {
+                        'display': 'var(--font-display)',
+                        'serif': 'var(--font-serif)',
+                    },
+                    fontSize: {
+                        'xs': 'var(--text-xs)',
+                        'sm': 'var(--text-sm)',
+                        'base': 'var(--text-base)',
+                        'lg': 'var(--text-lg)',
+                        'xl': 'var(--text-xl)',
+                        '2xl': 'var(--text-2xl)',
+                        '3xl': 'var(--text-3xl)',
+                        '4xl': 'var(--text-4xl)',
+                        '5xl': 'var(--text-5xl)',
+                    },
+                    fontWeight: {
+                        'normal': 'var(--font-normal)',
+                        'medium': 'var(--font-medium)',
+                        'semibold': 'var(--font-semibold)',
+                        'bold': 'var(--font-bold)',
+                    },
+                    lineHeight: {
+                        'tight': 'var(--leading-tight)',
+                        'normal': 'var(--leading-normal)',
+                        'relaxed': 'var(--leading-relaxed)',
+                    },
+                    letterSpacing: {
+                        'tight': 'var(--tracking-tight)',
+                        'normal': 'var(--tracking-normal)',
+                        'wide': 'var(--tracking-wide)',
+                        'wider': 'var(--tracking-wider)',
+                        'widest': 'var(--tracking-widest)',
+                    },
+                    spacing: {
+                        '0': 'var(--space-0)',
+                        '1': 'var(--space-1)',
+                        '2': 'var(--space-2)',
+                        '3': 'var(--space-3)',
+                        '4': 'var(--space-4)',
+                        '5': 'var(--space-5)',
+                        '6': 'var(--space-6)',
+                        '8': 'var(--space-8)',
+                        '10': 'var(--space-10)',
+                        '12': 'var(--space-12)',
+                        '16': 'var(--space-16)',
+                        'sidebar': 'var(--sidebar-width)',
+                        'header': 'var(--header-height)',
+                    },
+                    borderRadius: {
+                        'none': 'var(--radius-none)',
+                        'sm': 'var(--radius-sm)',
+                        'DEFAULT': 'var(--radius-md)',
+                        'md': 'var(--radius-md)',
+                        'lg': 'var(--radius-lg)',
+                        'xl': 'var(--radius-xl)',
+                        '2xl': 'var(--radius-2xl)',
+                        'full': 'var(--radius-full)',
+                    },
+                    boxShadow: {
+                        'sm': 'var(--shadow-sm)',
+                        'DEFAULT': 'var(--shadow-md)',
+                        'md': 'var(--shadow-md)',
+                        'lg': 'var(--shadow-lg)',
+                        'xl': 'var(--shadow-xl)',
+                        'card': 'var(--shadow-card)',
+                    },
+                    transitionDuration: {
+                        'fast': '150ms',
+                        'DEFAULT': '200ms',
+                        'slow': '300ms',
+                        'slower': '500ms',
+                    },
+                    width: {
+                        'sidebar': 'var(--sidebar-width)',
+                        'sidebar-collapsed': 'var(--sidebar-collapsed-width)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                        'stat-icon': 'var(--stat-icon-size)',
+                    },
+                    height: {
+                        'header': 'var(--header-height)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                        'stat-icon': 'var(--stat-icon-size)',
+                        'btn-sm': 'var(--btn-height-sm)',
+                        'btn-md': 'var(--btn-height-md)',
+                        'btn-lg': 'var(--btn-height-lg)',
+                    },
+                    zIndex: {
+                        'base': 'var(--z-base)',
+                        'dropdown': 'var(--z-dropdown)',
+                        'sticky': 'var(--z-sticky)',
+                        'header': 'var(--z-header)',
+                        'overlay': 'var(--z-overlay)',
+                        'modal': 'var(--z-modal)',
+                        'toast': 'var(--z-toast)',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
+    <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
+            <!-- Logo (Clickable to toggle) -->
+            <div class="sidebar-logo p-6 pb-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 flex items-center gap-3" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined text-accent text-3xl shrink-0">local_florist</span>
+                <div class="sidebar-label sidebar-hideable">
+                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Bloom</h1>
+                    <p class="text-text-inverse-muted text-sm mt-1">Wellness & Lifestyle</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav flex-1 px-4 py-6 flex flex-col gap-1">
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="index.html" title="Dashboard">
+                    <span class="material-symbols-outlined text-accent icon-filled shrink-0">dashboard</span>
+                    <span class="font-medium sidebar-label">Dashboard</span>
+                </a>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="components.html" title="Components">
+                    <span class="material-symbols-outlined shrink-0">widgets</span>
+                    <span class="font-medium sidebar-label">Components</span>
+                </a>
+                <a class="sidebar-nav-item flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="settings.html" title="Settings">
+                    <span class="material-symbols-outlined shrink-0">settings</span>
+                    <span class="font-medium sidebar-label">Settings</span>
+                </a>
+
+                <!-- Premium Card (under Settings) -->
+                <div class="mt-4 sidebar-hideable">
+                    <div class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-4 text-text-inverse">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="material-symbols-outlined text-accent-light icon-filled text-xl">star</span>
+                            <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">PRO</span>
+                        </div>
+                        <p class="font-medium text-sm leading-tight mb-1">Upgrade to Premium</p>
+                        <p class="text-xs text-text-inverse-muted mb-3">Unlock advanced insights.</p>
+                        <button class="w-full py-2 bg-bg-secondary text-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-accent-light transition-colors duration-200">Explore</button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Bottom Section: Profile, Notification & Collapse Toggle -->
+            <div class="sidebar-bottom p-4 border-t border-white/10">
+                <!-- Profile and Notification Row -->
+                <div class="sidebar-profile flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden shrink-0">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <div class="sidebar-label sidebar-hideable">
+                            <p class="text-sm font-semibold text-text-inverse">Sophia R.</p>
+                            <p class="text-xs text-text-inverse-muted">Free Plan</p>
+                        </div>
+                    </div>
+                    <button class="relative p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 sidebar-hideable" title="Notifications">
+                        <span class="material-symbols-outlined text-text-inverse-muted hover:text-text-inverse">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+                    </button>
+                </div>
+
+                <!-- Collapse Toggle Button -->
+                <button onclick="toggleSidebar()" class="sidebar-collapse-btn flex items-center justify-center gap-2 w-full py-2 rounded-lg hover:bg-white/10 transition-all duration-200 text-text-inverse-muted hover:text-text-inverse" title="Toggle sidebar">
+                    <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 shrink-0">keyboard_double_arrow_left</span>
+                    <span class="text-sm font-medium sidebar-label">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sidebar Toggle Script -->
+        <script>
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const isExpanded = sidebar.classList.contains('sidebar-expanded');
+
+                if (isExpanded) {
+                    sidebar.classList.remove('sidebar-expanded', 'w-sidebar');
+                    sidebar.classList.add('sidebar-collapsed', 'w-sidebar-collapsed');
+                } else {
+                    sidebar.classList.remove('sidebar-collapsed', 'w-sidebar-collapsed');
+                    sidebar.classList.add('sidebar-expanded', 'w-sidebar');
+                }
+            }
+        </script>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Greeting Section -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="font-serif text-4xl font-bold text-text-primary mb-2">Good Morning, Sophia</h1>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-accent text-lg">auto_awesome</span>
+                                <p class="text-text-secondary italic font-serif">"I am blooming in my own time."</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="px-5 py-2.5 bg-bg-secondary border border-border-default rounded-full text-sm font-semibold text-text-primary hover:border-border-hover transition-colors duration-200">
+                                Log Mood
+                            </button>
+                            <button class="px-5 py-2.5 bg-primary text-text-inverse rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200">
+                                <span class="material-symbols-outlined text-lg">add</span>
+                                New Entry
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <!-- Water Intake -->
+                        <div class="bg-bg-card p-5 rounded-2xl border border-border-default flex items-center gap-4 shadow-card">
+                            <div class="h-stat-icon w-stat-icon rounded-full bg-water-bg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-water text-2xl icon-filled">water_drop</span>
+                            </div>
+                            <div>
+                                <p class="text-text-tertiary text-xs font-medium uppercase tracking-wider">Water Intake</p>
+                                <div class="flex items-baseline gap-2">
+                                    <p class="text-2xl font-bold text-text-primary">1.5L</p>
+                                    <span class="text-xs font-bold text-success">+10%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sleep Quality -->
+                        <div class="bg-bg-card p-5 rounded-2xl border border-border-default flex items-center gap-4 shadow-card">
+                            <div class="h-stat-icon w-stat-icon rounded-full bg-sleep-bg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-sleep text-2xl icon-filled">bedtime</span>
+                            </div>
+                            <div>
+                                <p class="text-text-tertiary text-xs font-medium uppercase tracking-wider">Sleep Quality</p>
+                                <div class="flex items-baseline gap-2">
+                                    <p class="text-2xl font-bold text-text-primary">7h 30m</p>
+                                    <span class="text-xs font-bold text-success">+2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Mood -->
+                        <div class="bg-bg-card p-5 rounded-2xl border border-border-default flex items-center gap-4 shadow-card">
+                            <div class="h-stat-icon w-stat-icon rounded-full bg-mood-bg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-mood text-2xl icon-filled">sentiment_satisfied</span>
+                            </div>
+                            <div>
+                                <p class="text-text-tertiary text-xs font-medium uppercase tracking-wider">Current Mood</p>
+                                <div class="flex items-baseline gap-2">
+                                    <p class="text-2xl font-bold text-text-primary">Calm</p>
+                                    <span class="text-xs font-medium text-text-tertiary">Neutral</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Left Column (2/3) -->
+                        <div class="lg:col-span-2 space-y-6">
+                            <!-- Cycle Tracker Card -->
+                            <div class="bg-bg-card rounded-2xl border border-border-default p-6 flex flex-col md:flex-row items-center gap-8 shadow-card">
+                                <!-- Circle Chart -->
+                                <div class="relative h-44 w-44 flex-shrink-0">
+                                    <svg class="h-full w-full -rotate-90" viewBox="0 0 100 100">
+                                        <!-- Background circle -->
+                                        <circle cx="50" cy="50" r="42" fill="none" stroke="var(--color-accent-light)" stroke-width="5"></circle>
+                                        <!-- Progress arc -->
+                                        <circle cx="50" cy="50" r="42" fill="none" stroke="var(--color-primary)" stroke-width="5" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="66"></circle>
+                                    </svg>
+                                    <!-- Center floral image -->
+                                    <div class="absolute inset-0 m-auto h-28 w-28 rounded-full overflow-hidden border-4 border-bg-secondary bg-success-bg flex items-center justify-center">
+                                        <svg viewBox="0 0 100 100" class="w-20 h-20 text-success opacity-60">
+                                            <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M50 15 Q60 35 50 50 Q40 35 50 15" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M50 85 Q60 65 50 50 Q40 65 50 85" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M15 50 Q35 60 50 50 Q35 40 15 50" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M85 50 Q65 60 50 50 Q65 40 85 50" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M25 25 Q45 40 50 50 Q40 45 25 25" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M75 75 Q55 60 50 50 Q60 55 75 75" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M75 25 Q55 40 50 50 Q60 45 75 25" fill="none" stroke="currentColor" stroke-width="1"/>
+                                            <path d="M25 75 Q45 60 50 50 Q40 55 25 75" fill="none" stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                    </div>
+                                    <!-- Day indicator -->
+                                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-plum text-text-inverse text-xs font-bold px-3 py-1 rounded-full">
+                                        Day 14
+                                    </div>
+                                </div>
+
+                                <!-- Text Content -->
+                                <div class="flex-1 text-center md:text-left">
+                                    <h2 class="font-serif text-2xl font-bold text-text-primary mb-2">Ovulation Phase</h2>
+                                    <p class="text-text-secondary text-sm mb-4">You might feel more energetic and social today. It's a great time for creative projects.</p>
+                                    <div class="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
+                                        <span class="px-3 py-1.5 rounded-lg bg-energy-bg text-energy text-sm font-medium flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base">ecg_heart</span> High Energy
+                                        </span>
+                                        <span class="px-3 py-1.5 rounded-lg bg-social-bg text-social text-sm font-medium flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base">group</span> Social
+                                        </span>
+                                    </div>
+                                    <a href="#" class="text-primary font-semibold text-sm hover:underline">View Full Analysis &rarr;</a>
+                                </div>
+                            </div>
+
+                            <!-- Curated For You -->
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-serif text-xl font-bold text-text-primary">Curated For You</h3>
+                                    <a href="#" class="text-sm font-semibold text-accent hover:text-accent-hover hover:underline">See all</a>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Article 1 -->
+                                    <article class="bg-bg-card rounded-xl overflow-hidden border border-border-default group cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                                        <div class="h-40 relative overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=400&h=300&fit=crop" alt="Woman reading" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slower">
+                                            <span class="absolute top-3 left-3 bg-bg-secondary/90 text-text-primary text-xs font-bold px-3 py-1 rounded-full">Rituals</span>
+                                        </div>
+                                        <div class="p-4">
+                                            <h4 class="font-serif text-lg font-bold text-text-primary mb-1 leading-tight">Embracing Slow Living This Spring</h4>
+                                        </div>
+                                    </article>
+
+                                    <!-- Article 2 -->
+                                    <article class="bg-bg-card rounded-xl overflow-hidden border border-border-default group cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                                        <div class="h-40 relative overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" alt="Healthy salad" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slower">
+                                            <span class="absolute top-3 left-3 bg-bg-secondary/90 text-text-primary text-xs font-bold px-3 py-1 rounded-full">Nutrition</span>
+                                        </div>
+                                        <div class="p-4">
+                                            <h4 class="font-serif text-lg font-bold text-text-primary mb-1 leading-tight">Spring Recipes for Hormonal Balance</h4>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column (1/3) -->
+                        <div class="space-y-6">
+                            <!-- Today's Agenda -->
+                            <div class="bg-bg-card p-5 rounded-2xl border border-border-default shadow-card">
+                                <div class="flex items-center justify-between mb-5">
+                                    <h3 class="font-serif text-lg font-bold text-text-primary">Today's Agenda</h3>
+                                    <button class="h-7 w-7 rounded-full bg-bg-tertiary hover:bg-border-hover flex items-center justify-center text-text-primary transition-colors duration-200">
+                                        <span class="material-symbols-outlined text-sm">add</span>
+                                    </button>
+                                </div>
+                                <div class="space-y-3">
+                                    <!-- Event 1 -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-primary">
+                                        <div class="flex flex-col items-center justify-center min-w-[45px]">
+                                            <span class="text-xs font-bold text-text-tertiary">10:00</span>
+                                            <span class="text-xs text-text-tertiary">AM</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h5 class="font-semibold text-text-primary text-sm">Vinyasa Yoga Class</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">location_on</span>
+                                                The Studio
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Event 2 -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-secondary">
+                                        <div class="flex flex-col items-center justify-center min-w-[45px]">
+                                            <span class="text-xs font-bold text-text-tertiary">02:00</span>
+                                            <span class="text-xs text-text-tertiary">PM</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h5 class="font-semibold text-text-primary text-sm">Nutritionist Call</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">videocam</span>
+                                                Zoom
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="h-avatar-sm w-avatar-sm rounded-full overflow-hidden">
+                                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop&crop=face" alt="Doctor" class="w-full h-full object-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Event 3 -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-tertiary">
+                                        <div class="flex flex-col items-center justify-center min-w-[45px]">
+                                            <span class="text-xs font-bold text-text-tertiary">06:00</span>
+                                            <span class="text-xs text-text-tertiary">PM</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h5 class="font-semibold text-text-primary text-sm">Journaling Time</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">home</span>
+                                                Home
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="w-full mt-4 py-2 text-xs font-bold text-text-tertiary uppercase tracking-widest hover:text-primary transition-colors duration-200">View Calendar</button>
+                            </div>
+
+                            <!-- Quote Card -->
+                            <div class="bg-plum text-text-inverse p-6 rounded-2xl text-center">
+                                <span class="material-symbols-outlined text-accent text-3xl mb-3">spa</span>
+                                <p class="font-serif text-lg italic mb-4">"Happiness blooms from within."</p>
+                                <button class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm font-semibold hover:bg-bg-secondary hover:text-plum transition-all duration-200">
+                                    Start Meditation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

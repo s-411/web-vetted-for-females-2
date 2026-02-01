@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Calendar - Bloom</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ============================================
+         DESIGN TOKENS
+         ============================================ -->
+    <style>
+        :root {
+            /* ==========================================
+               COLOR TOKENS
+               ========================================== */
+
+            /* Primary Brand Colors */
+            --color-primary: #7f13ec;
+            --color-primary-hover: #6b0fcc;
+            --color-primary-dark: #4c0b8f;
+            --color-primary-light: #a855f7;
+
+            /* Secondary / Accent Colors */
+            --color-accent: #d4af37;
+            --color-accent-light: #f3e5ab;
+            --color-accent-hover: #c9a227;
+
+            /* Neutral / Base Colors */
+            --color-plum: #2a173b;
+            --color-plum-light: #4a2c63;
+            --color-plum-muted: rgba(42, 23, 59, 0.6);
+
+            /* Background Colors */
+            --color-bg-primary: #f7f4ed;
+            --color-bg-secondary: #ffffff;
+            --color-bg-tertiary: #f8f7f4;
+            --color-bg-sidebar: var(--color-plum);
+            --color-bg-card: var(--color-bg-secondary);
+
+            /* Text Colors */
+            --color-text-primary: var(--color-plum);
+            --color-text-secondary: rgba(42, 23, 59, 0.6);
+            --color-text-tertiary: rgba(42, 23, 59, 0.4);
+            --color-text-inverse: #ffffff;
+            --color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+            /* Border Colors */
+            --color-border: rgba(42, 23, 59, 0.05);
+            --color-border-hover: rgba(42, 23, 59, 0.15);
+            --color-border-accent: rgba(212, 175, 55, 0.3);
+
+            /* Status Colors */
+            --color-success: #16a34a;
+            --color-success-bg: #f0fdf4;
+            --color-warning: #ca8a04;
+            --color-warning-bg: #fefce8;
+            --color-error: #dc2626;
+            --color-error-bg: #fef2f2;
+            --color-info: #2563eb;
+            --color-info-bg: #eff6ff;
+
+            /* Category Colors */
+            --color-water: #3b82f6;
+            --color-water-bg: #eff6ff;
+            --color-sleep: var(--color-primary);
+            --color-sleep-bg: #faf5ff;
+            --color-mood: #eab308;
+            --color-mood-bg: #fefce8;
+            --color-energy: #ec4899;
+            --color-energy-bg: #fdf2f8;
+            --color-social: #f59e0b;
+            --color-social-bg: #fffbeb;
+
+            /* Event Colors */
+            --color-event-primary: var(--color-primary);
+            --color-event-secondary: #14b8a6;
+            --color-event-tertiary: #d1d5db;
+            --color-event-wellness: #10b981;
+            --color-event-health: #f43f5e;
+            --color-event-personal: #8b5cf6;
+
+            /* ==========================================
+               TYPOGRAPHY TOKENS
+               ========================================== */
+
+            --font-display: 'Manrope', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+            --text-5xl: 3rem;
+
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.625;
+
+            --tracking-tight: -0.025em;
+            --tracking-normal: 0;
+            --tracking-wide: 0.025em;
+            --tracking-wider: 0.05em;
+            --tracking-widest: 0.1em;
+
+            /* ==========================================
+               SPACING TOKENS
+               ========================================== */
+
+            --space-0: 0;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* ==========================================
+               BORDER RADIUS TOKENS
+               ========================================== */
+
+            --radius-none: 0;
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+
+            /* ==========================================
+               SHADOW TOKENS
+               ========================================== */
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
+
+            /* ==========================================
+               TRANSITION TOKENS
+               ========================================== */
+
+            --transition-fast: 150ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 300ms ease;
+            --transition-slower: 500ms ease;
+
+            /* ==========================================
+               SIZE TOKENS
+               ========================================== */
+
+            --sidebar-width: 16rem;
+            --header-height: 4rem;
+            --avatar-sm: 1.5rem;
+            --avatar-md: 2.5rem;
+            --avatar-lg: 3.5rem;
+            --icon-sm: 1rem;
+            --icon-md: 1.5rem;
+            --icon-lg: 2rem;
+            --btn-height-sm: 2rem;
+            --btn-height-md: 2.5rem;
+            --btn-height-lg: 3rem;
+            --stat-icon-size: 3rem;
+            --calendar-cell-size: 2.5rem;
+
+            /* ==========================================
+               Z-INDEX TOKENS
+               ========================================== */
+
+            --z-base: 0;
+            --z-dropdown: 10;
+            --z-sticky: 20;
+            --z-header: 30;
+            --z-overlay: 40;
+            --z-modal: 50;
+            --z-toast: 60;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: var(--radius-full);
+        }
+    </style>
+
+    <!-- Tailwind Config Using Design Tokens -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': 'var(--color-primary)',
+                        'primary-hover': 'var(--color-primary-hover)',
+                        'primary-dark': 'var(--color-primary-dark)',
+                        'primary-light': 'var(--color-primary-light)',
+                        'accent': 'var(--color-accent)',
+                        'accent-light': 'var(--color-accent-light)',
+                        'accent-hover': 'var(--color-accent-hover)',
+                        'plum': 'var(--color-plum)',
+                        'plum-light': 'var(--color-plum-light)',
+                        'plum-muted': 'var(--color-plum-muted)',
+                        'bg-primary': 'var(--color-bg-primary)',
+                        'bg-secondary': 'var(--color-bg-secondary)',
+                        'bg-tertiary': 'var(--color-bg-tertiary)',
+                        'bg-sidebar': 'var(--color-bg-sidebar)',
+                        'bg-card': 'var(--color-bg-card)',
+                        'text-primary': 'var(--color-text-primary)',
+                        'text-secondary': 'var(--color-text-secondary)',
+                        'text-tertiary': 'var(--color-text-tertiary)',
+                        'text-inverse': 'var(--color-text-inverse)',
+                        'text-inverse-muted': 'var(--color-text-inverse-muted)',
+                        'border-default': 'var(--color-border)',
+                        'border-hover': 'var(--color-border-hover)',
+                        'border-accent': 'var(--color-border-accent)',
+                        'success': 'var(--color-success)',
+                        'success-bg': 'var(--color-success-bg)',
+                        'warning': 'var(--color-warning)',
+                        'warning-bg': 'var(--color-warning-bg)',
+                        'error': 'var(--color-error)',
+                        'error-bg': 'var(--color-error-bg)',
+                        'info': 'var(--color-info)',
+                        'info-bg': 'var(--color-info-bg)',
+                        'water': 'var(--color-water)',
+                        'water-bg': 'var(--color-water-bg)',
+                        'sleep': 'var(--color-sleep)',
+                        'sleep-bg': 'var(--color-sleep-bg)',
+                        'mood': 'var(--color-mood)',
+                        'mood-bg': 'var(--color-mood-bg)',
+                        'energy': 'var(--color-energy)',
+                        'energy-bg': 'var(--color-energy-bg)',
+                        'social': 'var(--color-social)',
+                        'social-bg': 'var(--color-social-bg)',
+                        'event-primary': 'var(--color-event-primary)',
+                        'event-secondary': 'var(--color-event-secondary)',
+                        'event-tertiary': 'var(--color-event-tertiary)',
+                        'event-wellness': 'var(--color-event-wellness)',
+                        'event-health': 'var(--color-event-health)',
+                        'event-personal': 'var(--color-event-personal)',
+                    },
+                    fontFamily: {
+                        'display': 'var(--font-display)',
+                        'serif': 'var(--font-serif)',
+                    },
+                    fontSize: {
+                        'xs': 'var(--text-xs)',
+                        'sm': 'var(--text-sm)',
+                        'base': 'var(--text-base)',
+                        'lg': 'var(--text-lg)',
+                        'xl': 'var(--text-xl)',
+                        '2xl': 'var(--text-2xl)',
+                        '3xl': 'var(--text-3xl)',
+                        '4xl': 'var(--text-4xl)',
+                        '5xl': 'var(--text-5xl)',
+                    },
+                    borderRadius: {
+                        'none': 'var(--radius-none)',
+                        'sm': 'var(--radius-sm)',
+                        'DEFAULT': 'var(--radius-md)',
+                        'md': 'var(--radius-md)',
+                        'lg': 'var(--radius-lg)',
+                        'xl': 'var(--radius-xl)',
+                        '2xl': 'var(--radius-2xl)',
+                        'full': 'var(--radius-full)',
+                    },
+                    boxShadow: {
+                        'sm': 'var(--shadow-sm)',
+                        'DEFAULT': 'var(--shadow-md)',
+                        'md': 'var(--shadow-md)',
+                        'lg': 'var(--shadow-lg)',
+                        'xl': 'var(--shadow-xl)',
+                        'card': 'var(--shadow-card)',
+                    },
+                    width: {
+                        'sidebar': 'var(--sidebar-width)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                        'stat-icon': 'var(--stat-icon-size)',
+                        'cal-cell': 'var(--calendar-cell-size)',
+                    },
+                    height: {
+                        'header': 'var(--header-height)',
+                        'avatar-sm': 'var(--avatar-sm)',
+                        'avatar-md': 'var(--avatar-md)',
+                        'avatar-lg': 'var(--avatar-lg)',
+                        'stat-icon': 'var(--stat-icon-size)',
+                        'btn-sm': 'var(--btn-height-sm)',
+                        'btn-md': 'var(--btn-height-md)',
+                        'btn-lg': 'var(--btn-height-lg)',
+                        'cal-cell': 'var(--calendar-cell-size)',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
+    <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <aside class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0">
+            <!-- Logo -->
+            <div class="p-6 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-accent text-3xl">local_florist</span>
+                    <h1 class="font-serif text-2xl font-bold text-text-inverse">Bloom</h1>
+                </div>
+                <p class="text-text-inverse-muted text-sm mt-1">Wellness & Lifestyle</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 flex flex-col gap-1">
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-colors duration-200" href="index.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse" href="calendar.html">
+                    <span class="material-symbols-outlined text-accent icon-filled">calendar_month</span>
+                    <span class="font-medium">Calendar</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-colors duration-200" href="#">
+                    <span class="material-symbols-outlined">favorite</span>
+                    <span class="font-medium">Wellness</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-colors duration-200" href="#">
+                    <span class="material-symbols-outlined">book_2</span>
+                    <span class="font-medium">Journal</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-colors duration-200" href="components.html">
+                    <span class="material-symbols-outlined">widgets</span>
+                    <span class="font-medium">Components</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-colors duration-200" href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-medium">Settings</span>
+                </a>
+            </nav>
+
+            <!-- Premium Card -->
+            <div class="p-4">
+                <div class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-5 text-text-inverse">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="material-symbols-outlined text-accent-light icon-filled">star</span>
+                        <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">PRO</span>
+                    </div>
+                    <p class="font-medium text-lg leading-tight mb-1">Upgrade to Premium</p>
+                    <p class="text-xs text-text-inverse-muted mb-4">Unlock advanced floral cycle insights.</p>
+                    <button class="w-full py-2.5 bg-bg-secondary text-primary text-sm font-bold uppercase tracking-wider rounded-lg hover:bg-accent-light transition-colors duration-200">Explore</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Top Header -->
+            <header class="h-header flex items-center justify-between px-8 border-b border-border-default bg-bg-primary">
+                <div class="flex items-center gap-4">
+                    <h1 class="font-serif text-2xl font-bold text-text-primary">Calendar</h1>
+                    <div class="h-6 w-px bg-border-hover"></div>
+                    <div class="flex items-center gap-2 text-text-secondary">
+                        <span class="material-symbols-outlined text-lg">today</span>
+                        <span class="text-sm font-medium">October 2024</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button class="relative">
+                        <span class="material-symbols-outlined text-text-secondary hover:text-text-primary transition-colors duration-200">notifications</span>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="text-sm font-semibold text-text-primary">Sophia R.</p>
+                            <p class="text-xs text-text-tertiary">Free Plan</p>
+                        </div>
+                        <div class="h-avatar-md w-avatar-md rounded-full bg-bg-tertiary overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-7xl mx-auto">
+
+                    <!-- Calendar Toolbar -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <!-- Month Navigation -->
+                            <div class="flex items-center gap-1 bg-bg-card rounded-xl p-1 border border-border-default shadow-sm">
+                                <button class="h-9 w-9 rounded-lg hover:bg-bg-tertiary flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors duration-200">
+                                    <span class="material-symbols-outlined text-xl">chevron_left</span>
+                                </button>
+                                <span class="px-3 font-semibold text-text-primary">October 2024</span>
+                                <button class="h-9 w-9 rounded-lg hover:bg-bg-tertiary flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors duration-200">
+                                    <span class="material-symbols-outlined text-xl">chevron_right</span>
+                                </button>
+                            </div>
+                            <button class="px-4 py-2 text-sm font-medium text-primary hover:bg-sleep-bg rounded-lg transition-colors duration-200">
+                                Today
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <!-- View Toggle -->
+                            <div class="flex bg-bg-card rounded-xl p-1 border border-border-default shadow-sm">
+                                <button class="px-4 py-2 text-sm font-medium bg-primary text-text-inverse rounded-lg">Month</button>
+                                <button class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-200">Week</button>
+                                <button class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-200">Day</button>
+                            </div>
+
+                            <!-- Add Event Button -->
+                            <button class="px-5 py-2.5 bg-primary text-text-inverse rounded-xl text-sm font-semibold flex items-center gap-2 hover:bg-primary-hover transition-colors duration-200 shadow-md">
+                                <span class="material-symbols-outlined text-lg">add</span>
+                                Add Event
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+                        <!-- Calendar Grid (3 cols) -->
+                        <div class="xl:col-span-3">
+                            <div class="bg-bg-card rounded-2xl border border-border-default shadow-card overflow-hidden">
+                                <!-- Calendar Header -->
+                                <div class="grid grid-cols-7 border-b border-border-default">
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Sun</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Mon</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Tue</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Wed</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Thu</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Fri</div>
+                                    <div class="py-3 text-center text-xs font-bold text-text-tertiary uppercase tracking-wider">Sat</div>
+                                </div>
+
+                                <!-- Calendar Body -->
+                                <div class="grid grid-cols-7">
+                                    <!-- Week 1 -->
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default bg-bg-tertiary/50">
+                                        <span class="text-sm text-text-tertiary">29</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default bg-bg-tertiary/50">
+                                        <span class="text-sm text-text-tertiary">30</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">1</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">2</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">3</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">4</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">5</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-wellness/10 text-event-wellness rounded truncate">Yoga Retreat</div>
+                                    </div>
+
+                                    <!-- Week 2 -->
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">6</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">7</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-health/10 text-event-health rounded truncate">Doctor Appt</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">8</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">9</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">10</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded truncate">Ovulation</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">11</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">12</span>
+                                    </div>
+
+                                    <!-- Week 3 -->
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">13</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">14</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-wellness/10 text-event-wellness rounded truncate">Meditation</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">15</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">16</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">17</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">18</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-personal/10 text-event-personal rounded truncate">Brunch</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">19</span>
+                                    </div>
+
+                                    <!-- Week 4 -->
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">20</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">21</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-wellness/10 text-event-wellness rounded truncate">Yoga Class</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">22</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">23</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default relative">
+                                        <div class="absolute inset-0 ring-2 ring-primary ring-inset rounded-lg pointer-events-none"></div>
+                                        <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-text-inverse text-sm font-bold">24</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-primary/10 text-event-primary rounded truncate">Yoga Class</div>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-secondary/10 text-event-secondary rounded truncate">Nutritionist</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">25</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded truncate">Period Start</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-b border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">26</span>
+                                    </div>
+
+                                    <!-- Week 5 -->
+                                    <div class="min-h-[120px] p-2 border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">27</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">28</span>
+                                        <div class="mt-1 px-2 py-1 text-xs font-medium bg-event-health/10 text-event-health rounded truncate">Therapy</div>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">29</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">30</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-r border-border-default">
+                                        <span class="text-sm font-medium text-text-primary">31</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 border-r border-border-default bg-bg-tertiary/50">
+                                        <span class="text-sm text-text-tertiary">1</span>
+                                    </div>
+                                    <div class="min-h-[120px] p-2 bg-bg-tertiary/50">
+                                        <span class="text-sm text-text-tertiary">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar (1 col) -->
+                        <div class="space-y-6">
+
+                            <!-- Mini Calendar -->
+                            <div class="bg-bg-card p-5 rounded-2xl border border-border-default shadow-card">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-semibold text-text-primary">November 2024</h3>
+                                    <div class="flex gap-1">
+                                        <button class="h-6 w-6 rounded hover:bg-bg-tertiary flex items-center justify-center text-text-tertiary hover:text-text-primary transition-colors">
+                                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                                        </button>
+                                        <button class="h-6 w-6 rounded hover:bg-bg-tertiary flex items-center justify-center text-text-tertiary hover:text-text-primary transition-colors">
+                                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-7 gap-1 text-center">
+                                    <span class="text-xs text-text-tertiary font-medium py-1">S</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">M</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">T</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">W</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">T</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">F</span>
+                                    <span class="text-xs text-text-tertiary font-medium py-1">S</span>
+
+                                    <!-- Dates -->
+                                    <span class="text-xs text-text-tertiary py-1.5"></span>
+                                    <span class="text-xs text-text-tertiary py-1.5"></span>
+                                    <span class="text-xs text-text-tertiary py-1.5"></span>
+                                    <span class="text-xs text-text-tertiary py-1.5"></span>
+                                    <span class="text-xs text-text-tertiary py-1.5"></span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">1</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">2</span>
+
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">3</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">4</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">5</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">6</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">7</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">8</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">9</span>
+
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">10</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">11</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">12</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">13</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">14</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">15</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">16</span>
+
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">17</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">18</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">19</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">20</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">21</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">22</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">23</span>
+
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">24</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">25</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">26</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">27</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">28</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">29</span>
+                                    <span class="text-xs text-text-primary py-1.5 hover:bg-bg-tertiary rounded cursor-pointer">30</span>
+                                </div>
+                            </div>
+
+                            <!-- Event Categories / Filters -->
+                            <div class="bg-bg-card p-5 rounded-2xl border border-border-default shadow-card">
+                                <h3 class="font-serif text-lg font-bold text-text-primary mb-4">Categories</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="h-5 w-5 rounded border-2 border-event-primary bg-event-primary flex items-center justify-center peer-checked:bg-event-primary peer-checked:border-event-primary transition-colors">
+                                            <span class="material-symbols-outlined text-white text-sm">check</span>
+                                        </div>
+                                        <span class="text-sm text-text-primary group-hover:text-primary transition-colors">Cycle Tracking</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="h-5 w-5 rounded border-2 border-event-wellness bg-event-wellness flex items-center justify-center peer-checked:bg-event-wellness peer-checked:border-event-wellness transition-colors">
+                                            <span class="material-symbols-outlined text-white text-sm">check</span>
+                                        </div>
+                                        <span class="text-sm text-text-primary group-hover:text-primary transition-colors">Wellness</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="h-5 w-5 rounded border-2 border-event-health bg-event-health flex items-center justify-center peer-checked:bg-event-health peer-checked:border-event-health transition-colors">
+                                            <span class="material-symbols-outlined text-white text-sm">check</span>
+                                        </div>
+                                        <span class="text-sm text-text-primary group-hover:text-primary transition-colors">Health</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="h-5 w-5 rounded border-2 border-event-personal bg-event-personal flex items-center justify-center peer-checked:bg-event-personal peer-checked:border-event-personal transition-colors">
+                                            <span class="material-symbols-outlined text-white text-sm">check</span>
+                                        </div>
+                                        <span class="text-sm text-text-primary group-hover:text-primary transition-colors">Personal</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="h-5 w-5 rounded border-2 border-event-secondary bg-event-secondary flex items-center justify-center peer-checked:bg-event-secondary peer-checked:border-event-secondary transition-colors">
+                                            <span class="material-symbols-outlined text-white text-sm">check</span>
+                                        </div>
+                                        <span class="text-sm text-text-primary group-hover:text-primary transition-colors">Appointments</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Today's Events -->
+                            <div class="bg-bg-card p-5 rounded-2xl border border-border-default shadow-card">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-serif text-lg font-bold text-text-primary">Today</h3>
+                                    <span class="text-xs font-medium text-text-tertiary">Oct 24</span>
+                                </div>
+                                <div class="space-y-3">
+                                    <!-- Event Item -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-primary hover:shadow-sm transition-shadow cursor-pointer">
+                                        <div class="flex flex-col items-center justify-center min-w-[40px]">
+                                            <span class="text-xs font-bold text-text-tertiary">10:00</span>
+                                            <span class="text-xs text-text-tertiary">AM</span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h5 class="font-semibold text-text-primary text-sm truncate">Vinyasa Yoga Class</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">location_on</span>
+                                                The Studio
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Event Item -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-secondary hover:shadow-sm transition-shadow cursor-pointer">
+                                        <div class="flex flex-col items-center justify-center min-w-[40px]">
+                                            <span class="text-xs font-bold text-text-tertiary">02:00</span>
+                                            <span class="text-xs text-text-tertiary">PM</span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h5 class="font-semibold text-text-primary text-sm truncate">Nutritionist Call</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">videocam</span>
+                                                Zoom
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="h-avatar-sm w-avatar-sm rounded-full overflow-hidden">
+                                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop&crop=face" alt="Doctor" class="w-full h-full object-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Event Item -->
+                                    <div class="flex gap-3 p-3 rounded-xl bg-bg-tertiary border-l-4 border-event-tertiary hover:shadow-sm transition-shadow cursor-pointer opacity-60">
+                                        <div class="flex flex-col items-center justify-center min-w-[40px]">
+                                            <span class="text-xs font-bold text-text-tertiary">06:00</span>
+                                            <span class="text-xs text-text-tertiary">PM</span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h5 class="font-semibold text-text-primary text-sm truncate">Journaling Time</h5>
+                                            <p class="text-xs text-text-tertiary flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-xs">home</span>
+                                                Home
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cycle Phase Indicator -->
+                            <div class="bg-gradient-to-br from-primary/10 to-accent-light/30 p-5 rounded-2xl border border-primary/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-primary">spa</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-text-secondary font-medium">Current Phase</p>
+                                        <p class="font-serif font-bold text-text-primary">Luteal Phase</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-text-secondary">Day 21 of your cycle. Period expected in ~4 days.</p>
+                                <div class="mt-3 h-2 bg-white/50 rounded-full overflow-hidden">
+                                    <div class="h-full w-3/4 bg-primary rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
