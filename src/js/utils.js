@@ -13,26 +13,11 @@ export function getInitials(name) {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
-// Generate a random avatar color from the palette
-const avatarColors = [
-  '#7f13ec', // primary purple
-  '#9333ea', // purple variant
-  '#6b0fcc', // dark purple
-  '#d4af37', // gold
-  '#16a34a', // green
-  '#2563eb', // blue
-  '#ec4899', // pink
-  '#f59e0b', // orange
-];
+// Avatar color - matches sidebar/plum color
+const AVATAR_COLOR = '#2a173b';
 
 export function getAvatarColor(id) {
-  // Use the ID to deterministically pick a color
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = (hash << 5) - hash + id.charCodeAt(i);
-    hash |= 0;
-  }
-  return avatarColors[Math.abs(hash) % avatarColors.length];
+  return AVATAR_COLOR;
 }
 
 // Format relative time
