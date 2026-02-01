@@ -430,10 +430,14 @@
                     <div class="w-14 h-14 rounded-2xl bg-error/10 flex items-center justify-center">
                         <span class="material-symbols-outlined text-error text-3xl icon-filled">flag</span>
                     </div>
-                    <div>
+                    <div class="flex-1">
                         <h1 class="font-serif text-3xl font-bold text-text-primary">Red Flags</h1>
                         <p class="text-text-secondary">Manage warning signs to track in your evaluations</p>
                     </div>
+                    <button id="save-btn" class="hidden px-5 py-2.5 bg-primary text-white rounded-xl font-semibold hover:bg-primary-hover transition-all flex items-center gap-2 shadow-lg">
+                        <span class="material-symbols-outlined">save</span>
+                        Save Criteria
+                    </button>
                 </div>
             </div>
 
@@ -490,39 +494,55 @@
         </main>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 bg-success text-white rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span id="toast-message">Saved!</span>
+    </div>
+
     <!-- JavaScript -->
     <script type="module">
         import { CriteriaStore } from './src/js/criteria-store.js';
         import { redFlags, getDefaultRedFlags } from './src/data/red-flags.js';
 
         const STORAGE_KEY = 'vetted_red_flags_order';
+        const CRITERIA_CATEGORY = 'redFlags';
         let activeItems = [];
         let availableItems = [];
         let draggedItem = null;
         let draggedElement = null;
         let placeholder = null;
+        let hasUnsavedChanges = false;
+        let initialActiveIds = [];
 
         // Load state
         function loadState() {
             const defaultFlags = getDefaultRedFlags();
             const defaultIds = defaultFlags.map(f => f.id);
-            const customItems = CriteriaStore.getCustomItems('redFlags');
+            const customItems = CriteriaStore.getCustomItems(CRITERIA_CATEGORY);
 
             // Combine all items
             const allItems = [...redFlags, ...customItems];
 
-            // Get saved order
-            const savedOrder = localStorage.getItem(STORAGE_KEY);
-            let activeIds;
+            // Check CriteriaStore for enabled IDs first (this is what profile pages read)
+            const storedEnabledIds = CriteriaStore.getEnabledIds(CRITERIA_CATEGORY);
 
-            if (savedOrder) {
-                try {
-                    activeIds = JSON.parse(savedOrder);
-                } catch (e) {
+            let activeIds;
+            if (storedEnabledIds !== null) {
+                // Use CriteriaStore (authoritative source)
+                activeIds = storedEnabledIds;
+            } else {
+                // Fall back to local storage (for order) or defaults
+                const savedOrder = localStorage.getItem(STORAGE_KEY);
+                if (savedOrder) {
+                    try {
+                        activeIds = JSON.parse(savedOrder);
+                    } catch (e) {
+                        activeIds = [...defaultIds];
+                    }
+                } else {
                     activeIds = [...defaultIds];
                 }
-            } else {
-                activeIds = [...defaultIds];
             }
 
             // Build active and available lists
@@ -541,12 +561,70 @@
                     availableItems.push(item);
                 }
             });
+
+            // Store initial state for change detection
+            initialActiveIds = activeItems.map(i => i.id);
+            hasUnsavedChanges = false;
+            updateSaveButton();
         }
 
-        // Save state
+        // Check if current state differs from initial
+        function checkForChanges() {
+            const currentIds = activeItems.map(i => i.id);
+            if (currentIds.length !== initialActiveIds.length) return true;
+            return currentIds.some((id, idx) => id !== initialActiveIds[idx]);
+        }
+
+        // Mark state as changed
+        function markAsChanged() {
+            hasUnsavedChanges = checkForChanges();
+            updateSaveButton();
+        }
+
+        // Update save button visibility
+        function updateSaveButton() {
+            const btn = document.getElementById('save-btn');
+            if (btn) {
+                btn.classList.toggle('hidden', !hasUnsavedChanges);
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            if (toast && toastMessage) {
+                toastMessage.textContent = message;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 2500);
+            }
+        }
+
+        // Save criteria to CriteriaStore (for profile pages)
+        window.saveCriteria = function() {
+            const activeIds = activeItems.map(i => i.id);
+
+            // Save to CriteriaStore (authoritative source for profile pages)
+            CriteriaStore.setEnabledIds(CRITERIA_CATEGORY, activeIds);
+
+            // Also save order locally (backup)
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(activeIds));
+
+            // Update state
+            initialActiveIds = [...activeIds];
+            hasUnsavedChanges = false;
+            updateSaveButton();
+
+            showToast('Criteria saved!');
+        };
+
+        // Save state locally (for drag ordering within session)
         function saveState() {
             const activeIds = activeItems.map(i => i.id);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(activeIds));
+            markAsChanged();
         }
 
         // Create a card element
@@ -639,7 +717,7 @@
 
             card.classList.add('fade-out');
             setTimeout(() => {
-                CriteriaStore.removeCustomItem('redFlags', itemId);
+                CriteriaStore.removeCustomItem(CRITERIA_CATEGORY, itemId);
                 activeItems = activeItems.filter(i => i.id !== itemId);
                 availableItems = availableItems.filter(i => i.id !== itemId);
                 saveState();
@@ -654,9 +732,10 @@
             const label = input.value.trim();
             if (!label) return;
 
-            const newItem = CriteriaStore.addCustomItem('redFlags', { label, icon: 'flag' });
+            const newItem = CriteriaStore.addCustomItem(CRITERIA_CATEGORY, { label, icon: 'flag' });
             availableItems.unshift(newItem);
             input.value = '';
+            markAsChanged();
             render();
 
             // Animate
@@ -837,10 +916,42 @@
             return div.innerHTML;
         }
 
+        // Setup navigation warning
+        function setupNavigationWarning() {
+            // Warn before leaving with unsaved changes
+            window.addEventListener('beforeunload', (e) => {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+
+            // Intercept sidebar and other navigation clicks
+            document.querySelectorAll('a[href]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (hasUnsavedChanges) {
+                        if (!confirm('You have unsaved changes. Leave without saving?')) {
+                            e.preventDefault();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Setup save button
+        function setupSaveButton() {
+            const saveBtn = document.getElementById('save-btn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', window.saveCriteria);
+            }
+        }
+
         // Initialize
         loadState();
         render();
         setupDropZones();
+        setupNavigationWarning();
+        setupSaveButton();
     </script>
 </body>
 </html>
