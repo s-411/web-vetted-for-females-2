@@ -409,17 +409,37 @@
     <!-- Profile JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
+        import { CriteriaStore } from './src/js/criteria-store.js';
         import { getGradeColor, getGradeDescription } from './src/js/grading.js';
         import { getInitials, getAvatarColor, getProfileIdFromUrl, escapeHtml } from './src/js/utils.js';
-        import { greenFlags } from './src/data/green-flags.js';
-        import { redFlags } from './src/data/red-flags.js';
-        import { dealbreakers } from './src/data/dealbreakers.js';
-        import { investmentStages } from './src/data/investment-stages.js';
+        import { greenFlags, getDefaultGreenFlags } from './src/data/green-flags.js';
+        import { redFlags, getDefaultRedFlags } from './src/data/red-flags.js';
+        import { dealbreakers, getDefaultDealbreakers } from './src/data/dealbreakers.js';
+        import { investmentStages, getDefaultInvestmentStages } from './src/data/investment-stages.js';
 
-        const GREEN_TOTAL = greenFlags.length;
-        const RED_TOTAL = redFlags.length;
-        const DEALBREAKER_TOTAL = dealbreakers.length;
-        const INVESTMENT_TOTAL = investmentStages.length;
+        // Get enabled items for each category (including custom items)
+        function getEnabledItems(category, allItems, getDefaultFn) {
+            const defaultIds = getDefaultFn().map(i => i.id);
+            const customItems = CriteriaStore.getCustomItems(category);
+
+            // Filter built-in items to only enabled ones
+            const enabledBuiltIn = allItems.filter(item =>
+                CriteriaStore.isEnabled(category, item.id, defaultIds)
+            );
+
+            // Add custom items
+            return [...enabledBuiltIn, ...customItems];
+        }
+
+        const enabledGreenFlags = getEnabledItems('greenFlags', greenFlags, getDefaultGreenFlags);
+        const enabledRedFlags = getEnabledItems('redFlags', redFlags, getDefaultRedFlags);
+        const enabledDealbreakers = getEnabledItems('dealbreakers', dealbreakers, getDefaultDealbreakers);
+        const enabledInvestmentStages = getEnabledItems('investment', investmentStages, getDefaultInvestmentStages);
+
+        const GREEN_TOTAL = enabledGreenFlags.length;
+        const RED_TOTAL = enabledRedFlags.length;
+        const DEALBREAKER_TOTAL = enabledDealbreakers.length;
+        const INVESTMENT_TOTAL = enabledInvestmentStages.length;
 
         const profileId = getProfileIdFromUrl();
         if (!profileId) window.location.href = 'index.html';
@@ -546,19 +566,19 @@
 
             if (currentTab === 'green') {
                 html = `<div class="divide-y divide-border-default">
-                    ${greenFlags.map(flag => renderFlagItem(flag, 'greenFlags', 'success', 'bg-success-bg', 'thumb_up')).join('')}
+                    ${enabledGreenFlags.map(flag => renderFlagItem(flag, 'greenFlags', 'success', 'bg-success-bg', 'thumb_up')).join('')}
                 </div>`;
             } else if (currentTab === 'red') {
                 html = `<div class="divide-y divide-border-default">
-                    ${redFlags.map(flag => renderFlagItem(flag, 'redFlags', 'error', 'bg-error-bg', 'flag')).join('')}
+                    ${enabledRedFlags.map(flag => renderFlagItem(flag, 'redFlags', 'error', 'bg-error-bg', 'flag')).join('')}
                 </div>`;
             } else if (currentTab === 'dealbreakers') {
                 html = `<div class="divide-y divide-border-default">
-                    ${dealbreakers.map(db => renderDealbreakerItem(db)).join('')}
+                    ${enabledDealbreakers.map(db => renderDealbreakerItem(db)).join('')}
                 </div>`;
             } else if (currentTab === 'investment') {
                 html = `<div class="divide-y divide-border-default">
-                    ${investmentStages.map(stage => renderInvestmentItem(stage)).join('')}
+                    ${enabledInvestmentStages.map(stage => renderInvestmentItem(stage)).join('')}
                 </div>`;
             }
 
@@ -604,16 +624,19 @@
 
         function renderInvestmentItem(stage) {
             const checkedStages = Array.isArray(profile.investmentStages) ? profile.investmentStages : [];
-            const isChecked = checkedStages.includes(stage.stage);
+            // Support both stage.stage (number) for built-in and stage.id for custom items
+            const stageId = stage.id || stage.stage;
+            const isChecked = checkedStages.includes(stageId) || checkedStages.includes(stage.stage);
             const iconColor = isChecked ? 'text-info' : 'text-text-tertiary';
             const itemBg = isChecked ? 'bg-info-bg' : '';
+            const description = stage.description || '';
             return `
                 <label class="flag-item flex items-start gap-4 p-4 cursor-pointer ${itemBg}">
-                    <input type="checkbox" class="investment-checkbox" data-stage-id="${stage.stage}" ${isChecked ? 'checked' : ''} />
+                    <input type="checkbox" class="investment-checkbox" data-stage-id="${stageId}" ${isChecked ? 'checked' : ''} />
                     <span class="flag-icon material-symbols-outlined ${iconColor} text-3xl shrink-0 mt-0.5 ${isChecked ? 'icon-filled' : ''}">trending_up</span>
                     <div class="flex-1 min-w-0">
                         <span class="text-text-primary text-base font-medium block mb-1">${escapeHtml(stage.label)}</span>
-                        <span class="text-text-secondary text-sm leading-relaxed block">${escapeHtml(stage.description)}</span>
+                        ${description ? `<span class="text-text-secondary text-sm leading-relaxed block">${escapeHtml(description)}</span>` : ''}
                     </div>
                 </label>
             `;
@@ -634,7 +657,9 @@
 
         function handleInvestmentToggle(event) {
             const cb = event.target;
-            const stageId = parseInt(cb.dataset.stageId, 10);
+            const rawStageId = cb.dataset.stageId;
+            // Handle both numeric (built-in) and string (custom) stage IDs
+            const stageId = rawStageId.startsWith('custom-') ? rawStageId : parseInt(rawStageId, 10);
             const isChecked = cb.checked;
 
             profile = Store.toggleInvestmentStage(profileId, stageId, isChecked);

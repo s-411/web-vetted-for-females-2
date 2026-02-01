@@ -231,4 +231,115 @@ export const Store = {
   clearAllData() {
     saveData(getDefaultData());
   },
+
+  // Seed example profiles for demo purposes
+  seedExampleProfiles() {
+    const data = loadData();
+
+    // Only seed if no profiles exist
+    if (Object.keys(data.profiles).length > 0) {
+      return false;
+    }
+
+    const now = new Date();
+    const exampleProfiles = [
+      // A+ Profile - Marcus (exceptional)
+      {
+        id: 'demo-marcus',
+        name: 'Marcus',
+        createdAt: new Date(now - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Met at a friend\'s dinner party. He remembered my coffee order from our first conversation and texted to confirm our second date two days in advance. His friends seem genuinely happy for him.',
+        greenFlags: ['gf-1', 'gf-2', 'gf-3', 'gf-4', 'gf-5', 'gf-6', 'gf-7', 'gf-8', 'gf-9', 'gf-10', 'gf-11', 'gf-12', 'gf-13', 'gf-14', 'gf-15', 'gf-16', 'gf-17', 'gf-18', 'gf-19', 'gf-20', 'gf-21', 'gf-22', 'gf-23', 'gf-26'],
+        redFlags: [],
+        dealbreakers: [],
+        investmentStages: ['is-1', 'is-2', 'is-3', 'is-4', 'is-5'],
+        grade: 'A+',
+        gradeDetails: { greenPercent: 80, redPercent: 0, dealbreakerCount: 0, investmentCount: 5 },
+      },
+      // A Profile - James (strong candidate)
+      {
+        id: 'demo-james',
+        name: 'James',
+        createdAt: new Date(now - 21 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Dating app match. Great communicator, very respectful. Still early but showing consistent effort. Minor thing - can be a bit of a workaholic.',
+        greenFlags: ['gf-1', 'gf-2', 'gf-5', 'gf-7', 'gf-8', 'gf-9', 'gf-10', 'gf-11', 'gf-12', 'gf-13', 'gf-14', 'gf-15', 'gf-16', 'gf-17', 'gf-18', 'gf-19', 'gf-20', 'gf-22', 'gf-26', 'gf-27', 'gf-30'],
+        redFlags: ['rf-12'],
+        dealbreakers: [],
+        investmentStages: ['is-1', 'is-2', 'is-3'],
+        grade: 'A',
+        gradeDetails: { greenPercent: 70, redPercent: 3, dealbreakerCount: 0, investmentCount: 3 },
+      },
+      // B Profile - Ryan (good potential)
+      {
+        id: 'demo-ryan',
+        name: 'Ryan',
+        createdAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Friend of a coworker. Sweet guy, puts in effort. Some emotional unavailability to work through - he acknowledged it and is open to growth. Watching how this develops.',
+        greenFlags: ['gf-1', 'gf-2', 'gf-5', 'gf-7', 'gf-9', 'gf-10', 'gf-11', 'gf-12', 'gf-13', 'gf-16', 'gf-17', 'gf-18', 'gf-19', 'gf-20', 'gf-27', 'gf-28', 'gf-29', 'gf-30'],
+        redFlags: ['rf-3', 'rf-9', 'rf-12'],
+        dealbreakers: ['db-14'],
+        investmentStages: ['is-1', 'is-2'],
+        grade: 'B',
+        gradeDetails: { greenPercent: 60, redPercent: 10, dealbreakerCount: 1, investmentCount: 2 },
+      },
+      // C Profile - Brandon (proceed with caution)
+      {
+        id: 'demo-brandon',
+        name: 'Brandon',
+        createdAt: new Date(now - 45 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Met at gym. Charming but inconsistent. Says all the right things but actions don\'t always match. His drinking concerns me - watching closely.',
+        greenFlags: ['gf-1', 'gf-2', 'gf-5', 'gf-8', 'gf-10', 'gf-11', 'gf-16', 'gf-18', 'gf-21', 'gf-27', 'gf-28', 'gf-29', 'gf-30'],
+        redFlags: ['rf-1', 'rf-3', 'rf-5', 'rf-6', 'rf-7', 'rf-12', 'rf-14', 'rf-15', 'rf-17', 'rf-25'],
+        dealbreakers: ['db-14', 'db-16'],
+        investmentStages: ['is-1'],
+        grade: 'C',
+        gradeDetails: { greenPercent: 50, redPercent: 33, dealbreakerCount: 2, investmentCount: 1 },
+      },
+      // D Profile - Chad (high risk)
+      {
+        id: 'demo-chad',
+        name: 'Chad',
+        createdAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Dating app. Initially seemed great but red flags keep piling up. He love bombed early then pulled back. Makes me feel anxious constantly. Need to end this.',
+        greenFlags: ['gf-2', 'gf-11', 'gf-12', 'gf-16', 'gf-18', 'gf-21', 'gf-27'],
+        redFlags: ['rf-1', 'rf-3', 'rf-4', 'rf-5', 'rf-6', 'rf-7', 'rf-8', 'rf-11', 'rf-12', 'rf-13', 'rf-17', 'rf-19', 'rf-20', 'rf-21', 'rf-22', 'rf-25'],
+        dealbreakers: ['db-1', 'db-4', 'db-8', 'db-14'],
+        investmentStages: ['is-1'],
+        grade: 'D',
+        gradeDetails: { greenPercent: 23, redPercent: 53, dealbreakerCount: 4, investmentCount: 1 },
+      },
+      // F Profile - Derek (walk away)
+      {
+        id: 'demo-derek',
+        name: 'Derek',
+        createdAt: new Date(now - 90 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(now - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        isArchived: false,
+        notes: 'Ex\'s friend who pursued me. HUGE MISTAKE. Controlling, manipulative, caught him in multiple lies. He tried to isolate me from my friends. Blocked on everything. Never again.',
+        greenFlags: ['gf-2', 'gf-11', 'gf-21'],
+        redFlags: ['rf-1', 'rf-3', 'rf-4', 'rf-5', 'rf-6', 'rf-7', 'rf-8', 'rf-9', 'rf-10', 'rf-11', 'rf-12', 'rf-13', 'rf-16', 'rf-17', 'rf-19', 'rf-20', 'rf-21', 'rf-22', 'rf-24', 'rf-25', 'rf-26', 'rf-27'],
+        dealbreakers: ['db-1', 'db-3', 'db-4', 'db-8', 'db-10', 'db-11'],
+        investmentStages: ['is-1', 'is-2'],
+        grade: 'F',
+        gradeDetails: { greenPercent: 10, redPercent: 73, dealbreakerCount: 6, investmentCount: 2 },
+      },
+    ];
+
+    exampleProfiles.forEach(profile => {
+      data.profiles[profile.id] = profile;
+    });
+
+    saveData(data);
+    return true;
+  },
 };

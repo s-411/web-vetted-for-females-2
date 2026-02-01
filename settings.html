@@ -710,8 +710,228 @@
     <!-- Settings JavaScript -->
     <script type="module">
         import { Store } from './src/js/store.js';
+        import { CriteriaStore } from './src/js/criteria-store.js';
+        import { greenFlags, getDefaultGreenFlags, getOptionalGreenFlags } from './src/data/green-flags.js';
+        import { redFlags, getDefaultRedFlags, getOptionalRedFlags } from './src/data/red-flags.js';
+        import { dealbreakers, getDefaultDealbreakers, getOptionalDealbreakers } from './src/data/dealbreakers.js';
+        import { investmentStages, getDefaultInvestmentStages, getOptionalInvestmentStages } from './src/data/investment-stages.js';
 
         let pendingAction = null;
+        let currentCriteriaTab = 'green';
+
+        // Category config
+        const categoryConfig = {
+            green: {
+                allItems: greenFlags,
+                defaultItems: getDefaultGreenFlags(),
+                optionalItems: getOptionalGreenFlags(),
+                color: 'success',
+                icon: 'thumb_up',
+                label: 'Green Flag',
+                storeKey: 'greenFlags',
+            },
+            red: {
+                allItems: redFlags,
+                defaultItems: getDefaultRedFlags(),
+                optionalItems: getOptionalRedFlags(),
+                color: 'error',
+                icon: 'flag',
+                label: 'Red Flag',
+                storeKey: 'redFlags',
+            },
+            dealbreakers: {
+                allItems: dealbreakers,
+                defaultItems: getDefaultDealbreakers(),
+                optionalItems: getOptionalDealbreakers(),
+                color: 'primary',
+                icon: 'block',
+                label: 'Dealbreaker',
+                storeKey: 'dealbreakers',
+            },
+            investment: {
+                allItems: investmentStages,
+                defaultItems: getDefaultInvestmentStages(),
+                optionalItems: getOptionalInvestmentStages(),
+                color: 'info',
+                icon: 'trending_up',
+                label: 'Investment Stage',
+                storeKey: 'investment',
+            },
+        };
+
+        // Switch criteria tab
+        window.switchCriteriaTab = function(tab) {
+            currentCriteriaTab = tab;
+
+            // Update tab styles
+            ['green', 'red', 'dealbreakers', 'investment'].forEach(t => {
+                const btn = document.getElementById(`criteria-tab-${t}`);
+                btn.classList.remove('active-green', 'active-red', 'active-dealbreakers', 'active-investment');
+                if (t === tab) {
+                    btn.classList.add(`active-${t}`);
+                }
+            });
+
+            renderCriteriaContent();
+        };
+
+        // Render criteria content
+        function renderCriteriaContent() {
+            const config = categoryConfig[currentCriteriaTab];
+            const container = document.getElementById('criteria-content');
+            const customItems = CriteriaStore.getCustomItems(config.storeKey);
+            const defaultIds = config.defaultItems.map(i => i.id);
+
+            // Get all items (default + optional + custom)
+            const allBuiltIn = [...config.defaultItems, ...config.optionalItems];
+
+            let html = '';
+
+            // Enabled Section
+            html += `<div class="mb-6">
+                <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">Active (${countEnabled(config, defaultIds, customItems)})</h3>
+                <div class="space-y-1">`;
+
+            // Default items that are enabled
+            config.defaultItems.forEach(item => {
+                const isEnabled = CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds);
+                if (isEnabled) {
+                    html += renderCriteriaItem(item, config, true, false);
+                }
+            });
+
+            // Optional items that are enabled
+            config.optionalItems.forEach(item => {
+                const isEnabled = CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds);
+                if (isEnabled) {
+                    html += renderCriteriaItem(item, config, true, false);
+                }
+            });
+
+            // Custom items (always enabled)
+            customItems.forEach(item => {
+                html += renderCriteriaItem(item, config, true, true);
+            });
+
+            html += `</div></div>`;
+
+            // Available Section (optional items not yet enabled)
+            const availableItems = config.optionalItems.filter(item => !CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds));
+            const disabledDefaults = config.defaultItems.filter(item => !CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds));
+
+            if (availableItems.length > 0 || disabledDefaults.length > 0) {
+                html += `<div>
+                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">Available to Add</h3>
+                    <div class="space-y-1">`;
+
+                disabledDefaults.forEach(item => {
+                    html += renderCriteriaItem(item, config, false, false);
+                });
+
+                availableItems.forEach(item => {
+                    html += renderCriteriaItem(item, config, false, false);
+                });
+
+                html += `</div></div>`;
+            }
+
+            container.innerHTML = html;
+
+            // Add event listeners
+            container.querySelectorAll('.criteria-toggle').forEach(btn => {
+                btn.addEventListener('click', handleCriteriaToggle);
+            });
+            container.querySelectorAll('.criteria-remove').forEach(btn => {
+                btn.addEventListener('click', handleCriteriaRemove);
+            });
+        }
+
+        function countEnabled(config, defaultIds, customItems) {
+            let count = customItems.length;
+            [...config.defaultItems, ...config.optionalItems].forEach(item => {
+                if (CriteriaStore.isEnabled(config.storeKey, item.id, defaultIds)) {
+                    count++;
+                }
+            });
+            return count;
+        }
+
+        function renderCriteriaItem(item, config, isEnabled, isCustom) {
+            const bgClass = isEnabled ? `bg-${config.color}-bg` : '';
+            const iconColor = isEnabled ? `text-${config.color}` : 'text-text-tertiary';
+            const actionIcon = isEnabled ? 'remove_circle' : 'add_circle';
+            const actionColor = isEnabled ? 'text-text-tertiary hover:text-error' : 'text-success';
+
+            return `
+                <div class="criteria-item flex items-center gap-3 p-3 rounded-xl ${bgClass}">
+                    <span class="material-symbols-outlined ${iconColor} text-xl shrink-0">${config.icon}</span>
+                    <span class="flex-1 text-text-primary text-sm">${escapeHtml(item.label)}</span>
+                    ${isCustom ? `
+                        <button class="criteria-remove p-1.5 rounded-lg hover:bg-error-bg transition-colors" data-id="${item.id}" title="Remove custom item">
+                            <span class="material-symbols-outlined text-error text-lg">delete</span>
+                        </button>
+                    ` : `
+                        <button class="criteria-toggle p-1.5 rounded-lg hover:bg-bg-tertiary transition-colors ${actionColor}" data-id="${item.id}" data-enabled="${isEnabled}" title="${isEnabled ? 'Remove' : 'Add'}">
+                            <span class="material-symbols-outlined text-xl">${actionIcon}</span>
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        function handleCriteriaToggle(event) {
+            const btn = event.currentTarget;
+            const itemId = btn.dataset.id;
+            const config = categoryConfig[currentCriteriaTab];
+            const defaultIds = config.defaultItems.map(i => i.id);
+            const allIds = [...config.defaultItems, ...config.optionalItems].map(i => i.id);
+
+            CriteriaStore.toggleItem(config.storeKey, itemId, allIds);
+            renderCriteriaContent();
+        }
+
+        function handleCriteriaRemove(event) {
+            const btn = event.currentTarget;
+            const itemId = btn.dataset.id;
+            const config = categoryConfig[currentCriteriaTab];
+
+            CriteriaStore.removeCustomItem(config.storeKey, itemId);
+            renderCriteriaContent();
+        }
+
+        // Add custom item
+        window.addCustomItem = function() {
+            const input = document.getElementById('custom-item-input');
+            const label = input.value.trim();
+
+            if (!label) {
+                alert('Please enter a custom criteria');
+                return;
+            }
+
+            const config = categoryConfig[currentCriteriaTab];
+            CriteriaStore.addCustomItem(config.storeKey, { label });
+
+            input.value = '';
+            renderCriteriaContent();
+        };
+
+        // Reset all criteria
+        window.resetAllCriteria = function() {
+            pendingAction = () => {
+                CriteriaStore.resetAll();
+                renderCriteriaContent();
+            };
+            document.getElementById('confirm-title').textContent = 'Reset Criteria';
+            document.getElementById('confirm-message').textContent = 'This will reset all evaluation criteria to defaults and remove any custom items. Continue?';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        };
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         // Update storage stats
         function updateStorageStats() {
@@ -788,8 +1008,16 @@
             closeConfirmModal();
         };
 
+        // Handle Enter key on custom input
+        document.getElementById('custom-item-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addCustomItem();
+            }
+        });
+
         // Initialize
         updateStorageStats();
+        switchCriteriaTab('green');
     </script>
 </body>
 </html>
