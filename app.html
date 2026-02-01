@@ -333,13 +333,15 @@
         .sidebar-collapsed .sidebar-nav {
             padding-left: 0.5rem;
             padding-right: 0.5rem;
+            align-items: center;
         }
         .sidebar-collapsed .sidebar-nav-item {
             justify-content: center;
             padding-left: 0;
             padding-right: 0;
             gap: 0;
-            width: auto;
+            width: 2.5rem;
+            height: 2.5rem;
         }
         .sidebar-collapsed .sidebar-bottom {
             padding-left: 0.5rem;
@@ -379,6 +381,32 @@
         .modal-backdrop {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+        }
+
+        /* Mobile menu */
+        .mobile-header {
+            display: none;
+        }
+        @media (max-width: 1023px) {
+            .mobile-header {
+                display: flex;
+            }
+        }
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 300ms ease;
+        }
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+        .mobile-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 300ms ease;
+        }
+        .mobile-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 
@@ -555,7 +583,105 @@
     </script>
 </head>
 <body class="bg-bg-primary text-text-primary font-display antialiased overflow-hidden">
-    <div class="flex h-screen w-full">
+    <!-- Mobile Header -->
+    <header class="mobile-header fixed top-0 left-0 right-0 z-40 h-16 bg-bg-sidebar px-4 items-center justify-between lg:hidden">
+        <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200">
+            <span class="material-symbols-outlined text-text-inverse text-2xl">menu</span>
+        </button>
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-accent text-2xl icon-filled">verified_user</span>
+            <span class="font-serif text-xl font-bold text-text-inverse">Vetted</span>
+        </div>
+        <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm">
+            U
+        </a>
+    </header>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="mobile-overlay fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden" onclick="toggleMobileMenu()"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside id="mobile-sidebar" class="mobile-sidebar fixed top-0 left-0 z-50 w-72 h-full bg-bg-sidebar flex flex-col lg:hidden">
+        <!-- Mobile Sidebar Header -->
+        <div class="p-6 pb-4 flex items-center justify-between border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-accent text-3xl icon-filled">verified_user</span>
+                <h1 class="font-serif text-2xl font-bold text-text-inverse">Vetted</h1>
+            </div>
+            <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200">
+                <span class="material-symbols-outlined text-text-inverse-muted">close</span>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-white/10 text-text-inverse transition-all duration-200" href="app.html">
+                <span class="material-symbols-outlined text-accent icon-filled">dashboard</span>
+                <span class="font-medium">Profiles</span>
+            </a>
+
+            <!-- Mobile Criteria Dropdown -->
+            <button onclick="toggleMobileCriteriaDropdown()" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200">
+                <span class="material-symbols-outlined">checklist</span>
+                <span class="font-medium flex-1 text-left">Criteria</span>
+                <span id="mobile-criteria-chevron" class="material-symbols-outlined text-sm transition-transform duration-200">expand_more</span>
+            </button>
+            <div id="mobile-criteria-dropdown" class="overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 400px;">
+                <a class="flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="green-flags.html">
+                    <span class="material-symbols-outlined text-success text-xl">thumb_up</span>
+                    <span class="font-medium text-sm">Green Flags</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="red-flags.html">
+                    <span class="material-symbols-outlined text-error text-xl">flag</span>
+                    <span class="font-medium text-sm">Red Flags</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="dealbreakers.html">
+                    <span class="material-symbols-outlined text-primary-light text-xl">block</span>
+                    <span class="font-medium text-sm">Dealbreakers</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-2.5 pl-12 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200" href="investment.html">
+                    <span class="material-symbols-outlined text-accent text-xl">trending_up</span>
+                    <span class="font-medium text-sm">Investment</span>
+                </a>
+            </div>
+
+            <!-- Archived -->
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg text-text-inverse-muted hover:bg-white/5 hover:text-text-inverse transition-all duration-200 mt-4" href="archives.html">
+                <span class="material-symbols-outlined">inventory_2</span>
+                <span class="font-medium">Archived</span>
+            </a>
+        </nav>
+
+        <!-- Mobile Bottom Section -->
+        <div class="p-4 border-t border-white/10">
+            <!-- Theme Toggle -->
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-text-inverse-muted">Theme</span>
+                <div class="flex items-center gap-1 bg-white/10 rounded-lg p-1">
+                    <button onclick="setTheme('light')" id="mobile-theme-light" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Light mode">
+                        <span class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
+                    </button>
+                    <button onclick="setTheme('dark')" id="mobile-theme-dark" class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors duration-200" title="Dark mode">
+                        <span class="material-symbols-outlined text-xl text-text-inverse-muted">dark_mode</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <a href="settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors duration-200">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm shrink-0">
+                    U
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-medium text-text-inverse text-sm truncate">User</p>
+                    <p class="text-xs text-text-inverse-muted">Settings</p>
+                </div>
+                <span class="material-symbols-outlined text-text-inverse-muted text-lg">chevron_right</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex h-screen w-full lg:pt-0 pt-16">
         <!-- Sidebar -->
         <aside id="sidebar" class="hidden lg:flex flex-col w-sidebar bg-bg-sidebar text-text-inverse h-full shrink-0 sidebar-transition sidebar-expanded">
             <!-- Logo (Clickable to toggle) -->
@@ -627,18 +753,18 @@
 
                 <!-- Collapsed state items -->
                 <div class="sidebar-collapsed-only flex-col items-center gap-2 mb-4">
-                    <!-- Collapsed: Theme Toggle -->
+                    <!-- Collapsed: Theme Toggle (top) -->
                     <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Toggle theme">
                         <span id="collapsed-theme-icon" class="material-symbols-outlined text-xl text-text-inverse-muted">light_mode</span>
                     </button>
-                    <!-- Collapsed: User Profile -->
-                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
-                        U
-                    </a>
-                    <!-- Collapsed: Expand Button -->
+                    <!-- Collapsed: Expand Button (middle) -->
                     <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors duration-200" title="Expand sidebar">
                         <span class="material-symbols-outlined sidebar-collapse-icon transition-transform duration-300 text-text-inverse-muted">keyboard_double_arrow_left</span>
                     </button>
+                    <!-- Collapsed: User Profile (bottom) -->
+                    <a href="settings.html" class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg-sidebar font-bold text-sm" title="Settings">
+                        U
+                    </a>
                 </div>
 
                 <!-- User Profile -->
@@ -684,6 +810,29 @@
                 }
             }
 
+            // Mobile Menu
+            function toggleMobileMenu() {
+                const sidebar = document.getElementById('mobile-sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+                document.body.classList.toggle('overflow-hidden');
+            }
+
+            function toggleMobileCriteriaDropdown() {
+                const dropdown = document.getElementById('mobile-criteria-dropdown');
+                const chevron = document.getElementById('mobile-criteria-chevron');
+                const isOpen = dropdown.style.maxHeight !== '0px';
+
+                if (isOpen) {
+                    dropdown.style.maxHeight = '0px';
+                    chevron.style.transform = 'rotate(-90deg)';
+                } else {
+                    dropdown.style.maxHeight = '400px';
+                    chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+
             // Theme Management
             function setTheme(theme) {
                 const html = document.documentElement;
@@ -708,11 +857,22 @@
                 const lightBtn = document.getElementById('theme-light');
                 const darkBtn = document.getElementById('theme-dark');
                 const collapsedIcon = document.getElementById('collapsed-theme-icon');
+                const mobileLightBtn = document.getElementById('mobile-theme-light');
+                const mobileDarkBtn = document.getElementById('mobile-theme-dark');
+
+                // Desktop sidebar
                 if (lightBtn && darkBtn) {
                     lightBtn.classList.remove('theme-btn-active');
                     darkBtn.classList.remove('theme-btn-active');
                     if (theme === 'light') lightBtn.classList.add('theme-btn-active');
                     if (theme === 'dark') darkBtn.classList.add('theme-btn-active');
+                }
+                // Mobile sidebar
+                if (mobileLightBtn && mobileDarkBtn) {
+                    mobileLightBtn.classList.remove('theme-btn-active');
+                    mobileDarkBtn.classList.remove('theme-btn-active');
+                    if (theme === 'light') mobileLightBtn.classList.add('theme-btn-active');
+                    if (theme === 'dark') mobileDarkBtn.classList.add('theme-btn-active');
                 }
                 // Update collapsed theme icon
                 if (collapsedIcon) {
